@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.DormitoryMapper">
+	
+	<resultMap type="approvalVO" id="approvalMap">
+		<result property="appCd" column="APP_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="appTarget" column="APP_TARGET"/>
+		<result property="appYn" column="APP_YN"/>
+		<result property="appReg" column="APP_REG"/>
+		<result property="appProdt" column="APP_PRODT"/>
+		<result property="appRet" column="APP_RET"/>
+		<result property="appPcd" column="APP_PCD"/>
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="commonDetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="studentMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="buildingVO" id="buildingMap">
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="bldZip" column="BLD_ZIP"/>
+		<result property="bldAddr1" column="BLD_ADDR1"/>
+		<result property="bldAddr2" column="BLD_ADDR2"/>
+	</resultMap>
+	
+	<resultMap type="dormitoryVO" id="dormitoryMap">
+		<result property="domCd" column="DOM_CD"/>
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="domYear" column="DOM_YEAR"/>
+		<result property="domSem" column="DOM_SEM"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="payYn" column="PAY_YN"/>
+		
+		<association property="userVO" resultMap="userMap"></association>
+		<association property="approvalVO" resultMap="approvalMap"></association>
+		<association property="commonDetailVO" resultMap="commonDetailMap"></association>
+		<association property="studentVO" resultMap="studentMap"></association>
+		<association property="buildingVO" resultMap="buildingMap"></association>
+	</resultMap>
+	
+	<insert id="createApplyDormitoryConsent" parameterType="approvalVO">
+		<selectKey resultType="String" keyProperty="appCd" order="BEFORE">
+			SELECT 
+				approval_SEQ.nextVal
+			FROM DUAL
+		</selectKey>
+			INSERT INTO APPROVAL (
+			    APP_CD,
+			    USER_CD,
+			    COMD_CD,
+			    APP_TARGET
+				)
+			VALUES (
+			    #{appCd},
+			    #{userCd},
+			    'APPR05', <!-- 결재유형코드 -->
+			    '1001' 
+				)
+	</insert>
+	
+	<insert id="createApplyDormitory" parameterType="dormitoryVO">
+		<selectKey keyProperty="domCd" resultType="String" order="BEFORE">
+		SELECT 'DO' || TRIM(TO_CHAR(DORMITORY_SEQ.NEXTVAL,'00000')) FROM DUAL
+	    </selectKey>
+		INSERT INTO DORMITORY(DOM_CD, BLD_CD, STU_CD, APP_CD, COMD_CD, DOM_YEAR, DOM_SEM)
+		VALUES(#{domCd},#{bldCd},#{stuCd},#{appCd},#{comdCd},#{domYear},#{domSem})
+	</insert>
+	
+	<select id="list" parameterType="String" resultMap="dormitoryMap">
+		SELECT D.DOM_CD, D.BLD_CD, D.STU_CD, D.COMD_CD, D.DOM_YEAR, D.PAY_YN, D.DOM_SEM, A.APP_REG, D.ROOM_CD,
+		(SELECT U.USER_NM FROM USERS U WHERE U.USER_CD = D.STU_CD) USER_NM, 
+		(SELECT C.COMD_NM FROM COMMON_DETAIL C WHERE D.BLD_CD = C.COMD_CD) COMD_NM,
+		(SELECT A.APP_YN FROM APPROVAL A WHERE D.APP_CD = A.APP_CD) APP_YN
+		FROM DORMITORY D, USERS U, APPROVAL A, BUILDING B
+		WHERE D.STU_CD = U.USER_CD
+		AND D.APP_CD = A.APP_CD
+		AND D.BLD_CD = B.BLD_CD
+		AND D.STU_CD = #{stuCd}
+		ORDER BY A.APP_REG DESC
+	</select>
+	
+	<select id="dormitoryDetail" parameterType="String" resultMap="dormitoryMap">
+
+		
+			SELECT
+			D.DOM_CD, D.BLD_CD, D.STU_CD, D.APP_CD, D.DOM_YEAR, D.DOM_SEM,
+		
+			U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP, U.USER_ADDR1, U.USER_ADDR2,
+			U.USER_REG1, U.USER_REG2, U.USER_MAIL, U.USER_PASS, U.USER_BANK,
+			U.USER_DEPO, U.USER_ACC,
+		
+			A.USER_CD, A.COMD_CD, A.APP_TARGET, A.APP_YN, A.APP_REG, A.APP_PRODT, A.APP_RET,
+			APP_PCD,
+		
+			B.COL_CD, B.BLD_ZIP, B.BLD_ADDR1, B.BLD_ADDR2,
+		
+			S.DEP_CD, S.STU_YEAR, S.STU_SEM, S.STU_MRC, S.STU_MOC, S.STU_CRC, S.STU_COC,
+			S.STU_ADDT, S.STU_GRDT
+		
+			FROM DORMITORY D, USERS U, APPROVAL A, BUILDING B, STUDENT S
+		
+			WHERE
+			B.BLD_CD = D.BLD_CD
+			AND
+			S.STU_CD = D.STU_CD
+			AND
+			D.STU_CD = U.USER_CD
+			AND
+			A.APP_CD = D.APP_CD
+			AND
+			D.DOM_CD = #{domCd}
+	</select>
+	
+	<select id="getDormitoryInfoByStuCd" parameterType="String" resultMap="dormitoryMap">
+		SELECT * FROM DORMITORY WHERE STU_CD = #{stuCd}
+	</select>
+
+	<update id="updateDormitoryRoomCd" parameterType="dormitoryVO">
+		UPDATE DORMITORY SET ROOM_CD = #{roomCd} WHERE APP_CD = #{appCd}
+	</update>
+	
+	<update id="paymentDormitory" parameterType="hashMap">
+	 	UPDATE DORMITORY SET PAY_YN = #{payYn}
+	 	WHERE DOM_CD = #{domCd}
+	</update>
+	
+	<update id="updateApplyDormitory" parameterType="dormitoryVO">
+	 	UPDATE DORMITORY SET COMD_CD = #{comdCd}
+	 	WHERE APP_CD = #{appCd}
+	</update>
+	
+	<select id="renderDormitory" parameterType="approvalVO" resultMap="dormitoryMap">
+		SELECT  DOM_CD, ROOM_CD, STU_CD, D.APP_CD, D.COMD_CD, DOM_YEAR, DOM_SEM, BLD_CD, PAY_YN,
+		        A.USER_CD, A.COMD_CD, APP_TARGET, APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD, USER_NM
+		FROM    DORMITORY D, APPROVAL A, USERS U
+		WHERE   D.APP_CD = A.APP_CD
+		AND     D.STU_CD = U.USER_CD
+		AND     A.APP_YN = #{appYn}
+		AND     A.APP_TARGET = #{appTarget}
+		ORDER BY A.APP_REG DESC
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+

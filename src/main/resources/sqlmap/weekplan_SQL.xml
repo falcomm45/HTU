@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.WeekplanMapper">
+	<resultMap type="approvalVO" id="approvalVOMap">
+		<result property="appCd" column="APP_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="comdCd" column="COMD_CD" />
+		<result property="appTarget" column="APP_TARGET" />
+		<result property="appYn" column="APP_YN" />
+		<result property="appReg" column="APP_REG" />
+		<result property="appProdt" column="APP_PRODT" />
+		<result property="appRet" column="APP_RET" />
+		<result property="appPcd" column="APP_PCD" />
+	</resultMap>
+
+	<resultMap type="lectureApplyVO" id="lectureApplyVOMap">
+		<result property="lecaCd" column="LECA_CD" />
+		<result property="proCd" column="PRO_CD" />
+		<result property="appCd" column="APP_CD" />
+		<result property="depCd" column="DEP_CD" />
+		<result property="roomCd" column="ROOM_CD" />
+		<result property="lecaYear" column="LECA_YEAR" />
+		<result property="lecaSem" column="LECA_SEM" />
+		<result property="lecaNm" column="LECA_NM" />
+		<result property="lecaCon" column="LECA_CON" />
+		<result property="lecaTrg" column="LECA_TRG" />
+		<result property="lecaCrd" column="LECA_CRD" />
+		<result property="lecaPer" column="LECA_PER" />
+		<result property="lecaCap" column="LECA_CAP" />
+		<result property="lecaSche" column="LECA_SCHE" />
+		<result property="lecaBook" column="LECA_BOOK" />
+		<result property="lecaNote" column="LECA_NOTE" />
+		<result property="lecaEva" column="LECA_EVA" />
+		<result property="lecaTemp" column="LECA_TEMP" />
+		<result property="lecaStdt" column="LECA_STDT" />
+		<result property="lecaEddt" column="LECA_EDDT" />
+		<result property="lecaType" column="LECA_TYPE"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+		<result property="rnum" column="RNUM"/>
+		<association property="approvalVO" resultMap="approvalVOMap"></association>
+		<association property="professorVO" resultMap="professorVOMap"></association>
+		<association property="departmentVO" resultMap="departmentVOMap"></association>
+	</resultMap>
+	
+	<resultMap type="departmentVO" id="departmentVOMap">
+		<result property="depCd" column="DEP_CD" />
+		<result property="colCd" column="COL_CD" />
+		<result property="depNm" column="DEP_NM" />
+		<result property="depMrc" column="DEP_MRC" />
+		<result property="depMoc" column="DEP_MOC" />
+		<result property="depCrc" column="DEP_CRC" />
+		<result property="depCoc" column="DEP_COC" />
+		<result property="depCap" column="DEP_CAP" />
+		<result property="depTel" column="DEP_TEL" />
+		<result property="depFee" column="DEP_FEE" />
+		<association property="collegeVO"></association>
+	</resultMap>
+	
+	<resultMap type="collegeVO" id="collegeVOMap">
+		<result property="colCd" column="COL_CD"/>
+		<result property="colCrd" column="COL_CRD"/>
+	</resultMap>
+	
+
+	<resultMap type="professorVO" id="professorVOMap">
+		<result property="proCd" column="PRO_CD" />
+		<result property="depCd" column="DEP_CD" />
+		<result property="roomCd" column="ROOM_CD" />
+		<result property="proJoin" column="PRO_JOIN" />
+		<result property="proRet" column="PRO_RET" />
+		<result property="proPos" column="PRO_POS" />
+		<association property="userVO" resultMap="userVOMap"></association>
+	</resultMap>
+
+	<resultMap type="userVO" id="userVOMap">
+		<result property="userCd" column="USER_CD" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="userNm" column="USER_NM" />
+		<result property="userNme" column="USER_NME" />
+		<result property="userTel" column="USER_TEL" />
+		<result property="userZip" column="USER_ZIP" />
+		<result property="userAddr1" column="USER_ADDR1" />
+		<result property="userAddr2" column="USER_ADDR2" />
+		<result property="userReg1" column="USER_REG1" />
+		<result property="userReg2" column="USER_REG2" />
+		<result property="userMail" column="USER_MAIL" />
+		<result property="userPass" column="USER_PASS" />
+		<result property="userBank" column="USER_BANK" />
+		<result property="userDepo" column="USER_DEPO" />
+		<result property="userAcc" column="USER_ACC" />
+		<result property="comdCd" column="COMD_CD" />
+	</resultMap>
+	
+	<resultMap type="lectureVO" id="lectureVOMap">
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecHcnt" column="LEC_HCNT"/>
+		<result property="lecStat" column="LEC_STAT"/>
+		<association property="lectureApplyVO" resultMap="lectureApplyVOMap"></association>
+	</resultMap>
+	
+	<resultMap type="lectureScheduleVO" id="lectureScheduleVOMap">
+		<result property="lecsCd" column="LECS_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecDay" column="LEC_DAY"/>
+		<result property="lecsStdt" column="LECS_STDT"/>
+		<result property="lecsEddt" column="LECS_EDDT"/>
+		<association property="lectureVO" resultMap="lectureVOMap"></association>
+	</resultMap>
+	
+	<resultMap type="weekplanVO" id="weekplanVOMap">
+		<result property="wpNo" column="WP_NO"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="wpCon" column="WP_CON"/>
+		<result property="rnum" column="RNUM"/>
+		<association property="lectureVO" resultMap="lectureVOMap"></association>
+	</resultMap>
+	
+	
+	<insert id="weekplanCreatePost" parameterType="weekplanVO">
+		INSERT INTO WEEKPLAN (
+		    WP_NO,
+		    LEC_CD,
+		    WP_CON
+		) VALUES (
+		    #{wpNo},
+		    #{lecCd},
+		    #{wpCon}
+		)
+	</insert>
+	
+	<sql id="where">
+		<if test="keyword != null and keyword != ''">
+			WHERE W.WP_NO LIKE '%' || #{keyword} || '%'
+		</if>
+	</sql>
+	
+	
+	<select id="weekplanList" parameterType="hashMap" resultMap="weekplanVOMap">
+		SELECT T.* FROM(
+		    SELECT ROW_NUMBER() OVER(ORDER BY WP_NO) RNUM,	
+		
+		    W.WP_NO, W.LEC_CD, W.WP_CON,
+		          
+		    L.LEC_HCNT, L.LEC_STAT,
+		          
+		    LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		    LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, LA.LECA_SCHE,
+		    LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+			
+			P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+            
+            U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP, U.USER_ADDR1,
+            U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL,
+            U.COMD_CD
+		FROM WEEKPLAN W
+		
+		JOIN LECTURE L ON W.LEC_CD = L.LEC_CD
+		JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+		JOIN PROFESSOR P ON LA.PRO_CD = P.PRO_CD
+        JOIN USERS U ON U.USER_CD = P.PRO_CD
+		WHERE W.LEC_CD = #{lecCd}
+		) T
+		
+	</select>
+	
+	<select id="getTotal" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) FROM WEEKPLAN
+		WHERE LEC_CD = #{lecCd}
+		<include refid="where"></include>
+	</select>
+	
+	<select id="weekplanDetail" parameterType="hashMap" resultMap="weekplanVOMap">
+		SELECT    
+		    W.WP_NO, W.LEC_CD, W.WP_CON,
+		            
+		    L.LEC_HCNT, L.LEC_STAT,
+		            
+		    LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		    LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER,
+		    LA.LECA_CAP, LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA,
+		    LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+            
+            U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP, U.USER_ADDR1,
+            U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL,
+            U.COMD_CD
+		FROM WEEKPLAN W, LECTURE L, LECTURE_APPLY LA, PROFESSOR P, USERS U
+		
+		WHERE 
+		    W.LEC_CD = L.LEC_CD
+		AND
+		    L.LEC_CD = LA.LECA_CD
+		AND
+			LA.PRO_CD = P.PRO_CD
+		AND
+			U.USER_CD = P.PRO_CD
+		AND
+		    W.WP_NO = #{wpNo}
+		AND 
+		    W.LEC_CD = #{lecCd}
+	</select>
+	
+	<update id="weekplanUpdate" parameterType="weekplanVO">
+		UPDATE
+			WEEKPLAN
+		SET
+			WP_CON = #{wpCon}
+		WHERE
+			WP_NO = #{wpNo}
+		AND
+			LEC_CD = #{lecCd}
+	
+	</update>
+	
+	<delete id="weekplanDelete" parameterType="weekplanVO">
+	 	DELETE FROM WEEKPLAN
+	 	WHERE LEC_CD = #{lecCd}
+	 	AND WP_NO = #{wpNo}
+	</delete>
+	
+	<select id="getLecName" parameterType="String" resultType="String">
+		SELECT DISTINCT
+		    LA.LECA_NM
+		FROM 
+		    LECTURE_APPLY LA
+		    JOIN LECTURE L ON LA.LECA_CD = L.LEC_CD
+		    JOIN WEEKPLAN W ON W.LEC_CD = #{lecCd}
+		WHERE 
+		    LA.LECA_CD = W.LEC_CD
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

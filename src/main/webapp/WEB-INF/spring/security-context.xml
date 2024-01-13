@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security 
+	http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="customUserDetailService"
+		class="kr.or.ddit.security.CustomUserDetailService" />
+	<bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<bean id="customLoginSuccessHandler"
+		class="kr.or.ddit.security.CustomLoginSuccessHandler" />
+
+	<security:http pattern="/resources/**" security="none" />
+
+	<security:http auto-config="true" use-expressions="true">
+	
+		<security:headers>
+			<security:frame-options policy="SAMEORIGIN"/>
+		</security:headers>
+		
+		<!-- 예시 URL -->
+		<security:intercept-url pattern="/employee/nodelist" access="isAuthenticated()" />
+		<security:intercept-url pattern="/student/**" access="hasRole('ROLE_STUDENT')" />
+		<security:intercept-url pattern="/employee/**" access="hasRole('ROLE_EMPLOYEE')" />
+		<security:intercept-url pattern="/professor/**" access="hasRole('ROLE_PROFESSOR')" />
+		<security:intercept-url pattern="/login" access="permitAll" />
+		<security:intercept-url pattern="/logout" access="permitAll" />
+		<security:intercept-url pattern="/error/**" access="permitAll" />
+		<security:intercept-url pattern="/download/**" access="permitAll" />
+		<security:intercept-url pattern="/findinfo/**" access="permitAll" />
+		<security:intercept-url pattern="/face" access="hasRole('ROLE_PROFESSOR')" />
+		
+<!-- 		<security:intercept-url pattern="/mypage/**" access="permitAll" /> -->
+		<security:intercept-url pattern="/" access="permitAll" />
+		<!-- 위 URL을 제외한 모든 URL -->
+		<security:intercept-url pattern="/**" access="isAuthenticated()"/>
+
+		<security:session-management  invalid-session-url="/login?expired" 
+  			session-fixation-protection="none">
+			<security:concurrency-control max-sessions="1" expired-url="/login?expired"
+				error-if-maximum-exceeded="true"/>
+		</security:session-management>
+		
+		<security:form-login login-page="/login"
+			authentication-failure-url="/login?error"
+			username-parameter="username" password-parameter="password"
+			authentication-success-handler-ref="customLoginSuccessHandler" />
+		<security:logout logout-url="/logout"
+			invalidate-session="true" />
+	</security:http>
+	
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="customUserDetailService">
+			<security:password-encoder
+				ref="bcryptPasswordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>

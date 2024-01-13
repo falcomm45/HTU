@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.SchlshipMapper">
+	
+	<resultMap type="schlshipVO" id="schlMap">
+		<result property="sclCd" column="SCL_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="siCd" column="SI_CD"/>
+		<result property="sclYear" column="SCL_YEAR"/>
+		<result property="sclSem" column="SCL_SEM"/>
+		<result property="sclNm" column="SCL_NM"/>
+		<result property="depFee" column="DEP_FEE"/>
+		<result property="sclSum" column="SCL_SUM"/>
+		<association property="studentVO"></association>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="stuMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		<result property="colNm" column="COL_NM"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="stuNm" column="STU_NM"/>
+		<result property="score" column="SCORE"/>
+		<result property="rank" column="RANK"/>
+		<result property="depFee" column="DEP_FEE"/>
+		<result property="lecaYear" column="LECA_YEAR"/>
+		<result property="lecaSem" column="LECA_SEM"/>
+		<association property="schlshipVO"></association>
+	</resultMap>
+	
+	<!-- 장학금 수여 대상 학생 목록 -->
+	<select id="awardSchlship" resultMap="stuMap">
+		WITH ALLRANK AS (
+		    SELECT
+		        COL_NM, DEP_NM, STU_NM, STU_CD, STU_YEAR, AVG(SCORE) SCORE,
+		        RANK() OVER (PARTITION BY DEP_NM, STU_YEAR ORDER BY AVG(SCORE) DESC) RANK,
+		        DEP_FEE, LECA_YEAR, LECA_SEM
+		    FROM (
+		        SELECT G.COMD_NM COL_NM, D.DEP_NM, D.DEP_FEE, A.STU_CD, E.USER_NM STU_NM, F.STU_YEAR, C.LECA_YEAR, C.LECA_SEM
+		       , CASE
+		            WHEN LECG_SUM >= 97 THEN 4.5
+		            WHEN LECG_SUM >= 93 THEN 4.3
+		            WHEN LECG_SUM >= 90 THEN 4.0
+		            WHEN LECG_SUM >= 87 THEN 3.7
+		            WHEN LECG_SUM >= 83 THEN 3.5
+		            WHEN LECG_SUM >= 80 THEN 3.3
+		            WHEN LECG_SUM >= 77 THEN 3.0
+		            WHEN LECG_SUM >= 75 THEN 2.5
+		            WHEN LECG_SUM >= 70 THEN 2.0
+		            WHEN LECG_SUM >= 65 THEN 1.5
+		            WHEN LECG_SUM >= 60 THEN 1
+		            ELSE 0
+		        END SCORE
+		        FROM
+		            LECTURE_GRADE A, GRADE_CRITERIA B, LECTURE_APPLY C,DEPARTMENT D
+		            , USERS E, STUDENT F, COMMON_DETAIL G, LECTURE H
+		        WHERE
+		            A.CRTR_CD = B.CRTR_CD
+		            AND B.LEC_CD = C.LECA_CD
+		            AND C.LECA_YEAR = 
+		                 CASE 
+		                    WHEN TO_CHAR(SYSDATE, 'MM') &gt;= 01 and TO_CHAR(SYSDATE, 'MM') &lt;=06 THEN TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - 1
+		                    ELSE TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY'))
+		                END
+		            AND C.LECA_SEM = 
+		                CASE 
+		                    WHEN TO_CHAR(SYSDATE, 'MM') &gt;= 01 and TO_CHAR(SYSDATE, 'MM') &lt;=06 THEN 2
+		                    ELSE 1
+		                END
+		            AND A.STU_CD = E.USER_CD
+		            AND F.DEP_CD = D.DEP_CD
+		            AND F.STU_CD = E.USER_CD
+		            AND D.COL_CD = G.COMD_CD
+		            AND C.LECA_CD = H.LEC_CD
+            		AND H.LEC_STAT = '1'
+		    )
+		    GROUP BY STU_CD, DEP_NM, STU_NM, COL_NM, STU_YEAR, DEP_FEE, LECA_YEAR, LECA_SEM
+		)
+		SELECT * FROM ALLRANK
+		WHERE RANK &lt;= 3
+	</select>
+	
+	<!-- 장학금 정보 -->
+	<select id="scVO" parameterType="String" resultMap="schlMap">
+		SELECT
+		    SCL_CD
+		  , STU_CD
+		  , SI_CD
+		  , SCL_YEAR
+		  , SCL_SEM
+		FROM
+		    SCHLSHIP
+		WHERE
+		    STU_CD = #{stuCd}
+		    AND SCL_YEAR = 
+            	CASE 
+                    WHEN TO_CHAR(SYSDATE, 'MM') &gt;= 01 and TO_CHAR(SYSDATE, 'MM') &lt;=06 THEN TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - 1
+                    ELSE TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY'))
+            	END
+            AND SCL_SEM = 
+                CASE 
+                    WHEN TO_CHAR(SYSDATE, 'MM') &gt;= 01 and TO_CHAR(SYSDATE, 'MM') &lt;=06 THEN 2
+                    ELSE 1
+                END
+	</select>
+	
+	<!-- 장학금 수여 -->
+	<insert id="award" parameterType="schlshipVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="sclCd">
+			SELECT 'SCSH' || TRIM(TO_CHAR(SCSH_SEQ.NEXTVAL))
+			FROM   DUAL
+		</selectKey>
+		INSERT INTO SCHLSHIP (
+		    SCL_CD
+		    , STU_CD
+		    , SI_CD
+		    , SCL_YEAR
+		    , SCL_SEM
+		) VALUES (
+		    #{sclCd}
+		  , #{stuCd}
+		  , #{siCd}
+		  , #{sclYear}
+		  , #{sclSem}
+		)
+	</insert>
+	
+	<!-- 장학생 조회 -->
+	<select id="schlshipList" resultMap="schlMap">
+		SELECT
+		    A.SCL_CD
+		  , A.STU_CD
+		  , A.SI_CD
+		  , A.SCL_YEAR
+		  , A.SCL_SEM
+		  , B.COMD_NM SCL_NM
+          , CASE SI_CD
+            WHEN 'SCHL01' THEN DEP_FEE
+            ELSE C.DEP_FEE * 0.5
+        END SCL_SUM
+		FROM
+		    SCHLSHIP A
+		    , COMMON_DETAIL B
+            , DEPARTMENT C
+		WHERE
+		    A.SI_CD = B.COMD_CD
+            AND SUBSTR(A.STU_CD, 3, 3) = SUBSTR(C.DEP_CD, 6, 3)
+		ORDER BY A.SCL_CD, A.SCL_YEAR DESC
+	</select>
+	
+	<!-- 장학생 정보 -->
+	<select id="stuVO" parameterType="String" resultMap="stuMap">
+		SELECT 
+		    A.STU_CD, A.STU_YEAR, B.COMD_NM COL_NM
+		    , D.DEP_NM, C.USER_NM STU_NM, D.DEP_FEE
+		FROM
+			STUDENT A, COMMON_DETAIL B, USERS C, DEPARTMENT D
+		WHERE
+		    A.STU_CD = C.USER_CD
+		    AND  SUBSTR(A.STU_CD, 3, 3) = SUBSTR(D.DEP_CD, 6, 3)
+		    AND D.COL_CD = B.COMD_CD
+		    AND A.STU_CD = #{stuCd}
+	</select>
+	
+	<!-- 나의 장학금 조회 -->
+	<select id="mySchlship" parameterType="String" resultMap="schlMap">
+		SELECT
+		    A.SCL_CD
+		  , A.STU_CD
+		  , A.SI_CD
+		  , A.SCL_YEAR
+		  , A.SCL_SEM
+		  , B.COMD_NM SCL_NM
+		  , C.DEP_FEE
+		FROM
+		    SCHLSHIP A, COMMON_DETAIL B, DEPARTMENT C
+		WHERE
+		    STU_CD = #{stuCd}
+		    AND A.SI_CD = B.COMD_CD
+		    AND SUBSTR(A.STU_CD, 3, 3) = SUBSTR(C.DEP_CD, 6, 3)
+		ORDER BY A.SCL_YEAR DESC, A.SCL_SEM DESC
+	</select>
+	
+	<!-- 학기 -->
+	<select id="searchYear" parameterType="String" resultMap="schlMap">
+		SELECT
+		    A.SCL_CD
+		  , A.STU_CD
+		  , A.SI_CD
+		  , A.SCL_YEAR
+		  , A.SCL_SEM
+		  , B.COMD_NM SCL_NM
+          , CASE SI_CD
+            WHEN 'SCHL01' THEN DEP_FEE
+            ELSE C.DEP_FEE * 0.5
+        END SCL_SUM
+		FROM
+		    SCHLSHIP A
+		    , COMMON_DETAIL B
+            , DEPARTMENT C
+		WHERE
+		    A.SI_CD = B.COMD_CD
+            AND A.SCL_YEAR = #{sclYear}
+            AND SUBSTR(A.STU_CD, 3, 3) = SUBSTR(C.DEP_CD, 6, 3)
+		ORDER BY A.SCL_CD DESC
+	</select>
+	
+	<!-- 장학생 조회 - 학기 선택 -->
+	<select id="searchSem" parameterType="String" resultMap="schlMap">
+		SELECT
+		    A.SCL_CD
+		  , A.STU_CD
+		  , A.SI_CD
+		  , A.SCL_YEAR
+		  , A.SCL_SEM
+		  , B.COMD_NM SCL_NM
+          , CASE SI_CD
+            WHEN 'SCHL01' THEN DEP_FEE
+            ELSE C.DEP_FEE * 0.5
+        END SCL_SUM
+		FROM
+		    SCHLSHIP A
+		    , COMMON_DETAIL B
+            , DEPARTMENT C
+		WHERE
+		    A.SI_CD = B.COMD_CD
+            AND A.SCL_YEAR = #{sclYear}
+            AND A.SCL_SEM = #{sclSem}
+            AND SUBSTR(A.STU_CD, 3, 3) = SUBSTR(C.DEP_CD, 6, 3)
+		ORDER BY A.SCL_CD DESC
+	</select>
+	
+</mapper>

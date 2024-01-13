@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.ProfessorMapper">
+	
+	<resultMap type="professorVO" id="proMap">
+		<result property="proCd" column="PRO_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="proJoin" column="PRO_JOIN"/>
+		<result property="proRet" column="PRO_RET"/>
+		<result property="proPos" column="PRO_POS"/>
+	</resultMap>
+	
+	
+	<select id="getProfessor" parameterType="String" resultMap="proMap">
+		SELECT * FROM PROFESSOR WHERE PRO_CD = #{proCd}
+	</select>
+	
+	<select id="getProfessorList" resultMap="proMap">
+		SELECT PRO_CD, DEP_CD, ROOM_CD, PRO_JOIN, PRO_RET, PRO_POS 
+		FROM PROFESSOR
+	</select>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.AcademicAdminMapper">
+	
+	<resultMap type="studentVO" id="studentMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		<association property="commonDetailVO" resultMap="commondetailMap"></association>
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+
+	<resultMap type="commonDetailVO" id="commondetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<resultMap type="recordVO" id="recordMap">
+		<result property="recCd" column="REC_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="recYear" column="REC_YEAR"/>
+		<result property="recSem" column="REC_SEM"/>
+		<result property="recPer" column="REC_PER"/>
+		<result property="recRsn" column="REC_RSN"/>
+		<association property="studentVO" resultMap="studentMap"></association>
+		<association property="approvalVO" resultMap="approvalMap"></association>
+		<association property="commonDetailVO" resultMap="commondetailMap"></association>
+	</resultMap>
+
+	<select id="recordApp" parameterType="String" resultMap="studentMap">
+	   SELECT STU_CD, S.COMD_CD,
+       		  C.COMD_CD, COMD_NM
+         FROM STUDENT S, COMMON_DETAIL C
+        WHERE S.COMD_CD=C.COMD_CD
+          AND STU_CD=#{userCd}
+	</select>
+	
+	<insert id="recordAppPost" parameterType="recordVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="recCd">
+			SELECT RECORD_SEQ.nextVal
+			FROM DUAL
+		</selectKey>
+		INSERT INTO RECORD(REC_CD, STU_CD, APP_CD, COMD_CD, REC_YEAR, REC_SEM, REC_RSN)
+		VALUES(#{recCd},#{stuCd},#{appCd},#{comdCd},#{recYear},#{recSem},#{recRsn})
+	</insert>
+	
+	<select id="recordList" parameterType="hashMap" resultMap="recordMap">
+		SELECT REC_CD, R.STU_CD, R.APP_CD, R.COMD_CD, REC_YEAR, REC_SEM, REC_PER, REC_RSN,
+               S.STU_CD, DEP_CD, S.COMD_CD, STU_YEAR, STU_SEM, STU_MRC, STU_MOC, STU_CRC, STU_COC, STU_ADDT, STU_GRDT,
+       	       A.APP_CD, USER_CD, A.COMD_CD, APP_TARGET, APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD,
+               C.COMD_CD, COM_CD, COMD_NM, COMD_DESC
+		  FROM RECORD R, STUDENT S, APPROVAL A, COMMON_DETAIL C
+		 WHERE R.STU_CD = S.STU_CD
+		   AND R.APP_CD = A.APP_CD
+		   AND R.COMD_CD = C.COMD_CD
+		   AND R.STU_CD = #{userCd}
+		 ORDER BY APP_REG DESC
+	</select>
+	
+	<!-- 받은 메일함 전체 항목 개수(검색 포함) -->
+	<select id="getTotalRecord" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) 
+		FROM   RECORD
+		WHERE  1 = 1
+	</select>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM RECORD
+		WHERE REC_CD=#{recCd}
+	</delete>
+	
+	<select id="sideStatus" parameterType="String" resultType="String">
+		SELECT COMD_CD
+		FROM STUDENT
+		WHERE STU_CD=#{userCd}
+	</select>
+</mapper>

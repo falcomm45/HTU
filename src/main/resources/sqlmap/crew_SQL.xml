@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.CrewMapper">
+	
+	<resultMap type="approvalVO" id="approvalMap">
+		<result property="appCd" column="APP_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="appTarget" column="APP_TARGET"/>
+		<result property="appYn" column="APP_YN"/>
+		<result property="appReg" column="APP_REG"/>
+		<result property="appProdt" column="APP_PRODT"/>
+		<result property="appRet" column="APP_RET"/>
+		<result property="appPcd" column="APP_PCD"/>
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="studentMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="buildingVO" id="buildingMap">
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="bldZip" column="BLD_ZIP"/>
+		<result property="bldAddr1" column="BLD_ADDR1"/>
+		<result property="bldAddr2" column="BLD_ADDR2"/>
+	</resultMap>
+	
+	<resultMap type="roomVO" id="roomMap">
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="roomPur" column="ROOM_PUR"/>
+		<result property="roomCap" column="ROOM_CAP"/>
+		<result property="roomTel" column="ROOM_TEL"/>
+		<association property="buildingVO" resultMap="buildingMap"></association>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="commonDetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<resultMap type="crewPersonnelVO" id="crewPersonnelMap">
+		<result property="crCd" column="CR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="crpJoin" column="CRP_JOIN"/>
+		<result property="crpQuit" column="CRP_QUIT"/>
+	</resultMap>
+	
+	<resultMap type="crewActivityVO" id="crewActivityMap">
+		<result property="craCd" column="CRA_CD"/>
+		<result property="crCd" column="CR_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="craStdt" column="CRA_STDT"/>
+		<result property="craEddt" column="CRA_EDDT"/>
+		<result property="craCon" column="CRA_CON"/>
+		<result property="stuNm" column="STU_NM"/>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<resultMap type="crewVO" id="crewMap">
+		<result property="crCd" column="CR_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="crLeader" column="CR_LEADER"/>
+		<result property="crNm" column="CR_NM"/>
+		<result property="crYn" column="CR_YN"/>
+		<result property="crCon" column="CR_CON"/>
+		<result property="ldrNm" column="LDR_NM"/>
+		<result property="stuNm" column="STU_NM"/>
+		<result property="roomNm" column="ROOM_NM"/>
+		<result property="crPs" column="CR_PS"/>
+		<result property="depNm" column="DEP_NM"/>
+		<association property="userVO" resultMap="userMap"></association>
+		<association property="studentVO" resultMap="studentMap"></association>
+		<association property="approvalVO" resultMap="approvalMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+<!-- 		<association property="roomVO" resultMap="roomMap"/> -->
+<!-- 		<association property="commonDetailVO" resultMap="commonDetailMap"/> -->
+	</resultMap>
+	
+	<!-- 키워드 검색 -->
+	<sql id="search">
+		<if test="keyword!=null and keyword!=''">
+			AND (A.CR_NM LIKE '%' || #{keyword} || '%' 
+			OR   A.CR_CON LIKE '%' || #{keyword} || '%'
+			OR   B.USER_NM LIKE '%' || #{keyword} || '%')
+		</if>
+	</sql>
+	
+	<!-- 동아리 조회 (학생) -->
+	<select id="crewList" parameterType="hashMap" resultMap="crewMap">
+		SELECT A.CR_CD, A.ROOM_CD, A.APP_CD, A.CR_NM, A.CR_CON
+		       , SUBSTR(C.ROOM_CD, 7) || '호' ROOM_NM, B.USER_NM LDR_NM
+               , (
+               SELECT COUNT(*) 
+               FROM CREW_PERSONNEL D
+               WHERE A.CR_CD = D.CR_CD
+               AND D.CRP_QUIT IS NULL) CR_PS
+		FROM   CREW A, USERS B, ROOM C
+		WHERE  A.CR_LEADER = B.USER_CD
+		AND    A.ROOM_CD = C.ROOM_CD
+		AND    A.CR_YN = '0'
+		<include refid="search"></include>
+		ORDER BY A.CR_NM
+	</select>
+	
+	<!-- 나의 동아리 -->
+	<select id="myCrew" parameterType="String" resultMap="crewMap">
+		SELECT A.CR_CD, A.ROOM_CD, A.CR_LEADER, A.CR_NM, A.CR_CON
+			   , SUBSTR(C.ROOM_CD, 7) || '호' ROOM_NM, D.USER_NM LDR_NM
+		FROM   CREW A, CREW_PERSONNEL B, ROOM C, USERS D
+		WHERE  A.CR_CD = B.CR_CD
+		AND    B.CRP_QUIT IS NULL
+		AND    A.ROOM_CD = C.ROOM_CD
+		AND	   A.CR_LEADER = D.USER_CD
+		AND    B.STU_CD = #{stuCd}
+	</select>
+	
+	<!-- 동아리 개설 신청 -->
+	<insert id="crewApply" parameterType="crewVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="crCd">
+			SELECT 'CREW' || TRIM(TO_CHAR(CREW_SEQ.NEXTVAL, '000'))
+			FROM   DUAL
+		</selectKey>
+		INSERT INTO CREW(CR_CD, ROOM_CD, STU_CD, APP_CD, CR_LEADER, CR_NM, CR_CON)
+		VALUES(#{crCd}, #{roomCd}, #{stuCd}, #{appCd}, #{crLeader}, #{crNm}, #{crCon})
+	</insert>
+	
+	<!-- 동아리 상세 (학생) -->
+	<select id="crewDetail" parameterType="String" resultMap="crewMap">
+		SELECT
+		    A.CR_CD, A.ROOM_CD, A.APP_CD, A.STU_CD, A.CR_LEADER, A.CR_NM, A.CR_YN, A.CR_CON
+		    , SUBSTR(B.ROOM_CD, 7) || '호' ROOM_NM
+		    , C.FILE_SN, C.FILE_CD, C.FILE_PATH, C.FILE_ORNM, C.FILE_SVNM, C.FILE_EXTSN, C.FILE_CON, C.FILE_SIZE
+		    , D.USER_NM LDR_NM, D.USER_TEL
+		    , (SELECT COUNT(*) FROM CREW_PERSONNEL D WHERE D.CR_CD = A.CR_CD AND CRP_QUIT IS NULL ) CR_PS
+		FROM
+		    CREW A 
+		    LEFT JOIN ROOM B ON A.ROOM_CD = B.ROOM_CD
+		    LEFT JOIN FILES_DETAIL C ON A.CR_CD = C.FILE_CD
+		    LEFT JOIN USERS D ON A.CR_LEADER = D.USER_CD
+		WHERE
+			A.CR_CD = #{crCd}
+	</select>
+	
+	<!-- 동아리 가입 여부 확인 -->
+	<select id="crewJoinCheck" parameterType="String" resultMap="crewPersonnelMap">
+		SELECT CR_CD, STU_CD, APP_CD, CRP_JOIN, CRP_QUIT
+		FROM   CREW_PERSONNEL
+		WHERE  CR_CD = #{crCd}
+		AND    STU_CD = #{userCd}
+		AND    CRP_QUIT IS NULL
+	</select>
+	
+	<!-- 동아리원 조회 -->
+	<select id="crewPersonnel" parameterType="String" resultMap="crewMap">
+		SELECT A.STU_CD, B.USER_NM STU_NM, D.DEP_NM
+		FROM   CREW_PERSONNEL A, USERS B, CREW C, DEPARTMENT D
+		WHERE  A.STU_CD = B.USER_CD
+        AND    SUBSTR(A.STU_CD, 3, 3) = SUBSTR(D.DEP_CD, 6, 3)
+		AND    A.CRP_QUIT IS NULL
+		AND    A.CR_CD = #{crCd}
+        AND    A.CR_CD = C.CR_CD
+		ORDER BY A.CRP_JOIN
+	</select>
+	
+	<!-- 동아리 활동 내역 조회 -->
+	<select id="activityList" parameterType="String" resultMap="crewActivityMap">
+		SELECT A.CRA_CD, A.CR_CD, A.USER_CD, A.CRA_STDT, A.CRA_EDDT, A.CRA_CON, B.USER_NM AS STU_NM
+		       , C.FILE_SN, C.FILE_CD, C.FILE_ORNM, C.FILE_SVNM, C.FILE_USED
+		FROM   CREW_ACTIVITY A
+		JOIN   USERS B ON A.USER_CD = B.USER_CD
+		LEFT JOIN FILES_DETAIL C ON A.CRA_CD = C.FILE_CD
+		WHERE  A.CR_CD = #{crCd}
+		ORDER BY A.CRA_CD DESC
+	</select>
+	
+	<!-- 가입 신청 여부(중복 신청 방지) -->
+	<select id="joinAppCheck" parameterType="String" resultMap="crewMap">
+		SELECT A.APP_CD, A.USER_CD, A.COMD_CD, A.APP_TARGET, A.APP_YN
+		       , B.CR_CD, B.STU_CD, B.CR_LEADER, B.CR_NM  
+		FROM   APPROVAL A, CREW B
+		WHERE  A.USER_CD = #{stuCd}
+		AND    COMD_CD = 'APPR03'
+		AND    A.APP_TARGET = B.CR_LEADER
+		AND    B.CR_CD = #{crCd}
+	</select>
+	
+	<!-- 동아리원 등록 -->
+	<insert id="crewJoinApp" parameterType="crewPersonnelVO">
+		INSERT INTO CREW_PERSONNEL(CR_CD, STU_CD, APP_CD, CRP_JOIN)
+		VALUES(#{crCd}, #{stuCd}, #{appCd}, SYSDATE)
+	</insert>
+	
+	<!-- 동아리 수정 -->
+	<update id="crewUpdate">
+		UPDATE CREW
+		SET	   CR_NM = #{crNm}
+			   , CR_LEADER = #{crLeader}
+		       , ROOM_CD = #{roomCd}
+		       , CR_CON = #{crCon}
+		WHERE  CR_CD = #{crCd}
+	</update>
+	
+	<!-- 동아리 탈퇴 -->
+	<update id="crewQuit" parameterType="String">
+		UPDATE CREW_PERSONNEL
+		SET	   CRP_QUIT = SYSDATE
+		WHERE  CR_CD = #{crCd}
+        AND    STU_CD = #{stuCd}
+	</update>
+	
+	<!-- 동아리 개설 신청 내역 조회 -->
+	<select id="myAppList" parameterType="String" resultMap="crewMap">
+		SELECT A.APP_CD, A.USER_CD, A.COMD_CD, A.APP_TARGET, A.APP_YN, A.APP_REG, A.APP_PRODT, A.APP_RET, A.APP_PCD
+		       , B.CR_CD, B.ROOM_CD, B.APP_CD, B.STU_CD, B.CR_LEADER, B.CR_NM, B.CR_YN, B.CR_CON
+		       , SUBSTR(B.ROOM_CD, 7) || '호' ROOM_NM
+		FROM   APPROVAL A 
+		LEFT JOIN CREW B ON A.APP_CD = B.APP_CD
+		WHERE  A.USER_CD = #{userCd}
+		AND    A.USER_CD = B.STU_CD
+		ORDER BY A.APP_REG DESC
+	</select>
+	
+	<!-- 동아리 가입 신청 내역 조회 -->
+	<select id="myJoinAppList" parameterType="String" resultMap="crewMap">
+		SELECT DISTINCT
+		    A.APP_CD, A.USER_CD, A.COMD_CD, A.APP_TARGET, A.APP_YN, A.APP_REG, A.APP_PRODT, A.APP_RET, A.APP_PCD,
+		    FIRST_VALUE(B.CR_CD) OVER (PARTITION BY A.APP_CD ORDER BY A.APP_REG DESC NULLS LAST) CR_CD,
+		    FIRST_VALUE(B.ROOM_CD) OVER (PARTITION BY A.APP_CD ORDER BY A.APP_REG DESC NULLS LAST) ROOM_CD,
+		    FIRST_VALUE(B.CR_LEADER) OVER (PARTITION BY A.APP_CD ORDER BY A.APP_REG DESC NULLS LAST) CR_LEADER,
+		    FIRST_VALUE(B.CR_NM) OVER (PARTITION BY A.APP_CD ORDER BY A.APP_REG DESC NULLS LAST) CR_NM,
+		    FIRST_VALUE(B.CR_CON) OVER (PARTITION BY A.APP_CD ORDER BY A.APP_REG DESC NULLS LAST) CR_CON
+		FROM
+		    APPROVAL A
+		LEFT JOIN
+		    CREW B ON A.APP_TARGET = B.CR_LEADER
+		WHERE
+		    A.USER_CD = #{userCd}
+		    AND A.COMD_CD = 'APPR03'
+		    AND B.CR_CD IS NOT NULL
+		ORDER BY A.APP_REG DESC
+	</select>
+	
+	<!-- 동아리 활동 등록 -->
+	<insert id="addCrewActivity" parameterType="crewActivityVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="craCd">
+			SELECT CR_CD || TRIM(TO_CHAR(SUBSTR(MAX(CRA_CD),7) + 1))
+			FROM   CREW_ACTIVITY
+			WHERE  CR_CD = #{crCd}
+			GROUP BY CR_CD
+		</selectKey>
+		INSERT INTO CREW_ACTIVITY(CRA_CD, CR_CD, USER_CD, CRA_STDT, CRA_EDDT, CRA_CON)
+		VALUES(#{craCd}, #{crCd}, #{userCd}, #{craStdt}, #{craEddt}, #{craCon})
+	</insert>
+	
+	<!-- 동아리 개설 승인 상태 변경 -->
+	<update id="crewUpdateYn" parameterType="String">
+		UPDATE CREW
+	 	SET    CR_YN = 0
+	 	WHERE  APP_CD = #{appCd}
+	</update>
+	
+	<!-- 동아리 개설 반려 사유 -->	
+	<select id="appRetReason" parameterType="String" resultMap="approvalMap">
+		SELECT A.APP_RET
+		FROM   APPROVAL A, CREW B
+		WHERE  A.APP_CD = B.APP_CD 
+		AND    A.APP_CD = #{appCd}
+	</select>
+	
+	<!-- 동아리 활동 상세 -->
+	<select id="crewActivityDetail" parameterType="String" resultMap="crewActivityMap">
+		SELECT A.CRA_CD, A.CR_CD, A.USER_CD, A.CRA_STDT, A.CRA_EDDT, A.CRA_CON, B.USER_NM STU_NM
+       		   , C.FILE_SN, C.FILE_CD, C.FILE_PATH, C.FILE_ORNM, C.FILE_SVNM, C.FILE_EXTSN, C.FILE_CON
+		FROM   CREW_ACTIVITY A, USERS B,  FILES_DETAIL C
+		WHERE  A.USER_CD = B.USER_CD
+        AND    A.CRA_CD = C.FILE_CD
+		AND    A.CRA_CD = #{craCd}
+	</select>
+	
+	<!-- 동아리 조회 (학사 관리자) -->
+	<select id="crewListEmp" parameterType="hashMap" resultMap="crewMap">
+		SELECT A.CR_CD, A.ROOM_CD, A.APP_CD, A.CR_NM, A.CR_CON, A.CR_YN
+		       , SUBSTR(C.ROOM_CD, 7) || '호' ROOM_NM, B.USER_NM LDR_NM
+		       , (SELECT COUNT(*) FROM CREW_PERSONNEL D WHERE D.CR_CD = A.CR_CD AND CRP_QUIT IS NULL ) CR_PS
+		FROM   CREW A, USERS B, ROOM C, APPROVAL D
+		WHERE  A.CR_LEADER = B.USER_CD
+		AND    A.ROOM_CD = C.ROOM_CD
+		AND    A.APP_CD = D.APP_CD
+        AND    (D.APP_YN = 1 OR D.APP_YN = 2)
+		<include refid="search"></include>
+		ORDER BY A.CR_NM
+	</select>
+	
+	<!-- 총 동아리 수 -->
+	<select id="crewTotal" resultType="int">
+		SELECT COUNT(*) FROM CREW
+	</select>
+
+	<!-- 운영 동아리 수 -->
+	<select id="actCrewTotal" resultType="int">
+		SELECT COUNT(*) FROM CREW
+		WHERE CR_YN = 0
+	</select>
+	
+	<!-- 동아리 상세 (학사 관리자) -->
+	<select id="crewDetailEmp" parameterType="String" resultMap="crewMap">
+		SELECT
+		    A.CR_CD, A.ROOM_CD, A.APP_CD, A.STU_CD, A.CR_LEADER, A.CR_NM, A.CR_YN, A.CR_CON
+		    , SUBSTR(B.ROOM_CD, 7) || '호' ROOM_NM
+            , C.APP_YN, C.APP_REG, C.APP_PRODT, C.APP_RET
+		    , D.USER_NM LDR_NM, D.USER_TEL
+            , (SELECT COUNT(*) FROM CREW_PERSONNEL D WHERE D.CR_CD = A.CR_CD AND CRP_QUIT IS NULL ) CR_PS
+		FROM
+		    CREW A 
+		    LEFT JOIN ROOM B ON A.ROOM_CD = B.ROOM_CD
+		    LEFT JOIN APPROVAL C ON A.APP_CD = C.APP_CD
+		    LEFT JOIN USERS D ON A.CR_LEADER = D.USER_CD
+		WHERE
+			A.CR_CD = #{crCd}
+	</select>
+	
+	<!-- 동아리 폐쇄 -->
+	<update id="deleteCrew" parameterType="String">
+		UPDATE CREW
+		SET	   CR_YN = 1
+		WHERE  CR_CD = #{crCd}
+	</update>
+	
+	<!-- 동아리원 삭제 -->
+	<update id="deleteCrewPerson" parameterType="String">
+		UPDATE CREW_PERSONNEL
+		SET    CRP_QUIT = SYSDATE
+		WHERE  CR_CD = #{crCd}
+		AND    CRP_QUIT IS NULL
+	</update>
+	
+	<!-- 동아리 개설 신청서 조회 -->
+	<select id="crewAppForm" parameterType="String" resultMap="crewMap">
+		SELECT A.CR_CD, A.ROOM_CD, SUBSTR(A.ROOM_CD, 7) || '호' ROOM_NM, A.APP_CD, A.STU_CD
+			   , A.CR_LEADER, A.CR_NM, A.CR_YN, A.CR_CON, B.USER_NM STU_NM
+               , C.FILE_SN, C.FILE_CD, C.FILE_PATH, C.FILE_ORNM, C.FILE_SVNM, C.FILE_EXTSN, C.FILE_CON
+		FROM   CREW A, USERS B,  FILES_DETAIL C
+		WHERE A.STU_CD = B.USER_CD
+        AND A.CR_CD = C.FILE_CD
+		AND A.CR_CD = #{crCd}
+	</select>
+
+</mapper>

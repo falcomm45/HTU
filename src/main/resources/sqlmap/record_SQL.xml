@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.RecordMapper">
+
+	<resultMap type="recordVO" id="recordMap">
+		<result property="recCd" column="REC_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="recYear" column="REC_YEAR"/>
+		<result property="recSem" column="REC_SEM"/>
+		<result property="recPer" column="REC_PER"/>
+		<result property="recRsn" column="REC_RSN"/>
+		<association property="approvalVO" resultMap="approvalMap"></association>
+		<association property="commonDetailVO" resultMap="commondetailMap"></association>
+		<association property="userVO" resultMap="userMap"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="commondetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<resultMap type="approvalVO" id="approvalMap">
+		<result property="appCd" column="APP_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="appTarget" column="APP_TARGET"/>
+		<result property="appYn" column="APP_YN"/>
+		<result property="appReg" column="APP_REG"/>
+		<result property="appProdt" column="APP_PRODT"/>
+		<result property="appRet" column="APP_RET"/>
+		<result property="appPcd" column="APP_PCD"/>
+	</resultMap>
+	
+	<select id="getRecord" parameterType="String" resultMap="recordMap">
+		SELECT  REC_CD, STU_CD, R.APP_CD, R.COMD_CD, REC_YEAR, REC_SEM, REC_PER, REC_RSN,
+		        USER_CD, A.COMD_CD, APP_TARGET, APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD,
+		        CD.COMD_CD, COM_CD, COMD_NM, COMD_DESC
+		FROM    RECORD R, APPROVAL A, COMMON_DETAIL CD
+		WHERE   R.APP_CD = A.APP_CD
+		AND     R.COMD_CD = CD.COMD_CD
+		AND     STU_CD = ${stuCd}
+	</select>
+	
+	<select id="renderRecord" parameterType="approvalVO" resultMap="recordMap">
+		SELECT  REC_CD, STU_CD, R.APP_CD, R.COMD_CD, REC_YEAR, REC_SEM, REC_PER, REC_RSN,
+		        A.USER_CD, A.COMD_CD, APP_TARGET, APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD, USER_NM
+		FROM    RECORD R, APPROVAL A, USERS U
+		WHERE   R.APP_CD = A.APP_CD
+		AND     R.STU_CD = U.USER_CD
+		AND     A.APP_YN = #{appYn}
+		AND     A.APP_TARGET = #{appTarget}
+		ORDER BY A.APP_REG DESC
+	</select>	
+	
+</mapper>

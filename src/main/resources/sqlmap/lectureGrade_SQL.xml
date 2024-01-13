@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.AcademicAdminMapper">
+
+	<resultMap type="lectureGradeVO" id="lectureGradeMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecgMs" column="LECG_MS"/>
+		<result property="lecgFs" column="LECG_FS"/>
+		<result property="lecgTs" column="LECG_TS"/>
+		<result property="lecgAs" column="LECG_AS"/>
+		<result property="lecgSum" column="LECG_SUM"/>
+		<result property="lecgGrade" column="LECG_GRADE"/>
+		<association property="gradeCriteriaVO" resultMap="gradeCriteriaMap"></association>
+		<association property="objectionVO" resultMap="objectionMap"/>
+	</resultMap>
+	
+	<resultMap type="objectionVO" id="objectionMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="appCd" column="APP_CD2"/>
+		<result property="objCon" column="OBJ_CON"/>
+		<result property="objRpl" column="OBJ_RPL"/>
+		<association property="approvalVO" resultMap="approvalMap"/>
+	</resultMap>
+	
+	<resultMap type="approvalVO" id="approvalMap">
+		<result property="appCd" column="APP_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="appTarget" column="APP_TARGET"/>
+		<result property="appYn" column="APP_YN"/>
+		<result property="appReg" column="APP_REG"/>
+		<result property="appProdt" column="APP_PRODT"/>
+		<result property="appRet" column="APP_RET"/>
+		<result property="appPcd" column="APP_PCD"/>
+	</resultMap>
+	
+	<resultMap type="gradeCriteriaVO" id="gradeCriteriaMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+		<association property="lectureVO" resultMap="lectureMap"></association>
+	</resultMap>
+	
+	<resultMap type="lectureVO" id="lectureMap">
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecHcnt" column="LEC_HCNT"/>
+		<result property="lecStat" column="LEC_STAT"/>
+		<association property="lectureApplyVO" resultMap="lectureAppMap"/>
+	</resultMap>
+	
+	<resultMap type="lectureApplyVO" id="lectureAppMap">
+		<result property="lecaStdt" column="LECA_STDT"/>
+		<result property="lecaEddt" column="LECA_EDDT"/>
+		<result property="lecaType" column="LECA_TYPE"/>
+		<result property="lecaCd" column="LECA_CD"/>
+		<result property="proCd" column="PRO_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="lecaYear" column="LECA_YEAR"/>
+		<result property="lecaSem" column="LECA_SEM"/>
+		<result property="lecaNm" column="LECA_NM"/>
+		<result property="lecaCon" column="LECA_CON"/>
+		<result property="lecaTrg" column="LECA_TRG"/>
+		<result property="lecaCrd" column="LECA_CRD"/>
+		<result property="lecaPer" column="LECA_PER"/>
+		<result property="lecaCap" column="LECA_CAP"/>
+		<result property="lecaSche" column="LECA_SCHE"/>
+		<result property="lecaBook" column="LECA_BOOK"/>
+		<result property="lecaNote" column="LECA_NOTE"/>
+		<result property="lecaEva" column="LECA_EVA"/>
+		<result property="lecaTemp" column="LECA_TEMP"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+		<association property="professorVO" resultMap="professorMap"/>
+	</resultMap>
+	
+	<resultMap type="professorVO" id="professorMap">
+		<result property="proCd" column="PRO_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="proJoin" column="PRO_JOIN"/>
+		<result property="proRet" column="PRO_RET"/>
+		<result property="proPos" column="PRO_POS"/>
+		<association property="userVO" resultMap="userMap"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD" />
+		<result property="userNm" column="USER_NM" />
+		<result property="userNme" column="USER_NME" />
+		<result property="userTel" column="USER_TEL" />
+		<result property="userZip" column="USER_ZIP" />
+		<result property="userAddr1" column="USER_ADDR1" />
+		<result property="userAddr2" column="USER_ADDR2" />
+		<result property="userReg1" column="USER_REG1" />
+		<result property="userReg2" column="USER_REG2" />
+		<result property="userMail" column="USER_MAIL" />
+		<result property="userPass" column="USER_PASS" />
+		<result property="userBank" column="USER_BANK" />
+		<result property="userDepo" column="USER_DEPO" />
+		<result property="userAcc" column="USER_ACC" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="comdCd" column="COMD_CD" />
+	</resultMap>
+	
+	<resultMap type="taskVO" id="taskVOMap">
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="taskNm" column="TASK_NM"/>
+		<result property="taskCon" column="TASK_CON"/>
+		<result property="taskReg" column="TASK_REG"/>
+		<result property="taskEddt" column="TASK_EDDT"/>
+		<result property="rnum" column="RNUM"/>
+		<collection property="taskSubmitList" resultMap="taskSubmitVOMap"/>
+	</resultMap>
+	
+	<resultMap type="taskSubmitVO" id="taskSubmitVOMap">
+		<result property="tsubCd" column="TSUB_CD"/>
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="tsubDt" column="TSUB_DT"/>
+		<result property="tsubCon" column="TSUB_CON"/>
+		<result property="tsubScore" column="TSUB_SCORE"/>
+	</resultMap>	
+
+	<select id="getLecList" parameterType="String" resultMap="lectureGradeMap">
+		SELECT  LG.CRTR_CD, LG.STU_CD, LECG_MS, LECG_FS, LECG_TS, LECG_AS, LECG_SUM, LECG_GRADE,
+		        GC.LEC_CD, GC.CRTR_MP, GC.CRTR_FP, GC.CRTR_TP, GC.CRTR_AP,
+		        LEC_HCNT, LEC_STAT,
+		        LECA_CD, LA.PRO_CD, LA.DEP_CD, LA.ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, 
+		        LECA_TRG, LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, 
+		        LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE,
+		        P.DEP_CD, P.ROOM_CD, PRO_JOIN, PRO_RET, PRO_POS,
+		        U.USER_CD, FILE_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, 
+		        USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD,
+		        O.CRTR_CD, O.APP_CD AS APP_CD2, OBJ_CON, OBJ_RPL,
+		        A.APP_CD, A.USER_CD, A.COMD_CD, APP_TARGET, A.APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD
+		FROM    LECTURE_GRADE LG, GRADE_CRITERIA GC, LECTURE L, LECTURE_APPLY LA, PROFESSOR P, USERS U, OBJECTION O, APPROVAL A
+		WHERE   LG.CRTR_CD = GC.CRTR_CD
+		AND     GC.LEC_CD = L.LEC_CD
+		AND     L.LEC_CD = LA.LECA_CD
+		AND     LA.PRO_CD = P.PRO_CD
+		AND     P.PRO_CD = U.USER_CD
+		AND     LG.CRTR_CD = O.CRTR_CD(+)
+		AND     LG.STU_CD = O.STU_CD(+)
+		AND     O.APP_CD = A.APP_CD(+)
+		AND     LG.STU_CD = #{stuCd}
+	</select>
+	
+	<select id="getGrade" parameterType="studentVO" resultMap="lectureGradeMap">
+		SELECT  LG.CRTR_CD, LG.STU_CD, LECG_MS, LECG_FS, LECG_TS, LECG_AS, LECG_SUM, LECG_GRADE,
+		        GC.LEC_CD, GC.CRTR_MP, GC.CRTR_FP, GC.CRTR_TP, GC.CRTR_AP,
+		        LEC_HCNT, LEC_STAT,
+		        LECA_CD, LA.PRO_CD, LA.DEP_CD, LA.ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, 
+		        LECA_TRG, LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, 
+		        LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE,
+		        P.DEP_CD, P.ROOM_CD, PRO_JOIN, PRO_RET, PRO_POS,
+		        U.USER_CD, FILE_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, 
+		        USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD,
+		        O.CRTR_CD, O.APP_CD AS APP_CD2, OBJ_CON, OBJ_RPL,
+		        A.APP_CD, A.USER_CD, A.COMD_CD, APP_TARGET, A.APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD
+		FROM    LECTURE_GRADE LG, GRADE_CRITERIA GC, LECTURE L, LECTURE_APPLY LA, PROFESSOR P, USERS U, OBJECTION O, APPROVAL A
+		WHERE   LG.CRTR_CD = GC.CRTR_CD
+		AND     GC.LEC_CD = L.LEC_CD
+		AND     L.LEC_CD = LA.LECA_CD
+		AND     LA.PRO_CD = P.PRO_CD
+		AND     P.PRO_CD = U.USER_CD
+		AND     LG.CRTR_CD = O.CRTR_CD(+)
+		AND     LG.STU_CD = O.STU_CD(+)
+		AND     O.APP_CD = A.APP_CD(+)
+		AND     LG.STU_CD = #{stuCd}
+		AND		LA.LECA_TRG = #{stuYear}
+		AND		LA.LECA_SEM = #{stuSem}
+	</select>
+	
+	
+	<select id="checkGrade" parameterType="String" resultType="int">
+		SELECT  COUNT(*)
+		FROM    LECTURE_GRADE LG, GRADE_CRITERIA GC
+		WHERE   LG.CRTR_CD = GC.CRTR_CD
+		AND     GC.LEC_CD = #{lecCd}
+		AND     LG.LECG_MS IS NOT NULL
+		AND     LG.LECG_FS IS NOT NULL
+		AND     LG.LECG_TS IS NOT NULL
+		AND     LG.LECG_AS IS NOT NULL
+	</select>
+	
+	<select id="endLecture" parameterType="String" resultMap="taskVOMap">
+		SELECT  T.TASK_CD, LEC_CD, FILE_CD, TASK_NM, TASK_CON, TASK_REG, TASK_EDDT,
+		        TSUB_CD, STU_CD, TSUB_DT, TSUB_SCORE
+		FROM    TASK T, TASK_SUBMIT TS
+		WHERE   T.TASK_CD = TS.TASK_CD(+)
+		AND     T.LEC_CD = #{lecCd}
+	</select>
+	
+	<select id="getLectureGradeByLecCd" parameterType="String" resultMap="lectureGradeMap">
+		SELECT  LG.CRTR_CD, STU_CD, LECG_MS, LECG_FS, LECG_TS, LECG_AS, LECG_SUM, LECG_GRADE,
+		        LEC_CD, CRTR_MP, CRTR_FP, CRTR_TP, CRTR_AP
+		FROM    LECTURE_GRADE LG, GRADE_CRITERIA GC
+		WHERE   LG.CRTR_CD = GC.CRTR_CD
+		AND     GC.LEC_CD =	#{lecCd}
+	</select>
+	
+	<update id="updateGrade" parameterType="list">
+		<foreach collection="list" item="item" open="DECLARE BEGIN" close="; END;" separator=";">
+			UPDATE 	LECTURE_GRADE 
+			SET		LECG_TS = #{item.lecgTs}, 
+					LECG_AS = #{item.lecgAs},
+					LECG_SUM = #{item.lecgSum}
+			WHERE 	CRTR_CD = #{item.crtrCd}
+			AND		STU_CD = #{item.stuCd}
+		</foreach>
+	</update>
+	
+	<update id="updateLectureStat" parameterType="String">
+		UPDATE LECTURE
+		SET	LEC_STAT = 1
+		WHERE LEC_CD = #{lecCd}
+	</update>
+	
+<!-- 	<select id="getObjectionList" parameterType="String" resultMap="objectionMap"> -->
+<!-- 		SELECT  O.CRTR_CD, O.STU_CD, O.APP_CD, OBJ_CON, OBJ_RPL, -->
+<!-- 		        LECG_MS, LECG_FS, LECG_TS, LECG_AS, LECG_SUM, LECG_GRADE, -->
+<!-- 		        A.USER_CD, A.COMD_CD, APP_TARGET, APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD, -->
+<!-- 		        GC.LEC_CD, GC.CRTR_MP, GC.CRTR_FP, GC.CRTR_TP, GC.CRTR_AP, -->
+<!-- 		        LEC_HCNT, LEC_STAT, -->
+<!-- 		        LECA_CD, PRO_CD, DEP_CD, ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, LECA_TRG,  -->
+<!-- 		        LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, LECA_TEMP, LECA_STDT, -->
+<!-- 		        LECA_EDDT, LECA_TYPE, USER_NM -->
+<!-- 		FROM    OBJECTION O, LECTURE_GRADE LG, APPROVAL A, GRADE_CRITERIA GC, LECTURE L, LECTURE_APPLY LA, USERS U -->
+<!-- 		WHERE   O.CRTR_CD = LG.CRTR_CD -->
+<!-- 		AND     O.STU_CD = LG.STU_CD -->
+<!-- 		AND     LG.CRTR_CD = GC.CRTR_CD -->
+<!-- 		AND     O.APP_CD = A.APP_CD -->
+<!-- 		AND     A.APP_TARGET = U.USER_CD -->
+<!-- 		AND     GC.LEC_CD = L.LEC_CD -->
+<!-- 		AND     L.LEC_CD = LA.LECA_CD -->
+<!-- 		AND     O.STU_CD = #{stuCd} -->
+<!-- 	</select> -->
+	
+</mapper>

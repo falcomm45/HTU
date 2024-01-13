@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.TuitionMapper">
+	
+	<resultMap type="tuitionVO" id="tuitionMap">
+		<result property="tutCd" column="TUT_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="sclCd" column="SCL_CD"/>
+		<result property="tutYear" column="TUT_YEAR"/>
+		<result property="tutSem" column="TUT_SEM"/>
+		<result property="tutTuition" column="TUT_TUITION"/>
+		<result property="tutSchl" column="TUT_SCHL"/>
+		<result property="tutDt" column="TUT_DT"/>
+		<result property="tutPayment" column="TUT_PAYMENT"/>
+		<result property="stuNm" column="STU_NM"/>
+		<result property="depNm" column="DEP_NM"/>
+	</resultMap>
+	
+	<!-- 등록금 내역 조회 -->
+	<select id="tuitionList" resultMap="tuitionMap">
+		SELECT 
+		    A.TUT_CD, A.STU_CD,  C.USER_NM STU_NM, A.TUT_YEAR, A.TUT_SEM, A.TUT_TUITION, A.TUT_SCHL
+		    , A.TUT_DT, A.TUT_PAYMENT, B.DEP_NM
+		FROM 
+		    TUITION A, DEPARTMENT B, USERS C
+		WHERE
+		    SUBSTR(A.STU_CD, 3, 3) = SUBSTR(B.DEP_CD, 6, 3)
+		    AND A.STU_CD = C.USER_CD
+		    AND A.TUT_YEAR = '2024'
+		    AND A.TUT_SEM = '1'
+		ORDER BY A.TUT_DT DESC
+	</select>
+	
+	<!-- 나의 등록금 조회 -->
+	<select id="myTuition" parameterType="String" resultMap="tuitionMap">
+		SELECT
+		    TUT_CD
+		  , STU_CD
+		  , SCL_CD
+		  , TUT_YEAR
+		  , TUT_SEM
+		  , TUT_TUITION
+		  , TUT_SCHL
+		  , TUT_DT
+		  , TUT_PAYMENT
+		FROM
+		    TUITION
+		WHERE
+		    STU_CD = #{stuCd}
+		ORDER BY TUT_DT DESC
+	</select>
+	
+	<select id="bill" parameterType="String" resultMap="tuitionMap">
+		SELECT 
+		    A.TUT_CD, A.STU_CD,  C.USER_NM STU_NM, A.TUT_YEAR, A.TUT_SEM, A.TUT_TUITION, A.TUT_SCHL
+		    , A.TUT_DT, A.TUT_PAYMENT, B.DEP_NM
+		FROM 
+		    TUITION A, DEPARTMENT B, USERS C
+		WHERE
+		    SUBSTR(A.STU_CD, 3, 3) = SUBSTR(B.DEP_CD, 6, 3)
+		    AND A.STU_CD = C.USER_CD
+		    AND A.TUT_CD = #{tutCd}
+	</select>
+	
+	<insert id="insert" parameterType="tuitionVO">
+		<selectKey resultType="String" keyProperty="tutCd" order="BEFORE">
+			SELECT 'TUON' || TRIM(TO_CHAR(TUON_SEQ.NEXTVAL))
+			FROM   DUAL
+		</selectKey>
+		INSERT INTO TUITION (TUT_CD, STU_CD, TUT_YEAR, TUT_SEM, TUT_TUITION)
+		VALUES (#{tutCd}, #{stuCd}, #{tutYear}, #{tutSem}, #{tutTuition})
+	</insert>
+	
+	<select id="check" parameterType="tuitionVO" resultMap="tuitionMap">
+		SELECT 	* 
+		FROM 	TUITION
+		WHERE 	TUT_YEAR = #{tutYear}
+		AND		TUT_SEM = #{tutSem}
+		AND		STU_CD = #{stuCd}
+	</select>
+	
+</mapper>

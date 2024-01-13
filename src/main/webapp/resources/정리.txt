@@ -1,0 +1,188 @@
+
+1. 스프링 시큐리티에서 submit할 때
+   1) <form 태그 사용시>
+         <sec:csrfInput />
+      </form>
+   2) ajax사용시 
+      beforeSend:function(xhr){
+			xhr.setRequestHeader("${_csrf.headerName}","${_csrf.token}");
+		},
+      success앞에 꼭쓰기
+   3) 파일 업로드 시 
+      "action", "/item/updatePost?${_csrf.parameterName}=${_csrf.token}"
+      "enctype" , "multupart/form-data"
+   
+   4) 만약 어쩔수없이csrf 비활성 처리가 필요하다면
+      security-context.xml에서 <security:csrf disabled="true" /> 추가하기
+   
+2. 자동 로그인
+   1) 로그인하면 특정 시간 동안 다시 로그인 할 필요가 없는 기능
+   2) 스프링 시큐리티는 데이터베이스를 사용하여 처리  persistent_logins 테이블이용
+   3) security-context.xml 에서 remember-me 태그를 이용하여 구현
+
+3. 스프링 시큐리티 표현식
+   1) hasRole("ROLE_MEMBER") : 해당 롤이 있으면 true
+   2) hasAnyRole ("ROLE_MEMBER", "ROLE_ADMIN") : 여러 롤들 중에서 하나라도 해당하는 롤이 있으면 true
+   3) principal : 인증된 사용자의 사용자 정보(UserDetails 인터페이스를 구현한 클래스의 객체)
+   4) authentication : 인증된 사용자의 인증 정보 (Authentication 인터페이스를 구현한 클래스의 객체)
+   5) permitAll : 모든 사용자에게 허용
+   6) denyAll : 모든 사용자에게 거부
+   7) isAnonymous() : 익명의 사용자의 경우 (로그인을 하지 않은 경우도 해당)
+   8) isAuthenticated() : 인증된 사용자의 경우 true
+   9) isFullyAuthenticated() : Remember-me로 인증된 것이 아닌 일반적인 방법으로 인증된 사용자인 경우 true
+   
+   
+4. CKEditor 사용방법
+<script>
+   CKEDITOR.replace('editor');
+   //html 태그 사라지는 오류 해결
+   CKEDITOR.config.allowedContent = true;
+   //내용 미리 넣기
+   CKEDITOR.instances.editor.setData('<p>aaa</p>'); 
+   //ckeditor 안에 있는 내용을 태그 포함해서 다 가져오기
+   CKEDITOR.instances.editor.getData();
+   //입력란 읽기전용
+   $("#editor").attr("readOnly",true);
+   //입력란 활성화
+   CKEDITOR.instances['editor'].setReadOnly(false);
+</script>
+   
+   
+5. SBAdmin2 입력창 이미지 처리
+<style>
+.bg-register-image2 {
+  background-position: center;
+  background-size: cover;
+}
+</style>
+
+$("#row .bg-register-image2").css({"background-image":"url("+e.target.result+")"});
+
+<div class="col-lg-5 d-none d-lg-block bg-register-image2" 
+      style="background-image:url('https://source.unsplash.com/Mv9hjnEUHR4/600x800');">
+   </div>
+   
+   
+reader.onload = function(e){
+            //background-position:center;background-size:cover
+            $(".bg-register-image").css({"background-image":"url("+e.target.result+")","background-position":"center","background-size":"cover"});
+//             console.log(e.target.result);
+         }
+   
+   
+   
+   
+6. FormData 를 통한 비동기 통신
+$.ajax({
+	url: "",
+	processData: false,
+	contentType: false,
+	data: formData,
+	type: 'post',
+	dataType: 'json',
+	success: res => {
+		console.log(res);
+	}
+})
+
+7. json을 통해서 비동기 통신
+$.ajax({
+	url: "",
+	contentType: "application/json"; chatset=utf-8,
+	data: JSON.stringify(data),
+	type: 'post',
+	dataType: 'json',
+	success: res => {
+		console.log(res);
+	}
+})
+
+8. checkbox, select 요소 값 가져오기
+	//체크박스에 체크된 값 가져오기
+	let ePosition = $("input[name='ePosition']:checked").val();
+	//select 박스의 값 가져오기
+	//let eDept = $("select[name='eDept']").val();
+	let eDept = $("#eDept option:selected").val();
+
+
+9. validation
+/*
+애너테이션      |     설명
+------------------------------------------
+골뱅이NotEmpty   CharSequence, Map, Collection, Array가 not null이고 length() 또는 size()가 0이 아닐 것
+골뱅이NotNull   field의 값이 not null 임
+골뱅이Null   field의 값이 null일 것
+골뱅이Size(min="m", max="n")   CharSequence의 length() 또는 Map, Collection, Array의 size()가 m 보다 크고 n 보다 작을 것
+골뱅이UniqueElements   Collection 내의 요소들이 중복되지 않을 것
+골뱅이Min(m), 골뱅이Max(n)   각각 숫자형 field에 대해 최대, 최소 값  설정
+골뱅이Range(min=i, max=a)   최소 i에서 최대 a 사이의 값일 것
+골뱅이Digits   숫자 형태의 값으로만 구성될 것
+골뱅이Email   이메일 형식을 갖출 것
+골뱅이SafeHtml   전달된 HTML 내용이 안전한지 체크
+골뱅이CreditCardNumber   문자열이 신용카드 형태인지 점검
+골뱅이Future[OrPresent],
+골뱅이Past[OrPresent]   Date, Calendar, time package 타입에 대해 각각 미래 또는 이전 시간이거나  같을 것
+골뱅이URL   문자열이 URL 형식인지 검증
+골뱅이Pattern(regexp="")   문자열 field가 정규 표현식에 적합할 것. null은 valid
+골뱅이AssertTrue, 골뱅이AssertFalse   각각 값이 true, false인지 검증(주로 메서드의 리턴 값으로 검증할 때)
+ */
+
+
+
+10. 모달을 띄우는 방법
+	1. button으로 띄우기
+	<button type="button" class="btn btn-default" 
+	data-toggle="modal" data-target="#modal-default">
+	Launch Default Modal
+	</button>
+	
+	2. a 태그로 띄우기
+	<a data-toggle="modal" href="#modal-default">Open Modal</a>
+	
+	3. 기타 요소로 띄우기
+	<p data-toggle="modal" data-target="#modal-default">Open Modal</a>
+	 -->
+	<!-- bookVO -> attachVOList 멤버변수 -> List<AttachVO> 
+	JSTL누적 : 
+	
+	c set var="auth" value=""
+	
+	c set var="auth" value="달러{auth += ' ' += 누적할값}
+
+11. 양쪽정렬
+	<nav class="navbar navbar-expand navbar-dark bg-dark">
+		<div class="container">
+			<div class="navbar-header" style="justify-content:left;display:flex;">
+				<a class="navbar-brand" href="/home">Home</a>
+			</div>
+			<button type="submit" class="btn btn-primary"
+			style="justify-content:right;display:flex;">로그아웃</button>
+		</div>
+	</nav>
+
+
+12. sweetalert2 => success, error, warning, info, question
+	1.
+		1) adminlte 
+		  <script src="/resources/adminlte/plugins/sweetalert2/sweetalert2.min.js"></script>
+		<link rel="stylesheet" href="/resources/adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+		
+		  또는.. 2) sweetalert2.min.js 및 sweetalert2.min.css 다운로드
+	
+	
+	2. <body class="sidebar-mini sidebar-closed sidebar-collapse">
+	
+	3. <html class>
+	
+	4. 
+	var Toast = Swal.mixin({
+		      toast: true,
+		      position: 'top-end',
+		      showConfirmButton: false,
+		      timer: 3000
+		    });
+		
+		Toast.fire({
+			icon:'success',
+			title:'개똥이'
+		});

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.ObjectionMapper">
+	
+	<resultMap type="objectionVO" id="objectionMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="appCd" column="APP_CD2"/>
+		<result property="objCon" column="OBJ_CON"/>
+		<result property="objRpl" column="OBJ_RPL"/>
+		<association property="approvalVO" resultMap="approvalMap"/>
+		<association property="studentVO" resultMap="studentMap"/>
+		<association property="lectureGradeVO" resultMap="lectureGradeMap"/>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="studentMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		<association property="userVO" resultMap="userMap"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="lectureGradeVO" id="lectureGradeMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecgMs" column="LECG_MS"/>
+		<result property="lecgFs" column="LECG_FS"/>
+		<result property="lecgTs" column="LECG_TS"/>
+		<result property="lecgAs" column="LECG_AS"/>
+		<result property="lecgSum" column="LECG_SUM"/>
+		<result property="lecgGrade" column="LECG_GRADE"/>
+		<association property="gradeCriteriaVO" resultMap="gradeCriteriaMap"/>
+	</resultMap>
+	
+	<resultMap type="gradeCriteriaVO" id="gradeCriteriaMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+	</resultMap>
+	
+	<resultMap type="approvalVO" id="approvalMap">
+		<result property="appCd" column="APP_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="appTarget" column="APP_TARGET"/>
+		<result property="appYn" column="APP_YN"/>
+		<result property="appReg" column="APP_REG"/>
+		<result property="appProdt" column="APP_PRODT"/>
+		<result property="appRet" column="APP_RET"/>
+		<result property="appPcd" column="APP_PCD"/>
+	</resultMap>
+	
+	<insert id="insertObjection" parameterType="objectionVO">
+		INSERT INTO OBJECTION(CRTR_CD, STU_CD, APP_CD, OBJ_CON)
+		VALUES (#{crtrCd}, #{stuCd}, #{appCd}, #{objCon})
+	</insert>
+	
+	<select id="list" parameterType="String" resultMap="objectionMap">
+		SELECT  O.CRTR_CD, O.STU_CD, O.APP_CD, OBJ_CON, OBJ_RPL,
+		        A.APP_CD, A.USER_CD, A.COMD_CD, APP_TARGET, APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD,
+		        S.STU_CD, DEP_CD, S.COMD_CD, STU_YEAR, STU_SEM, STU_MRC, STU_MOC, STU_CRC, STU_COC, STU_ADDT, STU_GRDT,
+		        U.USER_CD, FILE_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, 
+		        USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD,
+		        LG.CRTR_CD, LG.STU_CD, LECG_MS, LECG_FS, LECG_TS, LECG_AS, LECG_SUM, LECG_GRADE,
+		        GC.CRTR_CD, LEC_CD, CRTR_MP, CRTR_FP, CRTR_TP, CRTR_AP
+		FROM    OBJECTION O, APPROVAL A, STUDENT S, USERS U,LECTURE_GRADE LG, GRADE_CRITERIA GC
+		WHERE   O.CRTR_CD = LG.CRTR_CD
+		AND     O.STU_CD = LG.STU_CD
+		AND     O.STU_CD = S.STU_CD
+		AND     S.STU_CD = U.USER_CD
+		AND     O.APP_CD = A.APP_CD
+		AND     O.CRTR_CD = GC.CRTR_CD
+		AND     GC.LEC_CD = #{lecCd}
+	</select>
+	
+	<update id="updateGrade" parameterType="hashMap">
+		UPDATE 	LECTURE_GRADE
+		SET 	LECG_GRADE = #{lecgGrade}
+		WHERE 	CRTR_CD = #{crtrCd}
+		AND		STU_CD = #{stuCd}	
+	</update>
+	
+	<select id="getLecCd" parameterType="String" resultType="String">
+		SELECT LEC_CD
+		FROM GRADE_CRITERIA
+		WHERE CRTR_CD = #{crtrCd}
+	</select>
+	
+	<update id="updateRpl" parameterType="objectionVO">
+		UPDATE 	OBJECTION
+		SET 	OBJ_RPL = #{objRpl}
+		WHERE 	CRTR_CD = #{crtrCd}
+		AND		STU_CD = #{stuCd}
+	</update>
+</mapper>

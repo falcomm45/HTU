@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.MyCalendarMapper">
+	
+	<resultMap type="myCalendarVO" id="mcMap">
+		<result property="mcCd" column="MC_CD"/>
+		<result property="mcTitle" column="MC_TITLE"/>
+		<result property="mcStdt" column="MC_STDT"/>
+		<result property="mcEddt" column="MC_EDDT"/>
+		<result property="userCd" column="USER_CD"/>
+	</resultMap>
+	
+	<!-- 개인일정 조회 -->
+	<select id="getCalendar" parameterType="String" resultMap="mcMap">
+		SELECT
+		    MC_CD,
+		    MC_TITLE,
+		    MC_STDT,
+		    MC_EDDT,
+		    USER_CD
+		FROM
+		    MY_CALENDAR
+		WHERE
+			USER_CD = #{userCd}
+	</select>
+	
+	<!-- 개인일정 등록 -->
+	<insert id="insertCalendar" parameterType="myCalendarVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="mcCd">
+			SELECT 'MC' || TRIM(TO_CHAR(SUBSTR(MAX(MC_CD),3) + 1))
+			FROM  MY_CALENDAR
+		</selectKey>
+		INSERT INTO MY_CALENDAR (
+		    MC_CD,
+		    MC_TITLE,
+		    MC_STDT,
+		    MC_EDDT,
+		    USER_CD
+		) VALUES (
+		    #{mcCd},
+		    #{mcTitle},
+		    #{mcStdt},
+		    #{mcEddt},
+		    #{userCd}
+		)
+	</insert>
+	
+	<!-- 개인일정 삭제 -->
+	<delete id="deleteCalendar" parameterType="String">
+		DELETE FROM MY_CALENDAR
+		WHERE  MC_CD = #{mcCd}
+	</delete>
+	
+	<!-- 개인일정 수정 -->
+	<update id="updateCalendar" parameterType="myCalendarVO">
+		UPDATE MY_CALENDAR
+		SET
+		    MC_TITLE = #{mcTitle}
+		    , MC_STDT = #{mcStdt}
+		    , MC_EDDT = #{mcEddt}
+		WHERE
+	        MC_CD = #{mcCd}   
+	</update>
+</mapper>

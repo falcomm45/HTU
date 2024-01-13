@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.NoticeBoardMapper">
+
+	<resultMap type="noticeBoardVO" id="noticeBoardMap">
+		<result property="nbCd" column="NB_CD" />
+		<result property="empCd" column="EMP_CD" />
+		<result property="userNm" column="USER_NM" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="nbTitle" column="NB_TITLE" />
+		<result property="nbCon" column="NB_CON" />
+		<result property="nbReg" column="NB_REG" />
+		<result property="nbUdt" column="NB_UDT" />
+		<result property="nbCnt" column="NB_CNT" />
+		<association property="employeeVO" resultMap="employeeMap"></association>
+		<collection property="filesDetailVOList"
+			resultMap="filesDetailMap"></collection>
+	</resultMap>
+
+	<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="filePath" column="FILE_PATH" />
+		<result property="fileOrnm" column="FILE_ORNM" />
+		<result property="fileSvnm" column="FILE_SVNM" />
+		<result property="fileExtsn" column="FILE_EXTSN" />
+		<result property="fileCon" column="FILE_CON" />
+		<result property="fileSize" column="FILE_SIZE" />
+	</resultMap>
+
+	<resultMap type="employeeVO" id="employeeMap">
+		<result property="empCd" column="EMP_CD" />
+		<result property="empDept" column="EMP_DEPT" />
+		<result property="empPos" column="EMP_POS" />
+		<result property="empJoin" column="EMP_JOIN" />
+		<result property="empQuit" column="EMP_QUIT" />
+	</resultMap>
+
+	<resultMap type="userVO" id="UsersMap">
+		<result property="userCd" column="USER_CD" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="userNm" column="USER_NM" />
+		<result property="userNme" column="USER_NME" />
+		<result property="userTel" column="USER_TEL" />
+		<result property="userZip" column="USER_ZIP" />
+		<result property="userAddr1" column="USER_ADDR1" />
+		<result property="userAddr2" column="USER_ADDR2" />
+		<result property="userReg1" column="USER_REG1" />
+		<result property="userReg2" column="USER_REG2" />
+		<result property="userMail" column="USER_MAIL" />
+		<result property="userPass" column="USER_PASS" />
+		<result property="userBank" column="USER_BANK" />
+		<result property="userDepo" column="USER_DEPO" />
+		<result property="userAcc" column="USER_ACC" />
+		<result property="comdCd" column="COMD_CD" />
+	</resultMap>
+
+	<select id="list" resultMap="noticeBoardMap">
+		SELECT
+				A.NB_CD, A.EMP_CD, (SELECT C.USER_NM FROM USERS C WHERE C.USER_CD = A.EMP_CD)
+				USER_NM,
+				A.FILE_CD, A.NB_TITLE, A.NB_CON, A.NB_REG, A.NB_UDT, A.NB_CNT, B.EMP_CD,
+				FILE_SN, FILE_PATH, FILE_ORNM, FILE_SVNM, FILE_EXTSN, FILE_CON,
+				FILE_SIZE
+		FROM
+				NOTICE_BOARD A, EMPLOYEE B, FILES_DETAIL F
+		WHERE
+				A.EMP_CD = B.EMP_CD AND
+				A.FILE_CD = F.FILE_CD(+)
+		<include refid="criteria" />
+		ORDER BY A.NB_REG DESC
+	</select>
+
+	<sql id="criteria">
+		<!-- <trim prefix="(" suffix=") AND " prefixOverrides="OR"> -->
+		<choose>
+			<when test="type == 'T'.toString()">
+				AND NB_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="type == 'C'.toString()">
+				AND NB_CON LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="type == 'W'.toString()">
+				AND USER_NM LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+		<!-- </trim> -->
+	</sql>
+
+	<select id="getListWithPaging" resultType="noticeBoardVO">
+		select T.*
+		from (
+		select ROW_NUMBER() OVER(ORDER BY NB_CD DESC,  A.NB_REG DESC) RN,
+		A.NB_CD, A.EMP_CD,(SELECT
+		C.USER_NM FROM USERS C WHERE C.USER_CD =
+		A.EMP_CD) USER_NM, A.FILE_CD,
+		A.NB_TITLE, A.NB_CON, A.NB_REG, A.NB_UDT,
+		A.NB_CNT, A.NB_YN
+		from NOTICE_BOARD A
+		WHERE 1 = 1
+		<include refid="criteria"></include>
+		ORDER BY A.NB_YN DESC,  A.NB_REG DESC ) T
+		where T.rn BETWEEN (#{pageNum} * #{amount}) -
+		(#{amount} - 1) AND
+		(#{pageNum} * #{amount})
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+	    <![CDATA[
+	    	select count(*) from NOTICE_BOARD WHERE 1 = 1
+	    ]]>
+		<include refid="criteria"></include>
+	</select>
+
+	<select id="detail" resultMap="noticeBoardMap"
+		parameterType="String">
+		SELECT
+		A.NB_CD,
+		A.EMP_CD,
+		(SELECT C.USER_NM FROM USERS C WHERE C.USER_CD
+		= A.EMP_CD) AS USER_NM,
+		F.FILE_CD,
+		A.NB_TITLE,
+		A.NB_CON,
+		A.NB_REG,
+		A.NB_UDT,
+		A.NB_CNT,
+		B.EMP_CD,
+		F.FILE_SN,
+		F.FILE_PATH,
+		F.FILE_ORNM,
+		F.FILE_SVNM,
+		F.FILE_EXTSN,
+		F.FILE_CON,
+		F.FILE_SIZE
+		FROM
+		NOTICE_BOARD A
+		INNER JOIN
+		EMPLOYEE B ON A.EMP_CD = B.EMP_CD
+		LEFT OUTER JOIN
+		FILES_DETAIL F ON A.NB_CD = F.FILE_CD -- 변경된 부분
+		WHERE
+		A.NB_CD = #{nbCd}
+		<!-- SELECT A.NB_CD, A.EMP_CD, (SELECT C.USER_NM FROM USERS C WHERE C.USER_CD 
+			= A.EMP_CD) USER_NM, A.FILE_CD, A.NB_TITLE, A. NB_CON, A.NB_REG, A.NB_UDT, 
+			A.NB_CNT, B.EMP_CD, -->
+		<!-- FILE_SN, FILE_PATH, FILE_ORNM, FILE_SVNM, FILE_EXTSN, FILE_CON, FILE_SIZE -->
+		<!-- FROM NOTICE_BOARD A, EMPLOYEE B, FILES_DETAIL F -->
+		<!-- WHERE A.EMP_CD=B.EMP_CD -->
+		<!-- AND A.FILE_CD = F.FILE_CD -->
+		<!-- AND A.NB_CD = #{nbCd} -->
+	</select>
+
+	<update id="count" parameterType="noticeBoardVO">
+		<selectKey resultType="int" keyProperty="nbCnt"
+			order="BEFORE">
+			SELECT NB_CNT FROM NOTICE_BOARD
+			WHERE NB_CD = #{nbCd}
+		</selectKey>
+		UPDATE NOTICE_BOARD
+		SET NB_CNT = (#{nbCnt} + 1)
+		WHERE NB_CD = #{nbCd}
+	</update>
+
+	<!-- <insert id="create" parameterType="noticeBoardVO"> -->
+	<!-- <selectKey keyProperty="nbCd" resultType="String" -->
+	<!-- order="BEFORE"> -->
+	<!-- SELECT 'NOBD' || LPAD(BOARD_SEQ.NEXTVAL, 6, '0') AS bdCd FROM DUAL -->
+	<!-- </selectKey> -->
+	<!-- INSERT INTO NOTICE_BOARD(NB_CD, EMP_CD, FILE_CD, NB_TITLE, NB_CON, 
+		NB_REG, NB_UDT, NB_CNT) -->
+	<!-- VALUES('NOBD' || LPAD(BOARD_SEQ.NEXTVAL, 6, '0'), #{empCd}, #{fileCd}, 
+		#{nbTitle}, #{nbCon}, SYSDATE, NULL, 0) -->
+	<!-- </insert> -->
+
+	<insert id="create" parameterType="noticeBoardVO">
+		<selectKey keyProperty="nbCd" resultType="String"
+			order="BEFORE">
+			SELECT 'NOBD' || BOARD_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO NOTICE_BOARD(NB_CD, EMP_CD, NB_TITLE, NB_CON, NB_REG)
+		VALUES(#{nbCd}, #{empCd}, #{nbTitle}, #{nbCon}, SYSTIMESTAMP)
+	</insert>
+
+
+
+	<update id="updatePost" parameterType="noticeBoardVO">
+		UPDATE NOTICE_BOARD
+		SET	NB_TITLE= 
+		#{nbTitle}, NB_CON= #{nbCon}, NB_UDT=SYSDATE
+		WHERE NB_CD = #{nbCd}
+	</update>
+
+	<delete id="deletePost">
+		DELETE FROM NOTICE_BOARD
+		WHERE NB_CD = #{nbCd}
+	</delete>
+
+	<select id="renderHome" resultMap="noticeBoardMap">
+		SELECT T.*
+		FROM (
+		SELECT * FROM
+		NOTICE_BOARD
+		ORDER BY NB_REG DESC
+		) T
+		WHERE ROWNUM &lt;= 4
+	</select>
+
+	<update id="updateYn" parameterType="String">
+		UPDATE NOTICE_BOARD
+		SET NB_YN = 1
+		WHERE NB_CD = #{nbCd}
+	</update>
+
+	<update id="updateYnClear" parameterType="String">
+		UPDATE NOTICE_BOARD
+		SET NB_YN = 0
+		WHERE NB_CD = #{nbCd}
+	</update>
+
+	<select id="popupList">
+		SELECT * FROM NOTICE_BOARD
+		WHERE NB_YN = 1
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

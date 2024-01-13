@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.MyPageMapper">
+
+	<resultMap type="boardVO" id="boardMap">
+		<result property="rnum" column="RNUM" />
+		<result property="bdCd" column="BD_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="comdCd" column="COMD_CD" />
+		<result property="bdTitle" column="BD_TITLE" />
+		<result property="bdCon" column="BD_CON" />
+		<result property="bdReg" column="BD_REG" />
+		<result property="bdUdt" column="BD_UDT" />
+		<result property="bdCnt" column="BD_CNT" />
+		<association property="userVO" resultMap="userMap" />
+		<collection property="fileList" resultMap="filesDetailMap" />
+	</resultMap>
+
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="userNm" column="USER_NM" />
+		<result property="userNme" column="USER_NME" />
+		<result property="userTel" column="USER_TEL" />
+		<result property="userZip" column="USER_ZIP" />
+		<result property="userAddr1" column="USER_ADDR1" />
+		<result property="userAddr2" column="USER_ADDR2" />
+		<result property="userReg1" column="USER_REG1" />
+		<result property="userReg2" column="USER_REG2" />
+		<result property="userMail" column="USER_MAIL" />
+		<result property="userPass" column="USER_PASS" />
+		<result property="userBank" column="USER_BANK" />
+		<result property="userDepo" column="USER_DEPO" />
+		<result property="userAcc" column="USER_ACC" />
+		<result property="comdCd" column="COMD_CD" />
+		<association property="filesDetailVO"
+			resultMap="filesDetailMap"></association>
+		<association property="studentVO" resultMap="studentMap"></association>
+		<association property="professorVO"
+			resultMap="professorMap"></association>
+		<association property="employeeVO" resultMap="employeeMap"></association>
+		<association property="postReportVO"
+			resultMap="postReportMap"></association>
+	</resultMap>
+
+	<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="filePath" column="FILE_PATH" />
+		<result property="fileOrnm" column="FILE_ORNM" />
+		<result property="fileSvnm" column="FILE_SVNM" />
+		<result property="fileExtsn" column="FILE_EXTSN" />
+		<result property="fileCon" column="FILE_CON" />
+		<result property="fileSize" column="FILE_SIZE" />
+		<result property="fileUsed" column="FILE_USED" />
+	</resultMap>
+
+	<resultMap type="studentVO" id="studentMap">
+		<result property="stuCd" column="STU_CD" />
+		<result property="depCd" column="DEP_CD" />
+		<result property="comdCd" column="COMD_CD" />
+		<result property="stuYear" column="STU_YEAR" />
+		<result property="stuSem" column="STU_SEM" />
+		<result property="stuMrc" column="STU_MRC" />
+		<result property="stuMoc" column="STU_MOC" />
+		<result property="stuCrc" column="STU_CRC" />
+		<result property="stuCoc" column="STU_COC" />
+		<result property="stuAddt" column="STU_ADDT" />
+		<result property="stuGrdt" column="STU_GRDT" />
+	</resultMap>
+
+	<resultMap type="professorVO" id="professorMap">
+		<result property="proCd" column="PRO_CD" />
+		<result property="depCd" column="DEP_CD" />
+		<result property="roomCd" column="ROOM_CD" />
+		<result property="proJoin" column="PRO_JOIN" />
+		<result property="proRet" column="PRO_RET" />
+		<result property="proPos" column="PRO_POS" />
+	</resultMap>
+
+	<resultMap type="employeeVO" id="employeeMap">
+		<result property="empCd" column="EMP_CD" />
+		<result property="empDept" column="EMP_DEPT" />
+		<result property="empPos" column="EMP_POS" />
+		<result property="empJoin" column="EMP_JOIN" />
+		<result property="empQuit" column="EMP_QUIT" />
+	</resultMap>
+
+	<resultMap type="postReportVO" id="postReportMap">
+		<result property="prCd" column="PR_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="appCd" column="APP_CD" />
+		<result property="bdCd" column="BD_CD" />
+		<result property="prRsn" column="PR_RSN" />
+		<result property="prDetail" column="PR_DETAIL" />
+	</resultMap>
+
+	<resultMap type="approvalVO" id="approvalMap">
+		<result property="appCd" column="APP_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="comdCd" column="COMD_CD" />
+		<result property="appTarget" column="APP_TARGET" />
+		<result property="appYn" column="APP_YN" />
+		<result property="appReg" column="APP_REG" />
+		<result property="appProdt" column="APP_PRODT" />
+		<result property="appRet" column="APP_RET" />
+		<result property="appPcd" column="APP_PCD" />
+	</resultMap>
+
+	<select id="profile" parameterType="String" resultMap="userMap">
+		SELECT
+		U.USER_CD,
+		U.FILE_CD,
+		U.USER_NM,
+		U.USER_NME,
+		U.USER_TEL,
+		U.USER_ZIP,
+		U.USER_ADDR1,
+		U.USER_ADDR2,
+		U.USER_REG1,
+		U.USER_REG2,
+		U.USER_MAIL,
+		U.USER_PASS,
+		U.USER_BANK,
+		U.USER_DEPO,
+		U.USER_ACC,
+		U.COMD_CD,
+		F.FILE_SN,
+		F.FILE_CD AS F_FILE_CD,
+		F.FILE_PATH,
+		F.FILE_ORNM,
+		F.FILE_SVNM,
+		F.FILE_EXTSN,
+		F.FILE_CON,
+		F.FILE_SIZE,
+		F.FILE_USED,
+		S.STU_CD AS S_STU_CD,
+		S.DEP_CD AS S_DEP_CD,
+		S.COMD_CD AS S_COMD_CD,
+		S.STU_YEAR,
+		S.STU_SEM,
+		S.STU_MRC,
+		S.STU_MOC,
+		S.STU_CRC,
+		S.STU_COC,
+		S.STU_ADDT,
+		S.STU_GRDT,
+		P.PRO_CD,
+		P.DEP_CD AS P_DEP_CD,
+		P.ROOM_CD,
+		P.PRO_JOIN,
+		P.PRO_RET,
+		P.PRO_POS,
+		E.EMP_CD, E.EMP_DEPT, E.EMP_POS, E.EMP_JOIN, E.EMP_QUIT
+		FROM
+		USERS U
+		LEFT OUTER
+		JOIN FILES_DETAIL F ON U.USER_CD = F.FILE_CD AND
+		F.FILE_USED = 0
+		LEFT
+		OUTER JOIN STUDENT S ON U.USER_CD = S.STU_CD
+		LEFT
+		OUTER JOIN PROFESSOR
+		P ON U.USER_CD = P.PRO_CD
+		LEFT OUTER JOIN EMPLOYEE
+		E ON U.USER_CD =
+		E.EMP_CD
+		WHERE U.USER_CD=#{userCd}
+	</select>
+
+	<select id="profileEdit" parameterType="String"
+		resultType="userVO">
+		SELECT USER_CD, FILE_CD, USER_NM, USER_NME, USER_TEL,
+		USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, USER_MAIL,
+		USER_PASS, USER_BANK, USER_DEPO, USER_ACC, COMD_CD
+		FROM USERS
+		WHERE
+		USER_CD = #{userCd}
+	</select>
+
+	<update id="profileEditPost" parameterType="userVO">
+		UPDATE USERS
+		SET
+		USER_TEL = #{userTel},
+		USER_ADDR1 = #{userAddr1},
+		USER_ADDR2 =
+		#{userAddr2},
+		USER_MAIL = #{userMail},
+		USER_BANK = #{userBank},
+		USER_ACC
+		= #{userAcc}
+		WHERE USER_CD = #{userCd}
+	</update>
+
+	<update id="passEditPost" parameterType="userVO">
+		UPDATE USERS
+		SET
+		USER_PASS = #{userPass}
+		WHERE USER_CD = #{userCd}
+	</update>
+
+	<select id="getEncodedPassword" parameterType="String"
+		resultMap="userMap">
+		SELECT USER_PASS FROM USERS WHERE USER_CD = #{userCd}
+	</select>
+
+	<select id="myBoardList" parameterType="String"
+		resultMap="boardMap">
+		SELECT T.*
+		FROM
+		(
+		SELECT DENSE_RANK() OVER( ORDER BY B.BD_REG DESC) RNUM,
+		BD_CD, B.USER_CD, B.COMD_CD,
+		BD_TITLE,BD_REG, BD_UDT,
+		BD_CNT
+
+		FROM
+		BOARD B
+		INNER
+		JOIN USERS U
+		ON B.USER_CD =
+		U.USER_CD
+		WHERE
+		U.USER_CD = #{userCd}
+		AND
+		B.BD_YN = 0
+		<include refid="criteria" />
+		) T
+		<!-- WHERE T.RNUM BETWEEN (${pageNum} * 20) - 19 AND ${pageNum} * 20 -->
+	</select>
+
+	<sql id="criteria">
+		<choose>
+			<when test="type == 'T'.toString()">
+				AND BD_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="type == 'C'.toString()">
+				AND BD_CON LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="type == 'W'.toString()">
+				AND USER_NM LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+
+	<select id="getMyBoardWithPaging" resultType="boardVO">
+		select T.*
+		from (
+		select ROW_NUMBER() OVER(ORDER BY BD_CD DESC) RN,
+		A.BD_CD, A.USER_CD,(SELECT
+		C.USER_NM FROM USERS C WHERE C.USER_CD =
+		A.USER_CD) USER_NM,
+		A.BD_TITLE, A.BD_CON, A.BD_REG,
+		A.BD_UDT, A.BD_CNT
+		from BOARD A
+		WHERE 1 = 1
+		<include refid="criteria"></include>
+		) T
+		where T.rn BETWEEN (#{pageNum} * #{amount}) - (#{amount} - 1) AND
+		(#{pageNum} * #{amount})
+	</select>
+
+	<select id="getMyBoardTotalCount" resultType="int">
+	    <![CDATA[
+	    	select count(*) from BOARD 
+	    	WHERE 1 = 1
+	    ]]>
+		<include refid="criteria"></include>
+	</select>
+
+	<select id="myReportList" parameterType="String" resultMap="postReportMap">
+		SELECT
+    PR.USER_CD,
+    PR.PR_RSN,
+    B.BD_TITLE,
+    B.COMD_CD,
+    B.BD_CD,
+    A.APP_YN,
+    A.APP_REG,
+    A.APP_PRODT
+FROM POST_REPORT PR
+JOIN BOARD B ON PR.BD_CD = B.BD_CD
+JOIN APPROVAL A ON PR.APP_CD = A.APP_CD
+WHERE PR.USER_CD   = #{userCd}
+ORDER BY A.APP_PRODT DESC
+	</select>
+
+</mapper>

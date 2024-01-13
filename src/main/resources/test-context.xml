@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+	<context:component-scan base-package="kr.or.ddit" >
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+   </context:component-scan>
+   
+	<bean id="uploadFolder" class="java.lang.String">
+		<constructor-arg value="C:\\eGovFrameDev-3.10.0-64bit\\workspace3\\HTU\\src\\main\\webapp\\resources\\upload" />
+	</bean>
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource">
+		<!--  <property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver"></property>
+		<property name="url"
+			value="jdbc:oracle:thin:@112.220.114.130:1521:xe"></property>-->
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="url"
+			value="jdbc:log4jdbc:oracle:thin:@112.220.114.130:1521:xe"></property>
+		<property name="username" value="team4_202306F"></property>
+		<property name="password" value="java"></property>
+		
+		<property name="initialSize" value="2" /> 
+		<property name="maxTotal" value="3" />  
+		
+		
+	</bean>
+
+	<!-- 데이터베이스와 연결을 맺고 끊어질 때까지의 라이프 사이클을 관리해주는 sqlSession 객체를 생성 1) dataSource 
+		2) 매퍼 xml의 위치 지정. / : src/main/resources/ -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations"
+			value="classpath:/sqlmap/**/*_SQL.xml" />
+		<property name="configLocation"
+			value="classpath:/mybatisAlias.xml" />
+	</bean>
+	<!-- 데이터베이스에 개별적으로 쿼리를 실행시키는 객체. 이 객체를 통해 query를 실행함 -->
+	<bean id="sqlSessionTemplate"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="kr.or.ddit.mapper" />
+	</bean>
+	
+	<!-- 스프링 AOP 활성화 -->
+   <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+</beans>

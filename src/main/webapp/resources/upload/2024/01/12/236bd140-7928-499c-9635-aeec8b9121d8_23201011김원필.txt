@@ -1,0 +1,234 @@
+ACS
+Advanced Customer Services
+Off-line 기술지원 서비스
+
+
+ASFU
+Application Specific Full Use
+라이선스 Type
+
+
+ATR
+Available to Renew
+PS Renewal 대상 계약들
+
+
+CPU
+Critical Patch Update
+Critical 보안패치 등 긴급 지원 발표
+
+
+CSI
+Customer Support Identifier
+고객 지원 번호
+
+
+CSM
+Customer Success Manager
+PS Sales rep for major account
+
+
+CSS
+Customer Support Services
+Support 본부 명
+
+
+DBEE
+Oracle Database Enterprise Edition
+DBMS for 대용량 시스템
+
+
+DBSE
+Oracle Database Standard Edition
+DBMS for 중소 단위 시스템
+
+
+EBS
+E-Business Suite
+Apps
+
+
+ECS
+Error Correction Support
+제품이슈에 대한 수정 정책 , 제품버전별 출시 및 Patch 종료일자
+
+
+ES
+Extended Support
+Support type for Life time Support Policy
+
+
+ESL
+Embedded Software License
+라이선스 Type
+
+
+FDS Partner
+Field Delivery Support Partner
+HW 부분 최상위 파트너쉽
+
+
+FTR
+First to Renew
+2nd Renewal 계약 대상
+
+
+FUDA
+Full Use Program Distribution Agreement
+오라클 파트너 쉽 (Full use 제품 판매 / PS 계약 권한
+
+
+Full Use
+Full Use
+라이선스 Type
+
+
+GCS
+Global Customer Support
+On-line Support 지원 부서 ( 1588-8501 or MOS 에서 접수)
+
+
+IAR
+Inflationary Adjustment Rate
+물가인상률 / FY '20 부터 4%
+
+
+ISV
+Independent Software Vendor
+파트너쉽 종류
+
+
+License Set
+License Set
+동일한 Source code 를 공유하는 제품 군 (Re pricing 의 기준)
+
+
+LMS
+License Management Services
+라이선스 보유량 실사조사
+
+
+LOB
+Line of Business
+오라클 조직 구분
+
+
+LSP
+Lifetime Support Policy
+평생지원정책
+
+
+MOS
+My Oracle Support
+MOS 시스템
+
+
+MSL
+Matching Service Levels
+기술지원 서비스 수준
+
+
+NAM
+National Account Manager
+PS Sales rep for SMB, Public, etc
+
+
+NUP
+Named User Plus (Perpetual)
+라이선스 단위 (사용자 단위)
+
+
+OBI
+Oracle Business Intelligence
+Middleware 제품
+
+
+OGG
+Oracle GoldenGate
+DB 제품 군
+
+
+On-time Renewal
+On-time Renewal 계약
+종료 이전 정시 계약
+
+
+OPN
+Oracle Partner Network
+오라클 파트너 쉽 Platinum / Gold / Silver, etc
+
+
+PL
+Processor License (Perpetual)
+라이선스 단위 (Core 단위)
+
+
+PS
+Premier Support
+Support type for Life time Support Policy
+
+
+PSU
+Patch Set Update
+3개월 주기로 발표 되는 주요 Patch Set
+
+
+RAC
+Real Application Clusters
+DB option
+
+
+Reinstatement Fee
+Reinstatement Fee
+재등록 비용
+
+
+Re-pricing
+Re-pricing 라이선스
+세트의 축소에 따른 가격 재산정
+
+
+RTR
+Renewal to Renew
+기존 Renewal 계약 대상
+
+
+SR
+Service Request
+MOS(My Oracle Support) 서비스 요청
+
+
+SRS Partner
+Support Renewal Schedule Partner
+Renewal Partnership
+
+
+SS
+Sustaining Support
+Support type for Life time Support Policy
+
+
+TSP
+Technical Support Policies
+기술지원 정책
+
+
+VAD
+Value Added Distributor
+총판
+
+
+VAR
+Value Added Reseller
+리셀러
+
+
+Welcome letter
+Welcome letter
+기술지원 고객카드
+
+
+WLS
+WebLogic Server
+Middleware 제품 군
+출처: https://gkstamin.tistory.com/entry/Oracle-오라클-용어-및-약어-정리 [Flick:티스토리]

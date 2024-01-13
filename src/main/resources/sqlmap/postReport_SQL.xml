@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.PostReportMapper">
+	
+	<resultMap type="userVO" id="userVOMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="approvalVO" id="approvalMap">
+		<result property="appCd" column="APP_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="appTarget" column="APP_TARGET"/>
+		<result property="appYn" column="APP_YN"/>
+		<result property="appReg" column="APP_REG"/>
+		<result property="appProdt" column="APP_PRODT"/>
+		<result property="appRet" column="APP_RET"/>
+		<result property="appPcd" column="APP_PCD"/>
+		<association property="userVO" resultMap="userVOMap"></association>
+	</resultMap>
+	
+	<resultMap type="boardVO" id="boardMap">
+       <result property="bdCd" column="BD_CD" />
+       <result property="userCd" column="USER_CD" />
+       <result property="comdCd" column="COMD_CD" />
+       <result property="bdTitle" column="BD_TITLE" />
+       <result property="bdCon" column="BD_CON" />
+       <result property="bdReg" column="BD_REG" />
+       <result property="bdUdt" column="BD_UDT" />
+       <result property="bdCnt" column="BD_CNT" />
+       <association property="userVO" resultMap="userVOMap"/>
+   </resultMap>
+   
+   <resultMap type="postReportVO" id="postReportMap">
+	  <result property="prCd" column="PR_CD"/>
+	  <result property="userCd" column="USER_CD"/>
+	  <result property="appCd" column="APP_CD"/>
+	  <result property="bdCd" column="BD_CD"/>
+	  <result property="prRsn" column="PR_RSN"/>
+	  <result property="prDetail" column="PR_DETAIL"/>
+	  <association property="approvalVO" resultMap="approvalMap"/>
+   </resultMap>
+   
+   <insert id="insert" parameterType="approvalVO">
+	   <selectKey resultType="String" keyProperty="appCd" order="BEFORE">
+			SELECT 
+				approval_SEQ.nextVal
+			FROM DUAL
+		</selectKey>
+			INSERT INTO APPROVAL (
+			    APP_CD,
+			    USER_CD,
+			    COMD_CD,
+			    APP_TARGET
+				)
+			VALUES (
+			    #{appCd},
+			    #{userCd},
+			    'APPR04', <!-- 결재유형코드 -->
+			    '1001' <!-- 임의로 관리자 아이디 넣음 -->
+				)
+   </insert>
+   
+   <!-- 
+   PostReportVO :PostReportVO(prCd=null, userCd=1001, appCd=null, bdCd=BORD02285, prRsn=0, prDetail=sdaf, approvalVO=null)
+    -->
+   <insert id="createReport" parameterType="postReportVO">
+   		<selectKey keyProperty="prCd" resultType="String" order="BEFORE">
+		SELECT 'PR' || TRIM(TO_CHAR(POST_REPORT_SEQ.NEXTVAL,'00000')) FROM DUAL
+	    </selectKey>
+   		INSERT INTO POST_REPORT(PR_CD, USER_CD, APP_CD, BD_CD, PR_RSN, PR_DETAIL)
+		VALUES(#{prCd},#{userCd},#{appCd},#{bdCd},#{prRsn},#{prDetail})
+	</insert>	
+	
+	<select id="renderReport" parameterType="approvalVO" resultMap="postReportMap">
+		SELECT  PR_CD, PR.USER_CD, PR.APP_CD, BD_CD, PR_RSN, PR_DETAIL,
+		        A.USER_CD, A.COMD_CD, APP_TARGET, APP_YN, APP_REG, APP_PRODT, APP_RET, APP_PCD, USER_NM
+		FROM    POST_REPORT PR, APPROVAL A, USERS U
+		WHERE   PR.USER_CD = U.USER_CD
+		AND     PR.APP_CD = A.APP_CD
+		AND     A.APP_YN = #{appYn}
+		AND     A.APP_TARGET = #{appTarget}
+		ORDER BY A.APP_REG DESC
+	</select>
+	
+</mapper>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.UnivMailMapper">
+	
+	<resultMap type="univMailVO" id="univMailMap">
+		<result property="umlCd" column="UML_CD"/>
+		<result property="umlSender" column="UML_SENDER"/>
+		<result property="umlReceiver" column="UML_RECEIVER"/>
+		<result property="umlTitle" column="UML_TITLE"/>
+		<result property="umlCon" column="UML_CON"/>
+		<result property="umlReg" column="UML_REG"/>
+		<result property="umlTemp" column="UML_TEMP"/>
+		<result property="umlYn" column="UML_YN"/>
+		<result property="umlDt" column="UML_DT"/>
+		<result property="senderNm" column=""/>
+		<result property="receiverNm" column="RECEIVER_NM"/>
+		<association property="userVO" resultMap="userMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+
+	<!-- 키워드 검색 -->
+	<sql id="search">
+		<if test="keyword!=null and keyword!=''">
+			AND (A.UML_TITLE LIKE '%' || #{keyword} || '%' 
+			OR   A.UML_CON LIKE '%' || #{keyword} || '%'
+			OR   B.USER_NM LIKE '%' || #{keyword} || '%')
+		</if>
+	</sql>
+	
+	<!-- 받은 메일함 -->
+	<select id="inbox" parameterType="hashMap" resultMap="univMailMap">
+		SELECT T.*
+		FROM
+		(
+			SELECT ROW_NUMBER() OVER(ORDER BY UML_REG DESC) RNUM
+				   , A.UML_CD, A.UML_SENDER, A.UML_RECEIVER, A.UML_TITLE, A.UML_CON
+	 		       , A.UML_REG, A.UML_TEMP, A.UML_YN, A.UML_DT, B.USER_CD, B.USER_NM
+	 		FROM   UNIV_MAIL A, USERS B 
+	 		WHERE  A.UML_RECEIVER = #{umlReceiver}
+	 		AND    A.UML_SENDER = B.USER_CD
+	 		AND    A.UML_TEMP = 0
+	 		<include refid="search"></include>
+		) T
+		WHERE T.RNUM BETWEEN (#{currentPage} * 10) - (10-1) AND (#{currentPage} * 10)
+	</select>
+
+	<!-- 보낸 메일함 -->
+	<select id="sentbox" parameterType="hashMap" resultMap="univMailMap">
+		SELECT T.*
+		FROM
+		(
+			SELECT ROW_NUMBER() OVER(ORDER BY UML_REG DESC) RNUM
+				   , A.UML_CD, A.UML_SENDER, A.UML_RECEIVER, A.UML_TITLE, A.UML_CON
+			       , A.UML_REG, A.UML_TEMP, A.UML_YN, A.UML_DT, B.USER_CD, B.USER_NM
+			FROM   UNIV_MAIL A, USERS B
+			WHERE  A.UML_SENDER = #{umlSender} 
+			AND    A.UML_RECEIVER = B.USER_CD
+			AND    A.UML_TEMP = 0
+			<include refid="search"></include>
+		) T
+		WHERE T.RNUM BETWEEN (#{currentPage} * 10) - (10-1) AND (#{currentPage} * 10)
+	</select>
+	
+	<!-- 받은 메일함 전체 항목 개수(검색 포함) -->
+	<select id="getTotalInbox" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) 
+		FROM   UNIV_MAIL A
+		LEFT   JOIN USERS B ON A.UML_SENDER = B.USER_CD
+		WHERE  1 = 1
+		AND    A.UML_TEMP = 0
+		AND	   A.UML_RECEIVER = #{umlReceiver}
+		<include refid="search"></include>
+	</select>
+	
+	<!-- 보낸 메일함 전체 항목 개수(검색 포함) -->
+	<select id="getTotalSentbox" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) 
+		FROM   UNIV_MAIL A
+		LEFT   JOIN USERS B ON A.UML_RECEIVER = B.USER_CD
+		WHERE  1 = 1
+		AND    A.UML_TEMP = 0
+		AND	   A.UML_SENDER = #{umlSender}
+		<include refid="search"></include>
+	</select>
+
+	<!-- 읽지 않은 메일 개수 -->
+	<select id="getUnreadTotal" parameterType="String" resultType="int">
+		SELECT COUNT(*) 
+		FROM   UNIV_MAIL A
+		LEFT   JOIN USERS B ON A.UML_SENDER = B.USER_CD
+		WHERE  1 = 1
+		AND    A.UML_TEMP = 0
+		AND    A.UML_YN = 0
+		AND	   A.UML_RECEIVER = #{umlReceiver}
+	</select>
+	
+	<!-- 메일 작성 -->
+	<insert id="sendMail" parameterType="univMailVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="umlCd">
+			SELECT 'MAIL' || TRIM(TO_CHAR(UML_CD_SEQ.NEXTVAL, '0000000000'))
+			FROM DUAL
+		</selectKey>
+		INSERT INTO UNIV_MAIL(UML_CD, UML_SENDER, UML_RECEIVER, UML_TITLE, UML_CON, UML_REG, UML_TEMP, UML_YN, UML_DT)
+		VALUES(#{umlCd}, #{umlSender}, #{umlReceiver}, #{umlTitle}, #{umlCon}, SYSDATE, #{umlTemp}, #{umlYn}, #{umlDt})
+	</insert>
+	
+	<!-- 받은 메일 상세 -->
+	<select id="receiveMailDetail" parameterType="String" resultMap="univMailMap">
+		SELECT
+		    A.UML_CD, A.UML_SENDER, A.UML_RECEIVER, A.UML_TITLE, A.UML_CON,
+		    A.UML_REG, A.UML_TEMP, A.UML_YN, A.UML_DT,
+		    C.FILE_SN, C.FILE_CD, C.FILE_PATH, C.FILE_ORNM, C.FILE_SVNM, C.FILE_EXTSN, C.FILE_CON, C.FILE_SIZE,
+		    D.USER_NM 
+		FROM
+		    UNIV_MAIL A
+		    LEFT JOIN FILES_DETAIL C ON A.UML_CD = C.FILE_CD
+		    LEFT JOIN USERS D ON A.UML_SENDER = D.USER_CD
+		WHERE
+<!-- 			C.FILE_USED = 0 -->
+			A.UML_CD = #{umlCd}
+	</select>
+	
+	<!-- 보낸 메일 상세 -->
+	<select id="sendMailDetail" parameterType="String" resultMap="univMailMap">
+		SELECT A.UML_CD, A.UML_SENDER, A.UML_RECEIVER, A.UML_TITLE, A.UML_CON, D.USER_NM RECEIVER_NM
+		     	, A.UML_REG, A.UML_TEMP, A.UML_YN, A.UML_DT, B.USER_CD, B.USER_NM
+		     	, C.FILE_SN, C.FILE_CD, C.FILE_PATH, C.FILE_ORNM, C.FILE_SVNM, C.FILE_EXTSN, C.FILE_CON, C.FILE_SIZE, C.FILE_USED
+		FROM   UNIV_MAIL A
+		LEFT JOIN USERS B ON A.UML_SENDER = B.USER_CD
+		LEFT JOIN FILES_DETAIL C ON A.UML_CD = C.FILE_CD
+		LEFT JOIN USERS D ON A.UML_RECEIVER = D.USER_CD
+		WHERE  
+<!-- 			C.FILE_USED = 0 -->
+			A.UML_CD = #{umlCd}
+	</select>
+
+	<!-- 메일 삭제 -->
+	<delete id="deleteMail" parameterType="String">
+		DELETE FROM UNIV_MAIL
+		WHERE UML_CD = #{umlCd}
+	</delete>
+	
+	<!-- 메일 읽음 -->
+	<update id="readReceiveMail" parameterType="String">
+		UPDATE UNIV_MAIL
+		SET    UML_YN = 1
+		WHERE  UML_CD = #{umlCd}
+	</update>
+	
+	<!-- 임시 보관함 -->
+	<select id="tempMailBox" parameterType="hashMap" resultMap="univMailMap">
+		SELECT T.*
+		FROM
+		(
+			SELECT ROW_NUMBER() OVER(ORDER BY UML_REG DESC) RNUM
+				   , A.UML_CD, A.UML_SENDER, A.UML_RECEIVER, A.UML_TITLE, A.UML_CON
+			       , A.UML_REG, A.UML_TEMP, A.UML_YN, A.UML_DT, B.USER_CD, B.USER_NM
+			FROM   UNIV_MAIL A, USERS B
+			WHERE  A.UML_SENDER = #{umlSender} 
+			AND    A.UML_RECEIVER = B.USER_CD
+			AND    A.UML_TEMP = 1
+			<include refid="search"></include>
+		) T
+		WHERE T.RNUM BETWEEN (#{currentPage} * 10) - (10-1) AND (#{currentPage} * 10)
+	</select>
+	
+	<!-- 임시 보관함 전체 항목 개수(검색 포함) -->
+	<select id="getTotalTempbox" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) 
+		FROM   UNIV_MAIL A
+		LEFT   JOIN USERS B ON A.UML_RECEIVER = B.USER_CD
+		WHERE  1 = 1
+		AND	   A.UML_SENDER = #{umlSender}
+		AND    A.UML_TEMP = 1
+		<include refid="search"></include>
+	</select>
+	
+	<!-- 임시 메일 업데이트 -->
+	<update id="tempMailUpdate" parameterType="univMailVO">
+		UPDATE UNIV_MAIL
+		SET    UML_RECEIVER = #{umlReceiver}
+			   , UML_TITLE = #{umlTitle}
+			   , UML_CON = #{umlCon}
+		WHERE  UML_CD = #{umlCd}
+	</update>
+	
+	<!-- 임시 저장 메일 전송 -->
+	<update id="sendTempMail" parameterType="univMailVO">
+		UPDATE UNIV_MAIL
+		SET    UML_RECEIVER = #{umlReceiver}
+			   , UML_TITLE = #{umlTitle}
+			   , UML_CON = #{umlCon}
+			   , UML_REG = SYSDATE
+			   , UML_TEMP = 0
+		WHERE  UML_CD = #{umlCd}
+	</update>
+	
+	<!-- 선택 메일 읽음 -->
+	<update id="readCheck" parameterType="java.util.List">
+		UPDATE UNIV_MAIL
+		SET    UML_YN = 1
+		WHERE  UML_CD IN
+		<foreach collection="list" item="umlCd" open="(" separator="," close=")">
+            #{umlCd}
+        </foreach>
+	</update>
+	
+	<!-- 알림코드로 해당 메일 가져오기 -->
+	<select id="getMailByNtfCd" parameterType="String" resultMap="univMailMap">
+		SELECT * FROM UNIV_MAIL WHERE UML_CD = #{ntfCd}	
+	</select>
+	
+	
+	<insert id="lectureApprovalMail" parameterType="univMailVO">
+	 	<selectKey resultType="String" order="BEFORE" keyProperty="umlCd">
+			SELECT 'LEC' || TRIM(TO_CHAR(UML_CD_SEQ.NEXTVAL, '0000000000'))
+			FROM DUAL
+		</selectKey>
+		INSERT INTO UNIV_MAIL(UML_CD, UML_SENDER, UML_RECEIVER, UML_TITLE, UML_CON, UML_REG, UML_TEMP, UML_YN)
+		VALUES(#{umlCd}, #{umlSender}, #{umlReceiver}, #{umlTitle}, #{umlCon}, SYSDATE, #{umlTemp}, #{umlYn})
+	</insert>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+

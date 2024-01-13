@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.FreeBoardMapper">
+
+	<!-- Criteria cri -->
+	<select id="list" resultMap="boardMap" parameterType="criteria">
+		SELECT T.*
+		FROM 
+		(
+		    SELECT  DENSE_RANK() OVER( ORDER BY B.BD_REG DESC) RNUM,
+		            BD_CD, B.USER_CD, B.COMD_CD,
+		            BD_TITLE, BD_CON, BD_REG, BD_UDT,
+		            BD_CNT,
+		            U.FILE_CD,
+		            USER_NM, USER_NME, USER_TEL, USER_ZIP,
+		            USER_ADDR1,
+		            USER_ADDR2,
+		            USER_REG1, USER_REG2, USER_MAIL, USER_PASS,
+		            USER_BANK, USER_DEPO,
+		            USER_ACC,
+		            FILE_SN, FILE_PATH,
+		            FILE_ORNM,
+		            FILE_SVNM, FILE_EXTSN, FILE_CON,
+		            FILE_SIZE, FILE_USED
+		    FROM
+		    BOARD B INNER
+		    JOIN USERS U
+		    ON B.USER_CD =
+		    U.USER_CD LEFT OUTER JOIN
+		    FILES_DETAIL F
+		    ON
+		    B.BD_CD = F.FILE_CD
+		    WHERE
+		    B.COMD_CD = 'BORD01'
+		    AND B.BD_YN = 0
+		    <include refid="criteria" />
+		) T
+		WHERE  T.RNUM BETWEEN (${pageNum} * 20) - 19 AND ${pageNum} * 20
+	</select>
+
+	<sql id="criteria">
+		<choose>
+			<when test="type == 'T'.toString()">
+				AND BD_TITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="type == 'C'.toString()">
+				AND BD_CON LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="type == 'W'.toString()">
+				AND USER_NM LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+
+	<select id="getListWithPaging" resultType="boardVO">
+		select T.*
+		from (
+			select ROW_NUMBER() OVER(ORDER BY BD_REG DESC) RN,
+			A.BD_CD, A.USER_CD,(SELECT
+			C.USER_NM FROM USERS C WHERE C.USER_CD =
+			A.USER_CD) USER_NM, A.FILE_CD,
+			A.BD_TITLE, A.BD_CON, A.BD_REG,
+			A.BD_UDT, A.BD_CNT
+			from BOARD A
+			WHERE 1 = 1
+			<include refid="criteria"></include>
+		) T
+		where T.rn BETWEEN (#{pageNum} * #{amount}) - (#{amount} - 1) AND
+		(#{pageNum} * #{amount})
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+	    <![CDATA[
+	    	select count(*) from BOARD WHERE 1 = 1 and COMD_CD = 'BORD01'
+	    ]]>
+		<include refid="criteria"></include>
+	</select>
+
+	<insert id="create" parameterType="boardVO">
+		<selectKey resultType="String" keyProperty="bdCd"
+			order="BEFORE">
+			SELECT 'BORD01' || BOARD_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO BOARD (BD_CD, USER_CD, COMD_CD, BD_TITLE, BD_CON, BD_REG)
+		VALUES (#{bdCd}, #{userCd}, 'BORD01', #{bdTitle}, #{bdCon},
+		SYSTIMESTAMP)
+	</insert>
+
+	<select id="detail" resultMap="boardMap" parameterType="String">
+		SELECT
+		B.BD_CD, B.USER_CD, B.COMD_CD, BD_TITLE, BD_CON, BD_REG, BD_UDT,
+		BD_CNT,
+		U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP, U.USER_ADDR1, U.USER_ADDR2,
+		U.USER_REG1, U.USER_REG2, U.USER_MAIL, U.USER_PASS, U.USER_BANK, U.USER_DEPO,
+		U.USER_ACC,
+		FILE_SN, FILE_PATH, FILE_ORNM, FILE_SVNM, FILE_EXTSN,
+		FILE_CON,
+		FILE_SIZE,
+		C.CMT_CD, C.USER_CD AS COMMENT_USER, C.BD_CD, CMT_PCD, CMT_CON, CMT_REG, CMT_UDT, CMT_ANONY, CMT_YN, UU.USER_NM AS WRITER
+		FROM BOARD B INNER JOIN USERS U
+		ON B.USER_CD =
+		U.USER_CD LEFT
+		OUTER JOIN FILES_DETAIL F
+		ON B.BD_CD = F.FILE_CD
+		AND
+		F.FILE_USED = 0
+		LEFT OUTER JOIN COMMENTS C ON B.BD_CD = C.BD_CD
+		LEFT OUTER JOIN USERS UU ON C.USER_CD = UU.USER_CD
+		WHERE B.COMD_CD = 'BORD01'
+		AND B.BD_CD = #{bdCd}
+	</select>
+
+	<update id="count" parameterType="boardVO">
+		<selectKey resultType="int" keyProperty="bdCnt"
+			order="BEFORE">
+			SELECT BD_CNT FROM BOARD
+			WHERE BD_CD = #{bdCd}
+		</selectKey>
+		UPDATE BOARD
+		SET BD_CNT = (#{bdCnt} + 1)
+		WHERE BD_CD = #{bdCd}
+	</update>
+
+	<update id="update" parameterType="boardVO">
+		UPDATE BOARD
+		SET BD_TITLE =
+		#{bdTitle}, BD_CON = #{bdCon}, BD_UDT = SYSDATE
+		WHERE BD_CD = #{bdCd}
+	</update>
+
+	<delete id="delete" parameterType="hashMap">
+		UPDATE BOARD
+		SET    BD_YN = 1, BD_UDT=SYSDATE
+		WHERE  BD_CD = #{bdCd}
+	</delete>
+
+	<select id="getCommentList" parameterType="String"
+		resultMap="commentMap2">
+		SELECT LEVEL, C.*, U.USER_NM AS WRITER
+		FROM COMMENTS C, USERS U
+		WHERE C.USER_CD = U.USER_CD
+		START WITH CMT_PCD IS NULL
+		AND BD_CD = #{bdCd}
+		CONNECT BY PRIOR CMT_CD = CMT_PCD
+		ORDER SIBLINGS BY CMT_REG DESC
+	</select>
+
+	<resultMap type="boardVO" id="boardMap">
+		<result property="rnum" column="RNUM" />
+		<result property="bdCd" column="BD_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="comdCd" column="COMD_CD" />
+		<result property="bdTitle" column="BD_TITLE" />
+		<result property="bdCon" column="BD_CON" />
+		<result property="bdReg" column="BD_REG" />
+		<result property="bdUdt" column="BD_UDT" />
+		<result property="bdCnt" column="BD_CNT" />
+		<association property="userVO" resultMap="userMap" />
+		<collection property="fileList" resultMap="fileDetailMap" />
+		<collection property="commentList" resultMap="commentMap2"/>
+	</resultMap>
+
+	<resultMap type="commentVO" id="commentMap">
+		<result property="cmtCd" column="CMT_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="bdCd" column="BD_CD" />
+		<result property="cmtPcd" column="CMT_PCD" />
+		<result property="cmtCon" column="CMT_CON" />
+		<result property="cmtReg" column="CMT_REG" />
+		<result property="cmtUdt" column="CMT_UDT" />
+		<result property="cmtAnony" column="CMT_ANONY" />
+		<result property="writer" column="WRITER"/>
+	</resultMap>
+	
+	<resultMap type="commentVO" id="commentMap2">
+		<result property="level" column="LEVEL"/>
+		<result property="cmtCd" column="CMT_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="bdCd" column="BD_CD" />
+		<result property="cmtPcd" column="CMT_PCD" />
+		<result property="cmtCon" column="CMT_CON" />
+		<result property="cmtReg" column="CMT_REG" />
+		<result property="cmtUdt" column="CMT_UDT" />
+		<result property="cmtAnony" column="CMT_ANONY" />
+		<result property="writer" column="WRITER"/>
+	</resultMap>
+	
+
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD" />
+		<result property="userNm" column="USER_NM" />
+		<result property="userNme" column="USER_NME" />
+		<result property="userTel" column="USER_TEL" />
+		<result property="userZip" column="USER_ZIP" />
+		<result property="userAddr1" column="USER_ADDR1" />
+		<result property="userAddr2" column="USER_ADDR2" />
+		<result property="userReg1" column="USER_REG1" />
+		<result property="userReg2" column="USER_REG2" />
+		<result property="userMail" column="USER_MAIL" />
+		<result property="userPass" column="USER_PASS" />
+		<result property="userBank" column="USER_BANK" />
+		<result property="userDepo" column="USER_DEPO" />
+		<result property="userAcc" column="USER_ACC" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="comdCd" column="COMD_CD" />
+	</resultMap>
+
+	<resultMap type="filesDetailVO" id="fileDetailMap">
+		<result property="fileSn" column="FILE_SN" />
+		<result property="fileCd" column="FILE_CD" />
+		<result property="filePath" column="FILE_PATH" />
+		<result property="fileOrnm" column="FILE_ORNM" />
+		<result property="fileSvnm" column="FILE_SVNM" />
+		<result property="fileExtsn" column="FILE_EXTSN" />
+		<result property="fileCon" column="FILE_CON" />
+		<result property="fileSize" column="FILE_SIZE" />
+	</resultMap>
+
+</mapper>

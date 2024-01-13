@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.NotificationMapper">
+	
+	<resultMap type="notificationVO" id="notificationMap">
+		<result property="ntfCd" column="NTF_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="ntfYn" column="NTF_YN"/>
+		<result property="ntfReg" column="NTF_REG"/>
+		<result property="ntfDt" column="NTF_DT"/>
+		<result property="ntfUrl" column="NTF_URL"/>
+		<result property="ntfCon" column="NTF_CON"/>
+		<association property="userVO" resultMap="userMap"/>
+		<association property="senderVO" resultMap="userMapB"/>
+		<association property="commonDetailVO" resultMap="cdMap"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMapB">
+		<result property="userCd" column="CD"/>
+		<result property="userNm" column="NM"/>
+		<result property="userNme" column="NME"/>
+		<result property="userTel" column="TEL"/>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="cdMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+		<association property="commonVO" resultMap="commonMap"/>
+	</resultMap>
+	
+	<resultMap type="commonVO" id="commonMap">
+		<result property="comCd" column="COM_CD"/>
+		<result property="comNm" column="COM_NM"/>
+		<result property="comDesc" column="COM_DESC"/>
+	</resultMap>
+	
+	<update id="checkNotification" parameterType="String">
+		UPDATE NOTIFICATION
+		SET NTF_YN = 1, NTF_DT = SYSDATE
+		WHERE NTF_CD = #{ntfCd}
+	</update>
+	
+	
+	<select id="getSimpleNotificationsByUserCd" parameterType="String" resultMap="notificationMap">
+		SELECT  NTF_CD, N.USER_CD, N.COMD_CD, NTF_YN, NTF_REG, NTF_DT, NTF_URL, NTF_CON,
+		        U.*, CD.COM_CD, COMD_NM, COMD_DESC, COM_NM, COM_DESC, 
+		        S.USER_CD AS CD, S.USER_NM AS NM, S.USER_NME AS NME, S.USER_TEL AS TEL
+		FROM 	NOTIFICATION N, USERS U, COMMON_DETAIL CD, COMMON C, USERS S
+		WHERE 	N.USER_CD = U.USER_CD
+		AND		N.NTF_CON = S.USER_CD(+)
+		AND 	N.COMD_CD = CD.COMD_CD
+		AND 	CD.COM_CD = C.COM_CD
+		AND 	NTF_YN = 0
+		AND 	N.USER_CD = #{userCd}
+		ORDER BY NTF_REG DESC
+	</select>
+	
+	<insert id="insert" parameterType="notificationVO">
+		<selectKey resultType="String" keyProperty="ntfCd" order="BEFORE">
+			SELECT 'NTF' || TRIM(TO_CHAR((NVL(MAX(SUBSTR(NTF_CD,4)), 0) + 1), '0000000'))
+			FROM NOTIFICATION
+		</selectKey>	
+		INSERT INTO NOTIFICATION (NTF_CD, USER_CD, COMD_CD, NTF_URL, NTF_CON)
+		VALUES (#{ntfCd}, #{userCd}, #{comdCd}, #{ntfUrl}, #{ntfCon})
+	</insert>
+	
+	
+</mapper>

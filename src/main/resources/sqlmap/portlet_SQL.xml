@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.PortletMapper">
+
+	<resultMap type="portletVO" id="portletMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="porYn" column="POR_YN"/>
+		<result property="porX" column="POR_X"/>
+		<result property="porY" column="POR_Y"/>
+		<result property="porH" column="POR_H"/>
+		<result property="porW" column="POR_W"/>
+		<association property="commonDetailVO" resultMap="commonDetailMap"/>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="commonDetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+
+	<select id="myPortlet" parameterType="String" resultMap="portletMap">
+		SELECT 	USER_CD, P.COMD_CD, POR_YN, POR_X, POR_Y, POR_H, POR_W,
+				CD.COMD_CD, COM_CD, COMD_NM, COMD_DESC 
+		FROM 	PORTLET P, COMMON_DETAIL CD
+		WHERE 	USER_CD = #{userCd}
+		AND		P.COMD_CD = CD.COMD_CD
+		AND 	POR_YN = 0
+	</select>
+	
+	<insert id="insert" parameterType="list">
+		<foreach collection="list" item="item" separator=" " open="INSERT ALL" close="SELECT 1 FROM DUAL">
+			INTO PORTLET(USER_CD, COMD_CD, POR_YN, POR_X, POR_Y, POR_H, POR_W)
+			VALUES
+			(
+				#{item.userCd}, #{item.comdCd}, 0, #{item.porX}, #{item.porY}, 
+				#{item.porH}, #{item.porW}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="checkPortlet" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM PORTLET
+		WHERE USER_CD = #{userCd}
+	</select>
+	
+	<update id="updatePortlet" parameterType="hashMap">
+		UPDATE 	PORTLET
+		SET 	POR_YN = #{porYn}
+		WHERE 	USER_CD = #{userCd}
+		AND		COMD_CD = #{comdCd}
+	</update>
+	
+	<update id="updateAll" parameterType="list">
+		<foreach collection="list" item="item" open="DECLARE BEGIN" close="; END;" separator=";">
+			UPDATE 	PORTLET
+			SET 	POR_X = #{item.porX},
+					POR_Y = #{item.porY},
+					POR_W = #{item.porW},
+					POR_H = #{item.porH}
+			WHERE 	USER_CD = #{item.userCd}
+			AND		COMD_CD = #{item.comdCd}
+		</foreach>
+	</update>
+	
+</mapper>

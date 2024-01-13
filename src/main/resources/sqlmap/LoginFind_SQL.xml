@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.LoginFindMapper">
+
+	<select id="findId" resultType="kr.or.ddit.vo.UserVO">
+		SELECT USER_CD
+		FROM USERS
+		WHERE USER_NM = #{USER_NM}
+		AND USER_REG1 = #{USER_REG1}
+		AND USER_REG2 = #{USER_REG2}
+	</select>
+
+	<select id="findPw" resultType="kr.or.ddit.vo.UserVO">
+		SELECT USER_PASS
+		FROM USERS
+		WHERE USER_CD = #{USER_CD}
+		AND USER_TEL = #{USER_TEL}
+	</select>
+	
+	<update id="modPassword" parameterType="userVO">
+		UPDATE USERS
+		SET USER_PASS = #{userPass}
+		WHERE USER_CD = #{userCd}	
+	</update>
+</mapper>

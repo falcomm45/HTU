@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.CertificateMapper">
+	<resultMap type="studentVO" id="studentVOMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		
+		<association property="userVO" resultMap="userVOMap"></association>
+		<association property="commonDetailVO" resultMap="commonDetailVOMap"></association>
+		<association property="departmentVO" resultMap="departmentVOMap"></association>
+	</resultMap>
+	<resultMap type="userVO" id="userVOMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="comdCd" column="COMD_CD"/>
+		
+	</resultMap>
+	<resultMap type="commonDetailVO" id="commonDetailVOMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<resultMap type="departmentVO" id="departmentVOMap">
+		<result property="depCd" column="DEP_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="depMrc" column="DEP_MRC"/>
+		<result property="depMoc" column="DEP_MOC"/>
+		<result property="depCrc" column="DEP_CRC"/>
+		<result property="depCoc" column="DEP_COC"/>
+		<result property="depCap" column="DEP_CAP"/>
+		<result property="depTel" column="DEP_TEL"/>
+		<result property="depFee" column="DEP_FEE"/>
+		<result property="colNm" column="COL_NM"/>
+	</resultMap>
+	
+	<select id="stuPrivacyInfo" parameterType="String" resultMap="studentVOMap">
+<!-- 		SELECT  -->
+<!-- 		    S.STU_CD, S.DEP_CD, S.COMD_CD, S.STU_YEAR, S.STU_SEM,  -->
+<!-- 		    S.STU_MRC, S.STU_MOC, S.STU_CRC, S.STU_COC, S.STU_ADDT, S.STU_GRDT, -->
+		    
+<!-- 		    U.USER_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP, -->
+<!-- 		    U.USER_ADDR1, U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL, -->
+<!-- 		    U.USER_BANK, U.USER_DEPO, U.USER_ACC, -->
+		    
+<!-- 		    C.COM_CD, C.COMD_NM, C.COMD_DESC -->
+<!-- 		FROM  -->
+<!-- 		    STUDENT S, USERS U, COMMON_DETAIL C -->
+<!-- 		WHERE -->
+<!-- 		    S.STU_CD = U.USER_CD -->
+<!-- 		AND -->
+<!-- 		    S.COMD_CD = C.COMD_CD -->
+<!-- 		AND -->
+<!-- 		    C.COM_CD = 'RECD' -->
+<!-- 		AND -->
+<!-- 		    S.STU_CD = #{stuCd} -->
+		SELECT 
+		    S.STU_CD, S.DEP_CD, S.COMD_CD, S.STU_YEAR, S.STU_SEM, 
+		    S.STU_MRC, S.STU_MOC, S.STU_CRC, S.STU_COC, S.STU_ADDT, S.STU_GRDT,
+		    
+		    U.USER_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP,
+		    U.USER_ADDR1, U.USER_ADDR2, (SELECT TO_CHAR(TO_DATE(U.USER_REG1, 'YYMMDD'), 'YY-MM-DD') FROM DUAL) USER_REG1, U.USER_REG2, U.USER_MAIL,
+		    U.USER_BANK, U.USER_DEPO, U.USER_ACC,
+		    
+		    C.COM_CD, C.COMD_NM, C.COMD_DESC,
+		    
+		    D.COL_CD, D.DEP_NM, D.COL_NM
+		FROM 
+		    STUDENT S, USERS U, COMMON_DETAIL C, DEPARTMENT D
+		WHERE
+		    S.STU_CD = U.USER_CD
+		AND
+		    S.COMD_CD = C.COMD_CD
+		AND
+   			S.DEP_CD = D.DEP_CD
+		AND
+		    C.COM_CD = 'RECD'
+		AND
+		    S.STU_CD =  #{stuCd}
+	</select>
+	
+
+	
+</mapper>

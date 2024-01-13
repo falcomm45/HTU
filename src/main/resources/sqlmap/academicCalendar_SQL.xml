@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.AcademicCalendarMapper">
+	
+	<resultMap type="academicCalendarVO" id="acMap">
+		<result property="acCd" column="AC_CD"/>
+		<result property="acTitle" column="AC_TITLE"/>
+		<result property="acStdt" column="AC_STDT"/>
+		<result property="acEddt" column="AC_EDDT"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<!-- 학사일정 조회 -->
+	<select id="getCalendar" resultMap="acMap">
+		SELECT  AC_CD, AC_TITLE, AC_STDT, AC_EDDT
+		FROM    ACADEMIC_CALENDAR
+	</select>
+	
+	<!-- 학사일정 등록 - 관리자만 가능 -->
+	<insert id="insertCalendar" parameterType="academicCalendarVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="acCd">
+			SELECT 'ACAD' || TRIM(TO_CHAR(SUBSTR(MAX(AC_CD),5) + 1))
+			FROM  ACADEMIC_CALENDAR
+		</selectKey>
+		INSERT INTO ACADEMIC_CALENDAR(AC_CD, AC_TITLE, AC_STDT, AC_EDDT)
+		VALUES(#{acCd}, #{acTitle}, #{acStdt}, #{acEddt})
+	</insert>
+	
+	<!-- 학사일정 삭제 - 관리자만 가능 -->
+	<delete id="deleteCalendar" parameterType="String">
+		DELETE FROM ACADEMIC_CALENDAR
+		WHERE  AC_CD = #{acCd}
+	</delete>
+	
+	<!-- 학사일정 수정 - 관리자만 가능 -->
+	<update id="updateCalendar" parameterType="academicCalendarVO">
+		UPDATE ACADEMIC_CALENDAR
+		SET    AC_STDT = #{acStdt}
+			   , AC_EDDT = #{acEddt}
+		WHERE  AC_CD = #{acCd}
+	</update>
+	
+</mapper>

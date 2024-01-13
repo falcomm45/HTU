@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.DepartmentMapper">
+	<resultMap type="departmentVO" id="departmentVOMap">
+		<result property="depCd" column="DEP_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="depMrc" column="DEP_MRC"/>
+		<result property="depMoc" column="DEP_MOC"/>
+		<result property="depCrc" column="DEP_CRC"/>
+		<result property="depCoc" column="DEP_COC"/>
+		<result property="depCap" column="DEP_CAP"/>
+		<result property="depTel" column="DEP_TEL"/>
+		<result property="depFee" column="DEP_FEE"/>
+		<association property="collegeVO" resultMap="collegeVOMap" ></association>
+	</resultMap>
+	<resultMap type="collegeVO" id="collegeVOMap">
+		<result property="colCd" column="COL_CD"/>
+		<result property="colCrd" column="COL_CRD"/>
+	</resultMap>
+	
+	
+	<select id="getDepartment" resultMap="departmentVOMap">
+		SELECT DEP_CD, DEPARTMENT.COL_CD, DEP_NM, DEP_MRC, DEP_MOC, DEP_CRC, DEP_COC, DEP_CAP, DEP_TEL, DEP_FEE
+		FROM DEPARTMENT, COLLEGE
+		WHERE COLLEGE.COL_CD = DEPARTMENT.COL_CD
+	</select>
+	
+	<select id="getDepCdByDepNm" parameterType="String" resultMap="departmentVOMap">
+		SELECT DEP_CD, COL_CD FROM DEPARTMENT
+		WHERE DEP_NM = #{depNm}
+	</select>
+	
+</mapper>

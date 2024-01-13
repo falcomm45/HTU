@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.RoomMapper">
+	
+	<resultMap type="roomVO" id="roomVOMap">
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="roomPur" column="ROOM_PUR"/>
+		<result property="roomCap" column="ROOM_CAP"/>
+		<result property="roomTel" column="ROOM_TEL"/>
+		<result property="roomNm" column="ROOM_NM"/>
+		<association property="buildingVO" resultMap="buildingVOMap"></association>
+	</resultMap>
+	
+	<resultMap type="buildingVO" id="buildingVOMap">
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="bldZip" column="BLD_ZIP"/>
+		<result property="bldAddr1" column="BLD_ADDR1"/>
+		<result property="bldAddr2" column="BLD_ADDR2"/>
+		<association property="commonDetailVO" resultMap="commonDetailMap"></association>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="commonDetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<select id="getRoomCd" parameterType="String" resultMap="roomVOMap">
+		SELECT C.COMD_NM || ' ' || SUBSTR(R.ROOM_CD, 7) || '호' ROOM_NM, R.ROOM_CD
+		FROM   COMMON_DETAIL C, ROOM R, PROFESSOR P, DEPARTMENT D, BUILDING B
+		WHERE  
+            P.DEP_CD = #{depCd}
+        AND  
+            P.DEP_CD =   D.DEP_CD
+        AND
+            D.COL_CD = B.COL_CD
+        AND
+            R.BLD_CD = B.BLD_CD
+        AND
+            C.COMD_CD = R.BLD_CD
+	
+<!-- 		SELECT C.COMD_NM || ' ' || SUBSTR(R.ROOM_CD, 7) || '호' ROOM_NM, R.ROOM_CD -->
+<!-- 		FROM   COMMON_DETAIL C, ROOM R -->
+<!-- 		WHERE  C.COMD_CD = R.BLD_CD -->
+<!-- 		AND	   R.BLD_CD = 'BULD01' -->
+	</select>
+	
+	<select id="getCrewRoomCd" resultMap="roomVOMap">
+		SELECT C.COMD_NM || ' ' || SUBSTR(R.ROOM_CD, 7) || '호' ROOM_NM, R.ROOM_CD
+		FROM   COMMON_DETAIL C, ROOM R
+		WHERE  C.COMD_CD = R.BLD_CD
+		AND    R.ROOM_CD NOT IN (
+		           SELECT ROOM_CD 
+		           FROM   CREW A, APPROVAL B 
+		           WHERE  A.APP_CD = B.APP_CD
+		           AND    B.APP_YN != 2
+		           OR     CR_YN = 0
+		       )
+		AND    R.BLD_CD = 'BULD09'
+		ORDER BY R.ROOM_CD
+	</select>
+	
+	<select id="getRoomListByComdCd" parameterType="String" resultMap="roomVOMap">
+		SELECT * FROM ROOM WHERE BLD_CD = #{bldCd}
+	</select>
+	
+	<select id="getComdCdByRoomCd" parameterType="String" resultMap="commonDetailMap">
+		SELECT  CD.COMD_CD, COM_CD, COMD_NM, COMD_DESC
+		FROM    COMMON_DETAIL CD, ROOM R, BUILDING B
+		WHERE   R.ROOM_CD = #{roomCd}
+		AND     R.BLD_CD = B.BLD_CD
+		AND     B.COL_CD = CD.COMD_CD
+	</select>
+	
+	<select id="getRoom" parameterType="String" resultMap="roomVOMap">
+		SELECT * FROM ROOM WHERE ROOM_CD = #{roomCd}	
+	</select>
+	
+	<select id="getEmptyRoomCd" parameterType="String" resultMap="roomVOMap">
+		SELECT ROOM_CD, ROOM_TEL FROM (
+			SELECT ROWNUM RN, ROOM_CD, ROOM_TEL
+			FROM ROOM
+			WHERE 
+			    BLD_CD = #{bldCd}
+			    AND
+			    ROOM_CAP > TO_NUMBER(ROOM_TEL)
+			ORDER BY ROOM_CD ASC
+		) T
+		WHERE T.RN = 1
+	</select>
+	
+	<update id="updateRoomTel" parameterType="roomVO">
+		UPDATE ROOM SET ROOM_TEL = ROOM_TEL+1 WHERE ROOM_CD = #{roomCd}
+	</update>
+	
+	<select id="getProfessorDepartment" parameterType="String" resultType="String">
+		SELECT DEP_CD FROM PROFESSOR WHERE PRO_CD = #{proCd}
+	</select>
+	
+	
+</mapper>

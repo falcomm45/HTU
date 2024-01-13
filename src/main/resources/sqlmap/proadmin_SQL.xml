@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.ProAdminMapper">
+
+	<resultMap type="professorVO" id="professorMap">
+		<result property="proCd" column="PRO_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="proJoin" column="PRO_JOIN"/>
+		<result property="proRet" column="PRO_RET"/>
+		<result property="proPos" column="PRO_POS"/>
+		<association property="userVO" resultMap="usersMap"></association>
+		<association property="roomVO" resultMap="roomMap"></association>
+		<association property="filesDetailVO" resultMap="filesDetailMap"></association>
+		<association property="departmentVO" resultMap="departmentMap"></association>
+		<association property="commonDetailVO" resultMap="commondetailMap"></association>
+		<association property="organizationChartVO" resultMap="organizationChartMap"></association>
+	</resultMap>
+	
+	<resultMap type="roomVO" id="roomMap">
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="roomPur" column="ROOM_PUR"/>
+		<result property="roomCap" column="ROOM_CAP"/>
+		<result property="roomTel" column="ROOM_TEL"/>
+	</resultMap>
+
+	<resultMap type="userVO" id="usersMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+		<result property="fileUsed" column="FILE_USED"/>
+	</resultMap>
+	
+	<resultMap type="departmentVO" id="departmentMap">
+	    <result property="depCd" column="DEP_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="depMrc" column="DEP_MRC"/>
+		<result property="depMoc" column="DEP_MOC"/>
+		<result property="depCrc" column="DEP_CRC"/>
+		<result property="depCoc" column="DEP_COC"/>
+		<result property="depCap" column="DEP_CAP"/>
+		<result property="depTel" column="DEP_TEL"/>
+		<result property="depFee" column="DEP_FEE"/>
+		<result property="colNm" column="COL_NM"/>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="commondetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<resultMap type="organizationChartVO" id="organizationChartMap">
+		<result property="organizationCode" column="ORGANIZATION_CODE"/>
+		<result property="organizationName" column="ORGANIZATION_NAME"/>
+		<result property="organizationParentCode" column="ORGANIZATION_PARENT_CODE"/>
+		<result property="organizationDescription" column="ORGANIZATION_DESCRIPTION"/>
+	</resultMap>
+	
+	<select id="chartList" resultType="organizationChartVO">
+		SELECT ORGANIZATION_CODE, ORGANIZATION_NAME, ORGANIZATION_PARENT_CODE,
+		(
+		    SELECT COUNT(*) 
+		    FROM PROFESSOR
+		    WHERE DEP_CD = ORGANIZATION_CODE
+		) AS ORGANIZATION_DESCRIPTION
+		FROM ORGANIZATION_CHART
+		WHERE LENGTH(ORGANIZATION_CODE) = 8
+		UNION
+		SELECT ORGANIZATION_CODE, ORGANIZATION_NAME, ORGANIZATION_PARENT_CODE,
+		(
+		    SELECT COUNT(*)
+		    FROM PROFESSOR
+		    WHERE SUBSTR(PRO_CD,0,1) = SUBSTR(ORGANIZATION_CODE,6)
+		) AS ORGANIZATION_DESCRIPTION
+		FROM ORGANIZATION_CHART
+		WHERE LENGTH(ORGANIZATION_CODE) = 6
+		UNION
+		SELECT ORGANIZATION_CODE, ORGANIZATION_NAME, ORGANIZATION_PARENT_CODE,
+		(
+		    SELECT COUNT(*)
+		    FROM PROFESSOR
+		) AS ORGANIZATION_DESCRIPTION
+		FROM ORGANIZATION_CHART
+		WHERE LENGTH(ORGANIZATION_CODE) = 4
+		UNION
+		SELECT ORGANIZATION_CODE, ORGANIZATION_NAME, ORGANIZATION_PARENT_CODE, ORGANIZATION_DESCRIPTION
+		FROM ORGANIZATION_CHART
+		WHERE LENGTH(ORGANIZATION_CODE) = 5
+	</select>
+	
+	<select id="coldetail" parameterType="String" resultMap="professorMap">
+		SELECT P.PRO_CD, P.DEP_CD, P.ROOM_CD, PRO_JOIN, PRO_RET, PRO_POS,
+       		   U.USER_CD, U.FILE_CD, U.USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD, USER_FACE,
+       	 	   R.ROOM_CD, R.BLD_CD, ROOM_PUR, ROOM_CAP, ROOM_TEL,
+               D.DEP_CD, D.COL_CD, D.DEP_NM, DEP_TEL, DEP_FEE, D.COL_NM,
+               F.FILE_SN, F.FILE_CD, FILE_PATH, FILE_ORNM, FILE_SVNM, FILE_EXTSN, FILE_CON, FILE_SIZE, FILE_USED,
+               O.ORGANIZATION_CODE, ORGANIZATION_NAME, ORGANIZATION_PARENT_CODE, ORGANIZATION_DESCRIPTION,
+               C.COMD_CD, C.COM_CD, C.COMD_NM, C.COMD_DESC
+		FROM PROFESSOR P 
+		JOIN USERS U ON P.PRO_CD = U.USER_CD 
+		JOIN ROOM R ON P.ROOM_CD = R.ROOM_CD
+		JOIN DEPARTMENT D ON P.DEP_CD = D.DEP_CD
+		LEFT OUTER JOIN FILES_DETAIL F ON U.USER_CD=F.FILE_CD
+		JOIN ORGANIZATION_CHART O ON O.ORGANIZATION_CODE=D.COL_CD
+        JOIN COMMON_DETAIL C ON C.COMD_CD = R.BLD_CD
+        WHERE O.ORGANIZATION_CODE=#{organizationCode} 
+		ORDER BY P.PRO_CD
+	</select>
+	
+	<select id="deptdetail" parameterType="String" resultMap="professorMap">
+		SELECT P.PRO_CD, P.DEP_CD, P.ROOM_CD, PRO_JOIN, PRO_RET, PRO_POS,
+       		   U.USER_CD, U.FILE_CD, U.USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD, USER_FACE,
+       	 	   R.ROOM_CD, R.BLD_CD, ROOM_PUR, ROOM_CAP, ROOM_TEL,
+               D.DEP_CD, D.COL_CD, D.DEP_NM, DEP_TEL, DEP_FEE, D.COL_NM,
+               F.FILE_SN, F.FILE_CD, FILE_PATH, FILE_ORNM, FILE_SVNM, FILE_EXTSN, FILE_CON, FILE_SIZE, FILE_USED,
+               O.ORGANIZATION_CODE, ORGANIZATION_NAME, ORGANIZATION_PARENT_CODE, ORGANIZATION_DESCRIPTION,
+               C.COMD_CD, C.COM_CD, C.COMD_NM, C.COMD_DESC
+		FROM PROFESSOR P 
+		JOIN USERS U ON P.PRO_CD = U.USER_CD 
+		JOIN ROOM R ON P.ROOM_CD = R.ROOM_CD
+		JOIN DEPARTMENT D ON P.DEP_CD = D.DEP_CD
+		LEFT OUTER JOIN FILES_DETAIL F ON U.USER_CD=F.FILE_CD
+		JOIN ORGANIZATION_CHART O ON O.ORGANIZATION_CODE = D.DEP_CD
+        JOIN COMMON_DETAIL C ON C.COMD_CD = R.BLD_CD
+        WHERE O.ORGANIZATION_CODE=#{organizationCode} 
+		ORDER BY P.PRO_CD
+	</select>
+
+	<select id="proinfolist" resultMap="professorMap">
+		SELECT P.PRO_CD, P.DEP_CD, P.ROOM_CD, PRO_JOIN, PRO_RET, PRO_POS,
+       		   U.USER_CD, U.FILE_CD, U.USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD, USER_FACE,
+       	 	   R.ROOM_CD, R.BLD_CD, ROOM_PUR, ROOM_CAP, ROOM_TEL,
+               D.DEP_CD, D.COL_CD, D.DEP_NM, DEP_TEL, DEP_FEE, D.COL_NM,
+               F.FILE_SN, F.FILE_CD, FILE_PATH, FILE_ORNM, FILE_SVNM, FILE_EXTSN, FILE_CON, FILE_SIZE, FILE_USED,
+               C.COMD_CD, C.COM_CD, C.COMD_NM, C.COMD_DESC
+		FROM PROFESSOR P 
+		JOIN USERS U ON P.PRO_CD = U.USER_CD 
+		JOIN ROOM R ON P.ROOM_CD = R.ROOM_CD
+		JOIN DEPARTMENT D ON P.DEP_CD = D.DEP_CD
+		LEFT OUTER JOIN FILES_DETAIL F ON U.USER_CD=F.FILE_CD
+        JOIN COMMON_DETAIL C ON C.COMD_CD = R.BLD_CD
+		ORDER BY P.PRO_CD
+	</select>
+	
+<!-- 	<select id="stuinfodetail" parameterType="String" resultMap="studentMap"> -->
+<!-- 			SELECT		    S.STU_CD -->
+<!-- 		  				  , S.DEP_CD -->
+<!-- 		  				  , S.COMD_CD -->
+<!-- 						  , STU_YEAR -->
+<!-- 						  , STU_SEM -->
+<!-- 						  , STU_MRC -->
+<!-- 						  , STU_MOC -->
+<!-- 						  , STU_CRC -->
+<!-- 						  , STU_COC -->
+<!-- 						  , STU_ADDT -->
+<!-- 						  , STU_GRDT -->
+<!-- 						  , U.USER_CD -->
+<!-- 						  , U.FILE_CD -->
+<!-- 						  , USER_NM -->
+<!-- 						  , USER_NME -->
+<!-- 						  , USER_TEL -->
+<!-- 						  , USER_ZIP -->
+<!-- 						  , USER_ADDR1 -->
+<!-- 						  , USER_ADDR2 -->
+<!-- 						  , USER_REG1 -->
+<!-- 						  , USER_REG2 -->
+<!-- 						  , USER_MAIL -->
+<!-- 						  , USER_PASS -->
+<!-- 						  , USER_BANK -->
+<!-- 						  , USER_DEPO -->
+<!-- 						  , USER_ACC -->
+<!-- 						  , U.COMD_CD -->
+<!-- 						  , FILE_SN -->
+<!-- 						  , F.FILE_CD -->
+<!-- 						  , FILE_PATH -->
+<!-- 						  , FILE_ORNM -->
+<!-- 						  , FILE_SVNM -->
+<!-- 						  , FILE_EXTSN -->
+<!-- 						  , FILE_CON -->
+<!-- 						  , FILE_SIZE -->
+<!-- 						  , FILE_USED -->
+<!-- 						  , D.DEP_CD -->
+<!-- 						  , COL_CD -->
+<!-- 						  , DEP_NM -->
+<!-- 						  , DEP_MRC -->
+<!-- 						  , DEP_MOC -->
+<!-- 						  , DEP_CRC -->
+<!-- 						  , DEP_COC -->
+<!-- 						  , DEP_CAP -->
+<!-- 						  , DEP_TEL -->
+<!-- 						  , DEP_FEE -->
+<!-- 						  , COL_NM -->
+<!-- 						  , C.COMD_CD -->
+<!--                           , C.COM_CD -->
+<!--                           , C.COMD_NM -->
+<!--                           , C.COMD_DESC -->
+<!-- 			FROM STUDENT S -->
+<!-- 			JOIN DEPARTMENT D ON S.DEP_CD=D.DEP_CD -->
+<!-- 			JOIN USERS U ON S.STU_CD=U.USER_CD  -->
+<!-- 			JOIN COMMON_DETAIL C ON S.COMD_CD=C.COMD_CD -->
+<!-- 			LEFT OUTER JOIN FILES_DETAIL F ON U.USER_CD=F.FILE_CD -->
+<!-- 			WHERE STU_CD=#{stuCd} -->
+<!-- 	</select> -->
+	<update id="updateuser" parameterType="userVO">
+		UPDATE USERS
+		SET USER_NM=#{userNm}
+		, USER_NME=#{userNme}
+		, USER_REG1=#{userReg1}
+		, USER_REG2=#{userReg2}
+		, USER_BANK=#{userBank}
+		, USER_ACC=#{userAcc}
+		, USER_ZIP=#{userZip}
+		, USER_ADDR1=#{userAddr1}
+		, USER_ADDR2=#{userAddr2}
+		, USER_TEL=#{userTel}
+		, USER_MAIL=#{userMail}
+		WHERE USER_CD=#{userCd}
+	</update>
+	
+	<select id="deptList" resultType="departmentVO">
+		SELECT DEP_CD, COL_CD, DEP_NM, COL_NM
+		FROM DEPARTMENT
+	</select>
+	
+	<update id="updatepro" parameterType="professorVO">
+		UPDATE PROFESSOR
+		SET DEP_CD=#{depCd}
+		, PRO_CD=#{proCd}
+		, ROOM_CD=#{roomCd}
+		, PRO_JOIN=#{proJoin}
+		, PRO_RET=#{proRet}
+        , PRO_POS=#{proPos}
+		WHERE PRO_CD=#{proCd}
+	</update>
+	
+	<update id="usedupdate" parameterType="String">
+		UPDATE FILES_DETAIL
+		SET FILE_USED=1
+		WHERE FILE_CD=#{userCd}
+	</update>
+	
+<!-- 	<select id="cntDepStu" parameterType="hashMap" resultType="int"> -->
+<!-- 		SELECT 	COUNT(*) FROM STUDENT -->
+<!-- 		WHERE 	DEP_CD = #{depCd} -->
+<!-- 		AND		TO_CHAR(STU_ADDT, 'YY') = #{year}  -->
+<!-- 	</select> -->
+	
+<!-- 	<insert id="insertUser" parameterType="userVO"> -->
+<!-- 		INSERT INTO USERS (USER_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, COMD_CD) -->
+<!-- 		VALUES (#{userCd}, #{userNm}, #{userNme}, #{userTel}, #{userZip}, #{userAddr1}, #{userAddr2}, #{userReg1}, #{userReg2}, #{userMail}, #{userPass}, #{userBank}, #{userDepo}, #{userAcc}, #{comdCd}) -->
+<!-- 	</insert> -->
+	
+<!-- 	<insert id="insertStudent" parameterType="studentVO"> -->
+<!-- 		INSERT INTO STUDENT(STU_CD, DEP_CD, COMD_CD, STU_YEAR, STU_SEM, STU_ADDT) -->
+<!-- 		VALUES (#{stuCd}, #{depCd}, #{comdCd}, #{stuYear}, #{stuSem}, SYSDATE) -->
+<!-- 	</insert> -->
+	
+<!-- 	<insert id="insertUserList" parameterType="list"> -->
+<!-- 		<foreach collection="list" item="item" separator=" " open="INSERT ALL" close="SELECT 1 FROM DUAL"> -->
+<!-- 			INTO USERS (USER_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, COMD_CD) -->
+<!-- 			VALUES  -->
+<!-- 			( -->
+<!-- 				#{item.userCd}, #{item.userNm}, #{item.userNme}, #{item.userTel}, #{item.userZip}, #{item.userAddr1}, #{item.userAddr2}, #{item.userReg1}, #{item.userReg2},  -->
+<!-- 				#{item.userMail}, #{item.userPass}, #{item.userBank}, #{item.userDepo}, #{item.userAcc}, #{item.comdCd} -->
+<!-- 			) -->
+<!-- 		</foreach> -->
+<!-- 	</insert> -->
+	
+<!-- 	<insert id="insertStudentList" parameterType="list"> -->
+<!-- 		<foreach collection="list" item="item" separator=" " open="INSERT ALL" close="SELECT 1 FROM DUAL"> -->
+<!-- 			INTO STUDENT (STU_CD, DEP_CD, COMD_CD, STU_YEAR, STU_SEM, STU_ADDT) -->
+<!-- 			VALUES -->
+<!-- 			( -->
+<!-- 				#{item.stuCd}, #{item.depCd}, #{item.comdCd}, #{item.stuYear}, #{item.stuSem}, SYSDATE -->
+<!-- 			) -->
+<!-- 		</foreach> -->
+<!-- 	</insert> -->
+	
+	
+<!-- 	<insert id="insertStudentList" parameterType="java.util.List"> -->
+<!-- 		INSERT INTO STUDENT (STU_CD, DEP_CD, COMD_CD, STU_YEAR, STU_SEM, STU_ADDT) -->
+<!-- 		VALUES -->
+<!-- 		<foreach collection="list" item="item" separator="," open="(" close=")"> -->
+<!-- 			#{item.stuCd}, #{item.depCd}, #{item.comdCd}, #{item.stuYear}, #{item.stuSem}, SYSDATE -->
+<!-- 		</foreach> -->
+<!-- 	</insert> -->
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

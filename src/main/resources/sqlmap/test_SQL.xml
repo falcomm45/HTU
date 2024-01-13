@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.TestMapper">
+	
+	<resultMap type="testVO" id="testMap">
+		<result property="testCd" column="TEST_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="testOpt" column="TEST_OPT"/>
+		<result property="testNm" column="TEST_NM"/>
+		<result property="testCon" column="TEST_CON"/>
+		<result property="testReg" column="TEST_REG"/>
+		<result property="testDt" column="TEST_DT"/>
+		<result property="testLmt" column="TEST_LMT"/>
+		<result property="lecNm" column="LEC_NM"/>
+		<association property="testApplyVOList" resultMap="taMap"></association>
+		<association property="testQuestionVOList" resultMap="tqMap"></association>
+	</resultMap>
+	
+	<resultMap type="testQuestionVO" id="tqMap">
+		<result property="teqCd" column="TEQ_CD"/>
+		<result property="testCd" column="TEST_CD"/>
+		<result property="teqNo" column="TEQ_NO"/>
+		<result property="teqCon" column="TEQ_CON"/>
+		<result property="teqOp1" column="TEQ_OP1"/>
+		<result property="teqOp2" column="TEQ_OP2"/>
+		<result property="teqOp3" column="TEQ_OP3"/>
+		<result property="teqOp4" column="TEQ_OP4"/>
+		<result property="teqOp5" column="TEQ_OP5"/>
+		<result property="teqAnswer" column="TEQ_ANSWER"/>
+		<result property="teqAllot" column="TEQ_ALLOT"/>
+	</resultMap>
+	
+	<resultMap type="testApplyVO" id="taMap">
+		<result property="teaCd" column="TEA_CD"/>
+		<result property="testCd" column="TEST_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="teaScore" column="TEA_SCORE"/>
+		<result property="stuNm" column="STU_NM"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="rank" column="RANK"/>
+	</resultMap>
+	
+	<resultMap type="testDetailVO" id="tdMap">
+		<result property="teqCd" column="TEQ_CD"/>
+		<result property="teaCd" column="TEA_CD"/>
+		<result property="tedAnswer" column="TED_ANSWER"/>
+		<result property="tedYn" column="TED_YN"/>
+	</resultMap>
+	
+	<resultMap type="lectureApplyVO" id="lecaMap">
+		<result property="lecaStdt" column="LECA_STDT"/>
+		<result property="lecaEddt" column="LECA_EDDT"/>
+		<result property="lecaType" column="LECA_TYPE"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+		<result property="lecaCd" column="LECA_CD"/>
+		<result property="proCd" column="PRO_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="lecaYear" column="LECA_YEAR"/>
+		<result property="lecaSem" column="LECA_SEM"/>
+		<result property="lecaNm" column="LECA_NM"/>
+		<result property="lecaCon" column="LECA_CON"/>
+		<result property="lecaTrg" column="LECA_TRG"/>
+		<result property="lecaCrd" column="LECA_CRD"/>
+		<result property="lecaPer" column="LECA_PER"/>
+		<result property="lecaCap" column="LECA_CAP"/>
+		<result property="lecaSche" column="LECA_SCHE"/>
+		<result property="lecaBook" column="LECA_BOOK"/>
+		<result property="lecaNote" column="LECA_NOTE"/>
+		<result property="lecaEva" column="LECA_EVA"/>
+		<result property="lecaTemp" column="LECA_TEMP"/>
+	</resultMap>
+	
+	<!-- 시험 목록 -->
+	<select id="testList" parameterType="String" resultMap="testMap">
+		SELECT A.TEST_CD, A.LEC_CD, A.TEST_OPT, A.TEST_NM, A.TEST_CON, A.TEST_REG, A.TEST_DT, A.TEST_LMT
+		       , B.TEA_CD, B.TEST_CD, B.STU_CD, B.TEA_SCORE
+		FROM   TEST A 
+		LEFT JOIN TEST_APPLY B
+		ON     A.TEST_CD = B.TEST_CD
+		WHERE  A.LEC_CD = #{lecCd}
+	</select>
+	
+	<!-- 시험 등록 -->
+	<insert id="testCreatePost" parameterType="testVO">
+		INSERT INTO TEST (
+		    TEST_CD
+		    , LEC_CD
+		    , TEST_OPT
+		    , TEST_NM
+		    , TEST_CON
+		    , TEST_REG
+		    , TEST_DT
+		    , TEST_LMT
+		) VALUES (
+		    #{testCd}
+		  , #{lecCd}
+		  , #{testOpt}
+		  , #{testNm}
+		  , #{testCon}
+		  , SYSDATE
+		  , #{testDt}
+		  , #{testLmt}
+		)
+	</insert>
+	
+	<!-- 시험 문제 등록 -->
+	<insert id="testQustionInsert" parameterType="testQuestionVO">
+		INSERT INTO TEST_QUESTION (
+		    TEQ_CD
+		    , TEST_CD
+		    , TEQ_NO
+		    , TEQ_CON
+		    , TEQ_OP1
+		    , TEQ_OP2
+		    , TEQ_OP3
+		    , TEQ_OP4
+		    , TEQ_OP5
+		    , TEQ_ANSWER
+		    , TEQ_ALLOT
+		) VALUES (
+		    #{testCd} || TRIM(TO_CHAR(#{teqNo}, '00'))
+		  , #{testCd}
+		  , #{teqNo}
+		  , #{teqCon}
+		  , #{teqOp1}
+		  , #{teqOp2}
+		  , #{teqOp3}
+		  , #{teqOp4}
+		  , #{teqOp5}
+		  , #{teqAnswer}
+		  , #{teqAllot}
+		)
+	</insert>
+	
+	<!-- 시험 상세 -->
+	<select id="testDetail" parameterType="String" resultMap="testMap">
+		SELECT TEST_CD, LEC_CD, TEST_OPT, TEST_NM, TEST_CON, TEST_REG, TEST_DT, TEST_LMT
+		FROM   TEST
+		WHERE  TEST_CD = #{testCd}
+	</select>
+	
+	<!-- 시험 문제 리스트 -->
+	<select id="tqVOList" parameterType="String" resultMap="tqMap">
+		SELECT TEQ_CD, TEST_CD, TEQ_NO, TEQ_CON, TEQ_OP1, TEQ_OP2, TEQ_OP3, TEQ_OP4, TEQ_OP5, TEQ_ANSWER, TEQ_ALLOT
+		FROM   TEST_QUESTION
+		WHERE  TEST_CD = #{testCd}
+		ORDER BY TEQ_NO
+	</select>
+	
+	<!-- 시험 수정 -->
+	<update id="testUpdate" parameterType="testVO">
+		UPDATE TEST
+		SET
+		    TEST_NM = #{testNm}
+		    , TEST_CON = #{testCon}
+		    , TEST_DT = #{testDt}
+		    , TEST_LMT = #{testLmt}
+		WHERE
+	       TEST_CD = #{testCd}
+	</update>
+	
+	<!-- 시험 문제 삭제 -->
+	<delete id="deleteQuestion" parameterType="String">
+		DELETE FROM TEST_QUESTION
+		WHERE
+        	TEST_CD = #{testCd}
+	</delete>
+	
+	<!-- 시험 제출 -->
+	<insert id="testApply" parameterType="testApplyVO">
+		<selectKey resultType="String" order="BEFORE" keyProperty="teaCd">
+			SELECT 'TEAP' || TRIM(TO_CHAR(TEST_SEQ.NEXTVAL))
+			FROM   DUAL
+		</selectKey>
+		INSERT INTO TEST_APPLY (
+		    TEA_CD
+		    , TEST_CD
+		    , STU_CD
+		) VALUES (
+		    #{teaCd}
+		  , #{testCd}
+		  , #{stuCd}
+		)
+	</insert>
+	
+	<!-- 시험 상세 추가 -->
+	<insert id="testDetailInsert" parameterType="testDetailVO">
+		INSERT INTO TEST_DETAIL (
+		    TEQ_CD
+		    , TEA_CD
+		    , TED_ANSWER
+		    , TED_YN
+		) VALUES (
+		    #{teqCd}
+		  , #{teaCd}
+		  , #{tedAnswer}
+		  , #{tedYn}
+		)
+	</insert>
+	
+	<!-- 시험 점수 입력 -->
+	<update id="testScoreUpdate" parameterType="testApplyVO">
+		UPDATE TEST_APPLY
+		SET
+		    TEA_SCORE = #{teaScore}
+		WHERE
+	        TEA_CD = #{teaCd}
+	</update>
+	
+	<!-- 시험 결과 상세 - 학생 -->
+	<select id="testResult" parameterType="String" resultMap="taMap">
+		SELECT
+		    TEA_CD
+		  , TEST_CD
+		  , STU_CD
+		  , TEA_SCORE
+		FROM
+		    TEST_APPLY
+		WHERE
+			TEST_CD = #{testCd}
+		AND
+			STU_CD = #{stuCd}
+	</select>
+	
+	<!-- 제출 시험지 -->
+	<select id="testResultDetail" parameterType="String" resultMap="tdMap">
+		SELECT
+		    TEQ_CD
+		  , TEA_CD
+		  , TED_ANSWER
+		  , TED_YN
+		FROM
+		    TEST_DETAIL
+		WHERE
+			TEA_CD = #{teaCd}
+	</select>
+	
+	<!-- 성적 처리 기준 코드 가져오기 -->
+	<select id="getCrtrCd" parameterType="String" resultType="String">
+		SELECT
+		    CRTR_CD
+		FROM
+		    GRADE_CRITERIA
+		WHERE
+		    LEC_CD = #{lecCd}
+	</select>
+	
+	<!-- 중간고사 점수 입력 -->
+	<update id="updateMsGrade" parameterType="String">
+		UPDATE LECTURE_GRADE A
+		SET
+			A.LECG_MS = (
+				SELECT B.TEA_SCORE
+		        FROM TEST_APPLY B, GRADE_CRITERIA C
+		        WHERE A.STU_CD = B.STU_CD
+		        AND A.CRTR_CD = C.CRTR_CD
+		        AND C.LEC_CD = SUBSTR(B.TEST_CD, 1, LENGTH(B.TEST_CD)-1)
+		        AND SUBSTR(B.TEST_CD,LENGTH(B.TEST_CD)) = '1'
+		        )
+		WHERE
+		    A.STU_CD = #{stuCd}
+		AND
+		    A.CRTR_CD = #{crtrCd}
+	</update>
+
+	<!-- 기말고사 점수 입력 -->
+	<update id="updateFsGrade" parameterType="String">
+		UPDATE LECTURE_GRADE A
+		SET
+			A.LECG_FS = (
+				SELECT B.TEA_SCORE
+		        FROM TEST_APPLY B, GRADE_CRITERIA C
+		        WHERE A.STU_CD = B.STU_CD
+		        AND A.CRTR_CD = C.CRTR_CD
+		        AND C.LEC_CD = SUBSTR(B.TEST_CD, 1, LENGTH(B.TEST_CD)-1)
+		        AND SUBSTR(B.TEST_CD,LENGTH(B.TEST_CD)) = '2'
+		        )
+		WHERE
+		    A.STU_CD = #{stuCd}
+		AND
+		    A.CRTR_CD = #{crtrCd}
+	</update>
+	
+	<!-- 시험 응시 결과 -->
+	<select id="testResultList" parameterType="testVO" resultMap="taMap">
+		SELECT
+		    A.STU_CD, B.TEA_SCORE, B.TEA_CD, C.USER_NM STU_NM, D.DEP_NM
+		    , RANK() OVER (ORDER BY B.TEA_SCORE DESC NULLS LAST) RANK
+		FROM
+		    ENROLMENT A
+		    LEFT JOIN TEST_APPLY B ON A.STU_CD = B.STU_CD
+		    AND B.TEST_CD = #{testCd},
+		    USERS C, DEPARTMENT D
+		WHERE
+		    A.LEC_CD = #{lecCd}
+		    AND A.STU_CD = C.USER_CD
+		    AND SUBSTR(D.DEP_CD, 6, 3) = SUBSTR(A.STU_CD, 3, 3)
+	</select>
+	
+	<!-- 시험 결과 상세 - 교수 -->
+	<select id="testResultPro" parameterType="String" resultMap="taMap">
+		SELECT
+		    TEA_CD
+		  , TEST_CD
+		  , STU_CD
+		  , TEA_SCORE
+		FROM
+		    TEST_APPLY
+		WHERE
+			TEA_CD = #{teaCd}
+	</select>
+</mapper>

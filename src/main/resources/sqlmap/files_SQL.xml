@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.FilesDetailMapper">
+	
+	<resultMap type="filesDetailVO" id="fileMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<insert id="insertFilesDetail" parameterType="filesDetailVO">
+		<selectKey resultType="int" order="BEFORE" keyProperty="fileSn">
+			SELECT NVL(MAX(FILE_SN), 0) + 1 FROM FILES_DETAIL
+			WHERE FILE_CD = #{fileCd}
+		</selectKey>
+<!-- 		INSERT INTO FILES_DETAIL -->
+		INSERT INTO FILES_DETAIL(FILE_SN, FILE_CD, FILE_PATH, FILE_ORNM, FILE_SVNM, FILE_EXTSN, FILE_CON, FILE_SIZE)
+		VALUES (#{fileSn}, #{fileCd}, #{filePath}, #{fileOrnm}, #{fileSvnm}, #{fileExtsn}, #{fileCon}, #{fileSize})
+	</insert>
+	
+	<insert id="insertFile" parameterType="String">
+		INSERT INTO FILES (FILE_CD)
+		VALUES (#{fileCd})
+	</insert>
+	
+	<update id="updateFileUsed" parameterType="String">
+		UPDATE FILES_DETAIL
+		SET    FILE_USED = 1
+		WHERE  FILE_CD = #{fileCd}
+	</update>
+	
+	<select id="searchFileCd" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM FILES
+		WHERE FILE_CD = #{fileCd}
+	</select>
+	
+	<update id="deleteFileUpdate" parameterType="filesDetailVO">
+		UPDATE FILES_DETAIL
+		SET    FILE_USED = 1
+		WHERE  FILE_CD = #{fileCd}
+		AND	   FILE_SN = #{fileSn}
+	</update>
+	
+	<delete id="deleteFiles" parameterType="String">
+		DELETE FROM  FILES
+		WHERE  FILE_CD = #{fileCd}
+	</delete>
+</mapper>

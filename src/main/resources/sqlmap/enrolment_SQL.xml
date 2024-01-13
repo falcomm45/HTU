@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.EnrolmentMapper">
+
+	
+	<resultMap type="wishLectureVO" id="wishLectureMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+	</resultMap>
+	
+	<resultMap type="lectureScheduleVO" id="lectureScheduleMap">
+		<result property="lecsCd" column="LECS_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecDay" column="LEC_DAY"/>
+		<result property="lecsStdt" column="LECS_STDT"/>
+		<result property="lecsEddt" column="LECS_EDDT"/>
+	</resultMap>
+	
+	<resultMap type="lectureApplyVO" id="lectureAppMap">
+		<result property="lecaStdt" column="LECA_STDT"/>
+		<result property="lecaEddt" column="LECA_EDDT"/>
+		<result property="lecaType" column="LECA_TYPE"/>
+		<result property="lecaCd" column="LECA_CD"/>
+		<result property="proCd" column="PRO_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="lecaYear" column="LECA_YEAR"/>
+		<result property="lecaSem" column="LECA_SEM"/>
+		<result property="lecaNm" column="LECA_NM"/>
+		<result property="lecaCon" column="LECA_CON"/>
+		<result property="lecaTrg" column="LECA_TRG"/>
+		<result property="lecaCrd" column="LECA_CRD"/>
+		<result property="lecaPer" column="LECA_PER"/>
+		<result property="lecaCap" column="LECA_CAP"/>
+		<result property="lecaSche" column="LECA_SCHE"/>
+		<result property="lecaBook" column="LECA_BOOK"/>
+		<result property="lecaNote" column="LECA_NOTE"/>
+		<result property="lecaEva" column="LECA_EVA"/>
+		<result property="lecaTemp" column="LECA_TEMP"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+		<association property="departmentVO" resultMap="departmentMap"/>
+		<association property="professorVO" resultMap="professorMap"/>
+	</resultMap>
+	
+	<resultMap type="professorVO" id="professorMap">
+		<result property="proCd" column="PRO_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="proJoin" column="PRO_JOIN"/>
+		<result property="proRet" column="PRO_RET"/>
+		<result property="proPos" column="PRO_POS"/>
+		<association property="userVO" resultMap="userMap"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="departmentVO" id="departmentMap">
+		<result property="depCd" column="DEP_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="depMrc" column="DEP_MRC"/>
+		<result property="depMoc" column="DEP_MOC"/>
+		<result property="depCrc" column="DEP_CRC"/>
+		<result property="depCoc" column="DEP_COC"/>
+		<result property="depCap" column="DEP_CAP"/>
+		<result property="depTel" column="DEP_TEL"/>
+		<result property="depFee" column="DEP_FEE"/>
+	</resultMap>
+	
+	<resultMap type="enrolmentVO" id="enrolmentVOMap">
+		<result property="enrCd" column="ENR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="enrReg" column="ENR_REG"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="studentVOList" resultMap="studentVOMap"></collection>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="studentVOMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+	
+		<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<resultMap type="lectureDataVO" id="lectureDataVOMap">
+		<result property="lecdCd" column="LECD_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="lecdDt" column="LECD_DT"/>
+		<result property="lecdTitle" column="LECD_TITLE"/>
+		<result property="lecdCon" column="LECD_CON"/>
+		<result property="rnum" column="RNUM"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<resultMap type="lectureNoticeVO" id="lectureNoticeVOMap">
+		<result property="lecnCd" column="LECN_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecnTitle" column="LECN_TITLE"/>
+		<result property="lecnCon" column="LECN_CON"/>
+		<result property="lecnReg" column="LECN_REG"/>
+		<result property="lecnUdt" column="LECN_UDT"/>
+		<result property="lecnCnt" column="LECN_CNT"/>
+		<result property="rnum" column="RNUM"/>
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<resultMap type="taskVO" id="taskVOMap">
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="taskNm" column="TASK_NM"/>
+		<result property="taskCon" column="TASK_CON"/>
+		<result property="taskReg" column="TASK_REG"/>
+		<result property="taskEddt" column="TASK_EDDT"/>
+		<result property="rnum" column="RNUM"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<association property="taskSubmitVO" resultMap="taskSubmitVOMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>	
+	
+	<resultMap type="lectureGradeVO" id="lectureGradeMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecgMs" column="LECG_MS"/>
+		<result property="lecgFs" column="LECG_FS"/>
+		<result property="lecgTs" column="LECG_TS"/>
+		<result property="lecgAs" column="LECG_AS"/>
+		<result property="lecgSum" column="LECG_SUM"/>
+		<result property="lecgGrade" column="LECG_GRADE"/>
+	</resultMap>
+	
+		
+	<resultMap type="lectureVO" id="lectureMap">
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecHcnt" column="LEC_HCNT"/>
+		<result property="lecStat" column="LEC_STAT"/>
+		<association property="lectureApplyVO" resultMap="lectureAppMap"/>
+		<association property="lectureScheduleVO" resultMap="lectureScheduleMap"/>
+		<collection property="wishLectureList" resultMap="wishLectureMap"/>
+		<collection property="weekplanVOList" resultMap="weekplanVOMap"></collection>
+	</resultMap>
+	
+	
+	<resultMap type="weekplanVO" id="weekplanVOMap">
+		<result property="wpNo" column="WP_NO"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="wpCon" column="WP_CON"/>
+		<result property="rnum" column="RNUM"/>
+<!-- 		<association property="lectureVO" resultMap="lectureMap"></association> -->
+	</resultMap>
+	
+	<resultMap type="taskSubmitVO" id="taskSubmitVOMap">
+		<result property="tsubCd" column="TSUB_CD"/>
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="tsubDt" column="TSUB_DT"/>
+		<result property="tsubCon" column="TSUB_CON"/>
+		<result property="tsubScore" column="TSUB_SCORE"/>
+		
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	
+	<select id="getColNm" parameterType="String" resultType="String">
+		SELECT  COMD_NM
+		FROM    COMMON_DETAIL CD, COLLEGE C, DEPARTMENT D, STUDENT S
+		WHERE   S.DEP_CD = D.DEP_CD
+		AND     D.COL_CD = C.COL_CD
+		AND     C.COL_CD = CD.COMD_CD
+		AND     S.STU_CD = #{userCd}
+	</select>
+	
+	<select id="getEnrolment" parameterType="String" resultMap="lectureMap">
+		SELECT * FROM LECTURE
+		WHERE LEC_CD = #{lecCd}
+	</select>
+	
+	
+	<select id="list" parameterType="studentVO" resultMap="lectureMap">
+		SELECT  L.LEC_CD, LEC_HCNT, LEC_STAT,
+		        LECA_CD, LA.PRO_CD, APP_CD, LA.DEP_CD, LA.ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, LECA_TRG, 
+		        LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE,
+		        LECS_CD, LS.LEC_CD, LEC_DAY, LECS_STDT, LECS_EDDT, CRTR_MP, CRTR_FP, CRTR_TP, CRTR_AP,
+		        USER_CD, USER_NM, USER_NME, USER_TEL,USER_MAIL, USER_DEPO,
+		        D.DEP_CD, COL_CD, DEP_NM, DEP_MRC, DEP_MOC, DEP_CRC, DEP_COC, DEP_CAP, DEP_TEL, DEP_FEE, COL_NM,
+		        WL.STU_CD, WL.LEC_CD, U.USER_NM,
+		        WP_CON
+		FROM    LECTURE L, LECTURE_APPLY LA, LECTURE_SCHEDULE LS, DEPARTMENT D, WISH_LECTURE WL, PROFESSOR P, USERS U, WEEKPLAN W
+		WHERE   LA.LECA_CD = L.LEC_CD
+		AND     LS.LEC_CD = L.LEC_CD
+		AND     D.DEP_CD = LA.DEP_CD
+		AND		WL.LEC_CD(+) = L.LEC_CD
+		AND     W.LEC_CD(+) = L.LEC_CD
+		AND		P.PRO_CD = LA.PRO_CD
+		AND		P.PRO_CD = U.USER_CD
+		AND     LECA_TRG = #{stuYear}
+		AND     LECA_SEM = #{stuSem}
+        AND     LECA_YEAR = TO_CHAR(SYSDATE, 'YYYY')
+		
+	</select>
+	
+	<select id="getEnrolmentListByStuCd" parameterType="String" resultMap="enrolmentVOMap">
+		SELECT  ENR_CD, STU_CD, E.LEC_CD, ENR_REG, LEC_HCNT, LEC_STAT,
+		        LECA_CD, PRO_CD, APP_CD, DEP_CD, ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, LECA_TRG, 
+		        LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE
+		FROM    ENROLMENT E,  LECTURE L, LECTURE_APPLY LA
+		WHERE   E.LEC_CD(+) = L.LEC_CD
+		AND     L.LEC_CD = LA.LECA_CD
+		AND		LA.LECA_YEAR = TO_CHAR(SYSDATE, 'YYYY')
+		AND		LA.LECA_SEM = 
+		(
+			CASE 
+				WHEN EXTRACT (MONTH FROM SYSDATE) IN (1, 2, 3, 4, 5, 6, 7, 8) THEN 1
+				ELSE 2
+			END
+		)
+		AND     E.STU_CD = #{stuCd}
+	</select>
+	
+	<select id="searchLecture" parameterType="hashMap" resultMap="lectureMap">
+		SELECT  L.LEC_CD, LEC_HCNT, LEC_STAT,
+		        LECA_CD, LA.PRO_CD, APP_CD, LA.DEP_CD, LA.ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, LECA_TRG, 
+		        LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE,
+		        LECS_CD, LS.LEC_CD, LEC_DAY, LECS_STDT, LECS_EDDT,
+		        D.DEP_CD, COL_CD, DEP_NM, DEP_MRC, DEP_MOC, DEP_CRC, DEP_COC, DEP_CAP, DEP_TEL, DEP_FEE, COL_NM,
+		        WL.STU_CD, WL.LEC_CD, U.USER_NM
+		FROM    LECTURE L, LECTURE_APPLY LA, LECTURE_SCHEDULE LS, DEPARTMENT D, WISH_LECTURE WL, PROFESSOR P, USERS U
+		WHERE   LA.LECA_CD = L.LEC_CD
+		AND     LS.LEC_CD = L.LEC_CD
+		AND     D.DEP_CD = LA.DEP_CD
+		AND		WL.LEC_CD(+) = L.LEC_CD
+		AND		P.PRO_CD = LA.PRO_CD
+		AND		P.PRO_CD = U.USER_CD
+		AND     LECA_TRG = #{stuYear}
+		AND     LECA_SEM = #{stuSem}
+		AND		LECA_NM LIKE '%' || #{lecNm} || '%'
+	</select>
+	
+	<select id="getWishLectureListByStuCd" parameterType="String" resultMap="wishLectureMap">
+		SELECT  STU_CD, LEC_CD
+		FROM WISH_LECTURE
+		WHERE STU_CD = #{stuCd}
+	</select>
+	
+	<insert id="addWishLecture" parameterType="wishLectureVO">
+		INSERT INTO WISH_LECTURE (STU_CD, LEC_CD)
+		VALUES (#{stuCd}, #{lecCd})
+	</insert>
+	
+	<delete id="removeWishLecture" parameterType="wishLectureVO">
+		DELETE FROM WISH_LECTURE
+		WHERE STU_CD = #{stuCd} AND LEC_CD = #{lecCd}	
+	</delete>
+	
+	<insert id="insertEnrolment" parameterType="enrolmentVO">
+		<selectKey resultType="String" keyProperty="enrCd" order="BEFORE">
+			SELECT ENROLMENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO ENROLMENT(ENR_CD, STU_CD, LEC_CD)
+		VALUES (#{enrCd}, #{stuCd}, #{lecCd})
+	</insert>
+	
+	<update id="updateLectureCnt" parameterType="enrolmentVO">
+		<selectKey resultType="int" keyProperty="lecHcnt" order="BEFORE">
+			SELECT LEC_HCNT FROM LECTURE
+			WHERE LEC_CD = #{lecCd}
+		</selectKey>
+		UPDATE LECTURE
+		SET LEC_HCNT = (#{lecHcnt} + 1)
+		WHERE LEC_CD = #{lecCd}
+	</update>
+	
+	<update id="updateLectureMinus" parameterType="lectureVO">
+		<selectKey resultType="int" keyProperty="lecHcnt" order="BEFORE">
+			SELECT LEC_HCNT FROM LECTURE
+			WHERE LEC_CD = #{lecCd}
+		</selectKey>
+		UPDATE LECTURE
+		SET LEC_HCNT = (#{lecHcnt} - 1)
+		WHERE LEC_CD = #{lecCd}
+	</update>
+	
+	<select id="getEnrolmentList" parameterType="String" resultMap="enrolmentVOMap">
+		SELECT ENR_CD, STU_CD, LEC_CD, ENR_REG
+		FROM ENROLMENT
+		WHERE LEC_CD = #{lecCd}
+	</select>
+	
+	<select id="getEnrolmentCnt" resultType="int" parameterType="String">
+	 	SELECT COUNT(ENR_CD)
+		FROM ENROLMENT
+		WHERE LEC_CD = #{lecCd}
+	</select>
+	
+	<select id="getEnrolmentLecture" parameterType="String" resultMap="enrolmentVOMap">
+	    <![CDATA[
+	    SELECT 
+	        E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG,
+	        LC.LEC_HCNT, LC.LEC_STAT,
+	        
+	        LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD,
+	        LA.LECA_YEAR, LA.LECA_SEM, LA.LECA_NM,
+	        LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP,
+	        LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP,
+	        LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+	        
+	        P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+	        
+	        U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO,
+	        
+	        D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC, 
+	        D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL
+	    FROM
+	        LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E
+	    WHERE 
+	        E.LEC_CD = LC.LEC_CD
+	    AND
+	        LC.LEC_CD = LA.LECA_CD
+	    AND
+	        LA.PRO_CD = P.PRO_CD
+	    AND 
+	        LA.DEP_CD = D.DEP_CD
+	    AND
+	        P.PRO_CD = U.USER_CD
+	    AND   
+	        LA.ROOM_CD = R.ROOM_CD
+	    AND     
+	        C.COMD_CD = R.BLD_CD
+	    AND 
+	        E.STU_CD = #{stuCd}
+	    AND (
+		        (LA.LECA_YEAR = EXTRACT(YEAR FROM SYSDATE) AND LA.LECA_SEM = 1 AND EXTRACT(MONTH FROM SYSDATE) <= 6)
+		        OR
+		        (LA.LECA_YEAR = EXTRACT(YEAR FROM SYSDATE) AND LA.LECA_SEM = 2 AND EXTRACT(MONTH FROM SYSDATE) BETWEEN 8 AND 12)
+		    )
+	    ]]>
+	</select>
+	
+	<select id="enrolmentLectureDetail" parameterType="hashMap" resultMap="lectureMap">
+	    <![CDATA[
+			SELECT 
+			    E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG,
+			    LC.LEC_HCNT, LC.LEC_STAT,
+			    
+			    LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD,
+			    LA.LECA_YEAR, LA.LECA_SEM, LA.LECA_NM,
+			    LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP,
+			    LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP,
+			    LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+			    
+			    P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+			    
+			    U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO,
+			    
+			    D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC, 
+			    D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL
+			FROM
+			    LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E
+			WHERE 
+			    E.LEC_CD = LC.LEC_CD
+			AND
+			    LC.LEC_CD = LA.LECA_CD
+			AND
+			    LA.PRO_CD = P.PRO_CD
+			AND 
+			    LA.DEP_CD = D.DEP_CD
+			AND
+			    P.PRO_CD = U.USER_CD
+			AND   
+			    LA.ROOM_CD = R.ROOM_CD
+			AND     
+			    C.COMD_CD = R.BLD_CD
+			AND 
+			    E.STU_CD = #{stuCd}
+			AND
+			    LC.LEC_CD = #{lecCd}
+	    ]]>
+	</select>
+	
+	<select id="changeMenu1" parameterType="hashMap" resultMap="lectureMap">
+		SELECT  L.LEC_CD, LEC_HCNT, LEC_STAT,
+		        LECA_CD, LA.PRO_CD, APP_CD, LA.DEP_CD, LA.ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, LECA_TRG, 
+		        LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE,
+		        LECS_CD, LS.LEC_CD, LEC_DAY, LECS_STDT, LECS_EDDT,
+		        D.DEP_CD, COL_CD, DEP_NM, DEP_MRC, DEP_MOC, DEP_CRC, DEP_COC, DEP_CAP, DEP_TEL, DEP_FEE, COL_NM,
+		        WL.STU_CD, WL.LEC_CD, U.USER_NM
+		FROM    LECTURE L, LECTURE_APPLY LA, LECTURE_SCHEDULE LS, DEPARTMENT D, WISH_LECTURE WL, PROFESSOR P, USERS U
+		WHERE   LA.LECA_CD = L.LEC_CD
+		AND     LS.LEC_CD = L.LEC_CD
+		AND     D.DEP_CD = LA.DEP_CD
+		AND		WL.LEC_CD(+) = L.LEC_CD
+		AND		P.PRO_CD = LA.PRO_CD
+		AND		P.PRO_CD = U.USER_CD
+		AND     LECA_TRG = #{stuYear}
+		AND     LECA_SEM = #{stuSem}
+        AND     LECA_YEAR = TO_CHAR(SYSDATE, 'YYYY')
+		<if test="keyword != 'ALL'">
+			AND 	LA.DEP_CD = #{keyword}
+		</if>
+	</select>
+	
+	<select id="changeMenu2" parameterType="hashMap" resultMap="lectureMap">
+		SELECT  L.LEC_CD, LEC_HCNT, LEC_STAT,
+		        LECA_CD, LA.PRO_CD, APP_CD, LA.DEP_CD, LA.ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, LECA_TRG, 
+		        LECA_CRD, LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE,
+		        LECS_CD, LS.LEC_CD, LEC_DAY, LECS_STDT, LECS_EDDT,
+		        D.DEP_CD, COL_CD, DEP_NM, DEP_MRC, DEP_MOC, DEP_CRC, DEP_COC, DEP_CAP, DEP_TEL, DEP_FEE, COL_NM,
+		        WL.STU_CD, WL.LEC_CD, U.USER_NM
+		FROM    LECTURE L, LECTURE_APPLY LA, LECTURE_SCHEDULE LS, DEPARTMENT D, WISH_LECTURE WL, PROFESSOR P, USERS U
+		WHERE   LA.LECA_CD = L.LEC_CD
+		AND     LS.LEC_CD = L.LEC_CD
+		AND     D.DEP_CD = LA.DEP_CD
+		AND		WL.LEC_CD(+) = L.LEC_CD
+		AND		P.PRO_CD = LA.PRO_CD
+		AND		P.PRO_CD = U.USER_CD
+		AND     LECA_TRG = #{stuYear}
+		AND     LECA_SEM = #{stuSem}
+        AND     LECA_YEAR = TO_CHAR(SYSDATE, 'YYYY')
+		AND 	LA.LECA_TYPE = #{keyword}
+	</select>
+	
+	<select id="stuLectureNoticeList" parameterType="hashMap" resultMap="lectureNoticeVOMap">
+		SELECT T.* FROM(
+		    SELECT ROW_NUMBER() OVER(ORDER BY LN.LECN_CD) RNUM,	
+            E.ENR_CD, E.STU_CD, E.ENR_REG,
+            
+		    LN.LECN_CD, LN.LEC_CD, LN.LECN_TITLE, LN.LECN_CON, LN.LECN_REG, LN.LECN_UDT, LN.LECN_CNT,
+		    L.LEC_HCNT, L.LEC_STAT,
+		    LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		    LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, LA.LECA_SCHE,
+		    LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+            
+            U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP, U.USER_ADDR1,
+            U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL,
+            U.COMD_CD
+		   
+		FROM LECTURE_NOTICE LN
+		
+		JOIN LECTURE L ON LN.LEC_CD = L.LEC_CD
+		JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+        JOIN ENROLMENT E ON L.LEC_CD = E.LEC_CD
+		JOIN PROFESSOR P ON LA.PRO_CD = P.PRO_CD
+        JOIN USERS U ON U.USER_CD = P.PRO_CD
+		WHERE E.STU_CD = #{stuCd}
+		AND L.LEC_CD = #{lecCd}
+		)
+		T
+		WHERE RNUM BETWEEN (#{currentPage} * 10) - (10 - 1) AND (#{currentPage} * 10)
+		
+	</select>
+	
+	<select id="getTotal" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) FROM LECTURE_NOTICE
+		WHERE LEC_CD = #{lecCd}
+	</select>
+	
+	<select id="stuLectureNoticeDetail" parameterType="String" resultMap="lectureNoticeVOMap">
+		SELECT DISTINCT
+		    LN.LECN_CD, LN.LEC_CD, LN.LECN_TITLE, LN.LECN_CON, LN.LECN_REG, LN.LECN_UDT, LN.LECN_CNT,
+		    L.LEC_HCNT, L.LEC_STAT,
+		    LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		    LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, LA.LECA_SCHE,
+		    LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    F.FILE_SN, F.FILE_CD, F.FILE_PATH, F.FILE_ORNM,
+		    F.FILE_SVNM, F.FILE_EXTSN, F.FILE_CON, F.FILE_SIZE, F.FILE_USED
+		   
+		FROM LECTURE_NOTICE LN
+		
+		JOIN LECTURE L ON LN.LEC_CD = L.LEC_CD
+		JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+        JOIN ENROLMENT E ON E.LEC_CD = LN.LEC_CD
+        LEFT OUTER JOIN FILES_DETAIL F ON LN.LECN_CD = F.FILE_CD
+		
+        WHERE LN.LECN_CD = #{lecnCd}
+	</select>
+	
+	<insert id="insertLectureGrade" parameterType="lectureGradeVO">
+		INSERT INTO LECTURE_GRADE(CRTR_CD, STU_CD)
+		VALUES (#{crtrCd}, #{stuCd})			
+	</insert>
+	
+	<!-- 제출기한 안지난과제  -->
+	<select id="taskList" parameterType="hashMap" resultMap="taskVOMap">
+		<![CDATA[
+			SELECT 
+		    T.TASK_CD, T.TASK_NM, T.TASK_CON, T.TASK_REG, T.TASK_EDDT,
+            
+		
+		    E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG,
+		    LC.LEC_HCNT, LC.LEC_STAT,
+		    
+		    LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD,
+		    LA.LECA_YEAR, LA.LECA_SEM,  LA.LECA_NM,
+		    LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP,
+		    LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP,
+		    LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+		    
+		    U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO,
+		    
+		    D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC, 
+		    D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL
+			FROM
+			    LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E, TASK T
+           
+			WHERE 
+			    E.LEC_CD = LC.LEC_CD
+			AND
+			    LC.LEC_CD = LA.LECA_CD
+			AND
+			    LA.PRO_CD = P.PRO_CD
+			AND 
+			    LA.DEP_CD = D.DEP_CD
+			AND
+			    P.PRO_CD = U.USER_CD
+			AND   
+			    LA.ROOM_CD = R.ROOM_CD
+			AND     
+			    C.COMD_CD = R.BLD_CD
+			AND
+			    LC.LEC_CD = T.LEC_CD
+			AND
+                T.TASK_EDDT + 1 > SYSDATE
+			AND 
+			    E.STU_CD = #{stuCd}
+			AND
+			    LC.LEC_CD = #{lecCd}
+			ORDER BY T.TASK_EDDT DESC
+		]]>
+	</select>
+	
+	<update id="count" parameterType="lectureNoticeVO">
+		<selectKey resultType="int" keyProperty="lecnCnt" order="BEFORE">
+			SELECT LECN_CNT FROM LECTURE_NOTICE
+			WHERE LECN_CD = #{lecnCd}
+		</selectKey>
+		UPDATE LECTURE_NOTICE
+		SET LECN_CNT = (#{lecnCnt} + 1)
+		WHERE LECN_CD = #{lecnCd}
+	</update>
+	
+	<select id="stuLectureDataList" parameterType="hashMap" resultMap="lectureDataVOMap">
+		SELECT T.* FROM(
+		SELECT ROW_NUMBER() OVER(ORDER BY LD.LECD_DT DESC) RNUM,	
+		E.ENR_CD, E.STU_CD, E.ENR_REG,
+		
+		LD.LECD_CD, LD.LEC_CD, LD.LECD_DT, LD.LECD_TITLE, LD.LECD_CON,
+		L.LEC_HCNT, L.LEC_STAT,
+		LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, LA.LECA_SCHE,
+		LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		
+		P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+		
+		U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP, U.USER_ADDR1,
+		U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL,
+		U.COMD_CD
+		
+		FROM LECTURE_DATA LD
+		
+		JOIN LECTURE L ON LD.LEC_CD = L.LEC_CD
+		JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+		JOIN ENROLMENT E ON L.LEC_CD = E.LEC_CD
+		JOIN PROFESSOR P ON LA.PRO_CD = P.PRO_CD
+		JOIN USERS U ON U.USER_CD = P.PRO_CD
+		WHERE E.STU_CD = #{stuCd}
+		AND L.LEC_CD = #{lecCd}
+		)
+		T
+	</select>
+	
+	<select id="stuLectureDataDetail" parameterType="String" resultMap="lectureDataVOMap">
+		SELECT DISTINCT
+		    LD.LECD_CD, LD.LEC_CD, LD.LECD_DT, LD.LECD_TITLE, LD.LECD_CON,
+		    L.LEC_HCNT, L.LEC_STAT,
+		    LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		    LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, LA.LECA_SCHE,
+		    LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    U.USER_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP,
+		    U.USER_ADDR1, U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL,
+		    
+		    
+		    F.FILE_SN, F.FILE_CD, F.FILE_PATH, F.FILE_ORNM,
+		    F.FILE_SVNM, F.FILE_EXTSN, F.FILE_CON, F.FILE_SIZE, F.FILE_USED
+		   
+		FROM LECTURE_DATA LD
+		
+		JOIN LECTURE L ON LD.LEC_CD = L.LEC_CD
+		JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+		JOIN ENROLMENT E ON E.LEC_CD = LD.LEC_CD
+		JOIN PROFESSOR P ON P.PRO_CD = LA.PRO_CD
+		JOIN USERS U ON P.PRO_CD = U.USER_CD
+		LEFT OUTER JOIN FILES_DETAIL F ON LD.LECD_CD = F.FILE_CD
+		
+		WHERE LD.LECD_CD = #{lecdCd}
+	</select>
+	
+	<select id="taskDetail" parameterType="hashMap" resultMap="taskVOMap">
+		SELECT DISTINCT
+		    T.TASK_CD, T.TASK_NM, T.TASK_CON, T.TASK_REG, T.TASK_EDDT,
+            
+		    L.LEC_HCNT, L.LEC_STAT,
+		    LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		    LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, LA.LECA_SCHE,
+		    LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    U.USER_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP,
+		    U.USER_ADDR1, U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL,
+		    
+		    
+		    F.FILE_SN, F.FILE_CD, F.FILE_PATH, F.FILE_ORNM,
+		    F.FILE_SVNM, F.FILE_EXTSN, F.FILE_CON, F.FILE_SIZE, F.FILE_USED
+		   
+		FROM TASK T
+		
+		JOIN LECTURE L ON T.LEC_CD = L.LEC_CD
+		JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+		JOIN ENROLMENT E ON E.LEC_CD = T.LEC_CD
+		JOIN PROFESSOR P ON P.PRO_CD = LA.PRO_CD
+		JOIN USERS U ON P.PRO_CD = U.USER_CD
+		LEFT OUTER JOIN FILES_DETAIL F ON T.TASK_CD = F.FILE_CD
+		
+		WHERE T.TASK_CD = #{taskCd}
+	</select>
+	<!-- 제출기한지난과제  -->
+	<select id="edTaskList" parameterType="hashMap" resultMap="taskVOMap">
+		<![CDATA[
+	 		SELECT 
+		    T.TASK_CD, T.TASK_NM, T.TASK_CON, T.TASK_REG, T.TASK_EDDT,
+            
+            TS.TSUB_CD, TS.STU_CD, TS.TSUB_DT,  TS.TSUB_SCORE,
+		
+		    E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG,
+		    LC.LEC_HCNT, LC.LEC_STAT,
+		    
+		    LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD,
+		    LA.LECA_YEAR, LA.LECA_SEM,  LA.LECA_NM,
+		    LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP,
+		    LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP,
+		    LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+		    
+		    U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO,
+		    
+		    D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC, 
+		    D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL
+			FROM
+			    LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E, TASK T
+            LEFT OUTER JOIN TASK_SUBMIT TS ON T.TASK_CD = TS.TASK_CD
+			WHERE 
+			    E.LEC_CD = LC.LEC_CD
+			AND
+			    LC.LEC_CD = LA.LECA_CD
+			AND
+			    LA.PRO_CD = P.PRO_CD
+			AND 
+			    LA.DEP_CD = D.DEP_CD
+			AND
+			    P.PRO_CD = U.USER_CD
+			AND   
+			    LA.ROOM_CD = R.ROOM_CD
+			AND     
+			    C.COMD_CD = R.BLD_CD
+			AND
+			    LC.LEC_CD = T.LEC_CD
+            AND
+                T.TASK_EDDT < SYSDATE -1
+			AND 
+			    E.STU_CD = #{stuCd}
+		
+			AND
+			    LC.LEC_CD = #{lecCd}
+            ORDER BY T.TASK_EDDT DESC
+    	]]>
+	</select>
+<!-- 		AND  -->
+<!--                TS.STU_CD =  E.STU_CD  -->
+	<select id="endEnrolmentList" parameterType="String" resultMap="enrolmentVOMap">
+		<![CDATA[
+	    SELECT 
+	        E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG,
+	        LC.LEC_HCNT, LC.LEC_STAT,
+	        
+	        LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD,
+	        LA.LECA_YEAR, LA.LECA_SEM, LA.LECA_NM,
+	        LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP,
+	        LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP,
+	        LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+	        
+	        P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+	        
+	        U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO,
+	        
+	        D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC, 
+	        D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL
+	    FROM
+	        LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E
+	    WHERE 
+	        E.LEC_CD = LC.LEC_CD
+	    AND
+	        LC.LEC_CD = LA.LECA_CD
+	    AND
+	        LA.PRO_CD = P.PRO_CD
+	    AND 
+	        LA.DEP_CD = D.DEP_CD
+	    AND
+	        P.PRO_CD = U.USER_CD
+	    AND   
+	        LA.ROOM_CD = R.ROOM_CD
+	    AND     
+	        C.COMD_CD = R.BLD_CD
+	    AND 
+	        E.STU_CD = #{stuCd}
+	     AND (
+		        (LA.LECA_YEAR < EXTRACT(YEAR FROM SYSDATE))
+		        OR
+		        (LA.LECA_YEAR = EXTRACT(YEAR FROM SYSDATE) AND LA.LECA_SEM < CASE WHEN EXTRACT(MONTH FROM SYSDATE) <= 6 THEN 1 ELSE 2 END)
+		    )
+	    ]]>
+	</select>
+	
+	<delete id="cancelEnrolment" parameterType="enrolmentVO">
+		DELETE 	FROM ENROLMENT
+		WHERE 	STU_CD = #{stuCd}
+		AND		LEC_CD = #{lecCd}
+	</delete>
+	
+	<select id="getCrtrCd" parameterType="String" resultType="String">
+		SELECT CRTR_CD FROM GRADE_CRITERIA
+		WHERE LEC_CD = #{lecCd}
+	</select>
+	
+	<delete id="deleteCriteria" parameterType="lectureGradeVO">
+		DELETE 	FROM LECTURE_GRADE
+		WHERE 	CRTR_CD = #{crtrCd}
+		AND		STU_CD = #{stuCd}
+	</delete>
+	
+	<select id="submitCountByTaskCd" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) FROM TASK_SUBMIT 
+		WHERE TASK_CD = #{taskCd}
+		AND STU_CD = #{stuCd}
+	</select>
+	
+	<select id="endSubmitCountByTaskCd" parameterType="hashMap" resultType="int">
+		SELECT COUNT(*) FROM TASK_SUBMIT 
+		WHERE TASK_CD = #{taskCd}
+		AND STU_CD = #{stuCd}
+	</select>
+	
+<!-- 	<select id="getLectureSyllabus" parameterType="hashMap" resultMap="lectureMap"> -->
+<!-- 		<![CDATA[ -->
+<!-- 		SELECT  -->
+<!-- 		    E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG, -->
+<!-- 		    LC.LEC_HCNT, LC.LEC_STAT, -->
+		    
+<!-- 		    LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD, -->
+<!-- 		    LA.LECA_YEAR, LA.LECA_SEM, LA.LECA_NM, -->
+<!-- 		    LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, -->
+<!-- 		    LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, -->
+<!-- 		    LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE, LA.CRTR_MP, LA.CRTR_FP, LA.CRTR_TP, LA.CRTR_AP, -->
+		    
+<!-- 		    P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS, -->
+		    
+<!-- 		    U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO, -->
+		    
+<!-- 		    D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC,  -->
+<!-- 		    D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL -->
+<!-- 		FROM -->
+<!-- 		    LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E -->
+<!-- 		WHERE  -->
+<!-- 		    E.LEC_CD = LC.LEC_CD -->
+<!-- 		AND -->
+<!-- 		    LC.LEC_CD = LA.LECA_CD -->
+<!-- 		AND -->
+<!-- 		    LA.PRO_CD = P.PRO_CD -->
+<!-- 		AND  -->
+<!-- 		    LA.DEP_CD = D.DEP_CD -->
+<!-- 		AND -->
+<!-- 		    P.PRO_CD = U.USER_CD -->
+<!-- 		AND    -->
+<!-- 		    LA.ROOM_CD = R.ROOM_CD -->
+<!-- 		AND      -->
+<!-- 		    C.COMD_CD = R.BLD_CD -->
+<!-- 		AND  -->
+<!-- 		    E.STU_CD = #{stuCd} -->
+<!-- 		AND -->
+<!-- 		    LC.LEC_CD = #{lecCd} -->
+<!-- 	    ]]> -->
+<!-- 	</select> -->
+	
+		<select id="endSubmitScoreByTaskCd" parameterType="hashMap" resultType="taskSubmitVO">
+			SELECT TSUB_SCORE FROM TASK_SUBMIT 
+			WHERE TASK_CD = #{taskCd}
+			AND STU_CD = #{stuCd}
+		</select>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

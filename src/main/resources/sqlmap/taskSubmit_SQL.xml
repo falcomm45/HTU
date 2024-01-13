@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.TaskSubmitMapper">
+	<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<resultMap type="lectureVO" id="lectureMap">
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecHcnt" column="LEC_HCNT"/>
+		<result property="lecStat" column="LEC_STAT"/>
+		<association property="lectureApplyVO" resultMap="lectureAppMap"/>
+	</resultMap>
+	
+	<resultMap type="lectureApplyVO" id="lectureAppMap">
+		<result property="lecaStdt" column="LECA_STDT"/>
+		<result property="lecaEddt" column="LECA_EDDT"/>
+		<result property="lecaType" column="LECA_TYPE"/>
+		<result property="lecaCd" column="LECA_CD"/>
+		<result property="proCd" column="PRO_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="lecaYear" column="LECA_YEAR"/>
+		<result property="lecaSem" column="LECA_SEM"/>
+		<result property="lecaNm" column="LECA_NM"/>
+		<result property="lecaCon" column="LECA_CON"/>
+		<result property="lecaTrg" column="LECA_TRG"/>
+		<result property="lecaCrd" column="LECA_CRD"/>
+		<result property="lecaPer" column="LECA_PER"/>
+		<result property="lecaCap" column="LECA_CAP"/>
+		<result property="lecaSche" column="LECA_SCHE"/>
+		<result property="lecaBook" column="LECA_BOOK"/>
+		<result property="lecaNote" column="LECA_NOTE"/>
+		<result property="lecaEva" column="LECA_EVA"/>
+		<result property="lecaTemp" column="LECA_TEMP"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+		<association property="departmentVO" resultMap="departmentMap"/>
+		<association property="professorVO" resultMap="professorMap"/>
+	</resultMap>
+	
+	<resultMap type="professorVO" id="professorMap">
+		<result property="proCd" column="PRO_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="proJoin" column="PRO_JOIN"/>
+		<result property="proRet" column="PRO_RET"/>
+		<result property="proPos" column="PRO_POS"/>
+		<association property="userVO" resultMap="userMap"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="departmentVO" id="departmentMap">
+		<result property="depCd" column="DEP_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="depMrc" column="DEP_MRC"/>
+		<result property="depMoc" column="DEP_MOC"/>
+		<result property="depCrc" column="DEP_CRC"/>
+		<result property="depCoc" column="DEP_COC"/>
+		<result property="depCap" column="DEP_CAP"/>
+		<result property="depTel" column="DEP_TEL"/>
+		<result property="depFee" column="DEP_FEE"/>
+	</resultMap>
+	
+	<resultMap type="enrolmentVO" id="enrolmentVOMap">
+		<result property="enrCd" column="ENR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="enrReg" column="ENR_REG"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="studentVOList" resultMap="studentVOMap"></collection>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="studentVOMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+	
+	<resultMap type="taskVO" id="taskVOMap">
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="taskNm" column="TASK_NM"/>
+		<result property="taskCon" column="TASK_CON"/>
+		<result property="taskReg" column="TASK_REG"/>
+		<result property="taskEddt" column="TASK_EDDT"/>
+		<result property="rnum" column="RNUM"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<resultMap type="taskSubmitVO" id="taskSubmitVOMap">
+		<result property="tsubCd" column="TSUB_CD"/>
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="tsubDt" column="TSUB_DT"/>
+		<result property="tsubCon" column="TSUB_CON"/>
+		<result property="tsubScore" column="TSUB_SCORE"/>
+		<association property="taskVO" resultMap="taskVOMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<select id="submitTask" parameterType="hashMap" resultMap="taskSubmitVOMap">
+		SELECT DISTINCT
+		    T.TASK_CD, T.TASK_NM, T.TASK_CON, T.TASK_REG, T.TASK_EDDT,
+            
+            TS.TSUB_CD, TS.STU_CD, TS.TSUB_DT,  TS.TSUB_SCORE,
+		    L.LEC_HCNT, L.LEC_STAT,
+		    LA.PRO_CD, LA.APP_CD, LA.DEP_CD, LA.ROOM_CD, LA.LECA_YEAR, LA.LECA_SEM,
+		    LA.LECA_NM, LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP, LA.LECA_SCHE,
+		    LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP, LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    U.USER_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_ZIP,
+		    U.USER_ADDR1, U.USER_ADDR2, U.USER_REG1, U.USER_REG2, U.USER_MAIL,
+		    
+		    
+		    F.FILE_SN, F.FILE_CD, F.FILE_PATH, F.FILE_ORNM,
+		    F.FILE_SVNM, F.FILE_EXTSN, F.FILE_CON, F.FILE_SIZE, F.FILE_USED
+		   
+		FROM TASK_SUBMIT TS
+		JOIN TASK T ON T.TASK_CD = TS.TASK_CD
+		JOIN LECTURE L ON T.LEC_CD = L.LEC_CD
+		JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+		JOIN ENROLMENT E ON E.LEC_CD = T.LEC_CD
+		JOIN PROFESSOR P ON P.PRO_CD = LA.PRO_CD
+		JOIN USERS U ON P.PRO_CD = U.USER_CD
+        
+		LEFT OUTER JOIN FILES_DETAIL F ON TS.TSUB_CD = F.FILE_CD
+		
+		WHERE T.TASK_CD = #{taskCd}
+        AND TS.STU_CD = #{stuCd}
+	</select>
+	
+	<insert id="taskSubmit" parameterType="taskSubmitVO" > 
+		<selectKey resultType="String" keyProperty="tsubCd" order="BEFORE">
+			SELECT 'TSUB' || TRIM(TO_CHAR(TASK_SUBMIT_SEQ.NEXTVAL, '0000')) FROM DUAL
+		</selectKey>
+		INSERT INTO TASK_SUBMIT (
+		    TSUB_CD,
+		    TASK_CD,
+		    STU_CD
+		    
+		) VALUES (
+		    #{tsubCd},
+		    #{taskCd},
+		    #{stuCd}
+		   
+		)
+	</insert>
+	
+	<select id="submitFileList" parameterType="taskSubmitVO" resultMap="filesDetailMap">
+		SELECT
+		    FILE_SN,
+		    FILE_CD,
+		    FILE_PATH,
+		    FILE_ORNM,
+		    FILE_SVNM,
+		    FILE_EXTSN,
+		    FILE_CON,
+		    FILE_SIZE,
+		    FILE_USED
+		FROM
+		    FILES_DETAIL
+		    WHERE FILE_CD = #{tsubCd}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+

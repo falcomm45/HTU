@@ -1,0 +1,45 @@
+.btn-two {margin: 9px; text-decoration: none;}
+.btn-two.mini{padding: 4px 12px;  font-size: 12px;}
+/* Colors for .btn and .btn-two */
+.btn-reg.blue, .btn.blue, .btn-two.blue {background-color: #014fff;}
+.btn-reg.red, .btn.red, .btn-two.red {background-color: LightSalmon;}
+.btn-reg.gray, .btn.gray, .btn-two.gray {background-color: #A3A3A3;}
+.btn-reg.green, .btn.green, .btn-two.green {background-color: #32b67a;}
+.btn-reg.sky, .btn.sky, .btn-two.sky {background-color: #005397;}
+.btn-reg.orange, .btn.orange, .btn-two.orange {background-color: #e54b4b;}
+.btn-reg.mint, .btn.mint, .btn-two.mint {background-color: #b7e3e4;}
+.btn-reg.beige, .btn.beige, .btn-two.beige {background-color: #efe8d8;}
+.btn-reg.pink, .btn.pink, .btn-two.pink {background-color: #ff8b8b;}
+.btn-reg.dark, .btn.dark, .btn-two.dark {background-color: #555555;}
+.btn-reg.back, .btn.back, .btn-two.back {background-color: #d1d0d0;}
+.btn-reg.bur, .btn.bur, .btn-two.bur {background-color: #751c35;}
+/* #EEF1F6 */
+
+.btn-two {
+	color: white; border-radius:3px;
+	padding: 15px 25px;
+	display: inline-block;
+	border: 1px solid rgba(0,0,0,0.21);
+	border-bottom-color: rgba(0,0,0,0.34);
+	text-shadow:0 1px 0 rgba(0,0,0,0.15);
+	/* box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+				      0 2px 0 -1px rgba(0,0,0,0.13), 
+				      0 3px 0 -1px rgba(0,0,0,0.08), 
+				      0 3px 13px -1px rgba(0,0,0,0.21); */
+}
+.btn-two:active {
+	top: 1px;
+	border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+	box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+	position: relative;
+}
+
+.btn-reg{
+	display:flex; justify-content:center; align-items:center; text-decoration: none;
+	color:#ffffff; font-size:13px; font-weight:500; width:90px; height:30px; 
+	border:none; border-radius:30px;}
+
+/*버튼 사용법*/
+/*<a href="#" class="btn-two blue mini">Button</a>
+  <a href="#" class="btn-two red mini">Button</a>
+  <a href="#" class="btn-two gray mini">Button</a>*/

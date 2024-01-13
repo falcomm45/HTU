@@ -1,0 +1,218 @@
+type
+target
+day
+stdt
+eddt
+eva
+	<c:if test="${edTaskVO.taskSubmitList[status.index].stuCd != userVO.userCd}"><td>미제출</td></c:if>
+	<c:if test="${edTaskVO.taskSubmitList[status.index].stuCd != userVO.userCd}"><td>제출완료</td></c:if>
+						<c:if test="${taskVO.taskSubmitList[stat.index].stuCd != userVO.userCd}"><td>미제출</td></c:if>
+						<c:if test="${taskVO.taskSubmitList[stat.index].stuCd == userVO.userCd}"><td>제출완료</td></c:if>
+
+<!-- <style> -->
+<!-- /* .counsel_box{width:100%; padding:40px; background-color:#ffffff;} */ -->
+<!-- /* .table_topic{font-size: 20px; padding-bottom:30px;} */ -->
+
+<!-- /* .counsel_form{border:1px solid #d1d0d0; padding:30px; width:80%; border-radius:5px; position:relative;} */ -->
+<!-- /* .counsel_form_title{display:flex; flex-direction:column; margin-bottom:30px;} */ -->
+<!-- /* .counsel_form_title p{width:120px; font-size:16px; margin-bottom:15px;} */ -->
+<!-- /* .counsel_form_title select, .counsel_form_title input{font-size:14px; border: 1px solid #d1d0d0; border-radius:3px; padding:5px 15px;} */ -->
+<!-- /* .counsel_margin_left{margin-left:5px;} */ -->
+<!-- /* .counsel_form a:hover{color:#ffffff!important;} */ -->
+<!-- </style> -->
+<%-- <sec:authorize access="isAuthenticated()"> --%>
+<%-- 	<sec:authentication property="principal.userVO" var="userVO" /> --%>
+<%-- </sec:authorize> --%>
+
+<!-- <div class="counsel_box"> -->
+<!-- 	<div style="font-size:12px; color:#888888; margin-bottom: 20px;"> -->
+<!-- 	<span><svg xmlns="http://www.w3.org/2000/svg" height="13" width="13" viewBox="0 0 576 512" style="margin-right: 5px;"><path fill="#888888" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg></span> -->
+<!-- 	<span style="font-size:12px; color:#888888;">></span> -->
+<!-- 	<span style="font-size:12px; color:#888888;">강의계획신청</span> -->
+<!-- 	<span style="font-size:12px; color:#888888;">></span> -->
+<!-- 	<span style="font-size:12px; color:#888888;">상세</span> -->
+<!-- 	</div> -->
+<!-- 	<div class="table_topic">강의계획신청상세</div> -->
+<%-- <form name="frm" id="applyFrm" action="/professor/lectureapply/update?${_csrf.parameterName}=${_csrf.token}" method="post" class="counsel_form"> --%>
+	
+<%-- <input type="hidden" id="userCd" name="approvalVO.userCd" value="${userVO.userCd}" />  --%>
+<!-- <input type="hidden" id="lecaTemp" name="lecaTemp" class="form-control" value="0" /> -->
+<!-- <input type="hidden" id="lecaCd" name="lecaCd"  value=""/> -->
+
+
+
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<div style="display:flex;"> -->
+<!-- 		<p style="flex:1">강의명</p> -->
+<!-- 		<p style="flex:1">작성자</p> -->
+<!-- 		<p style="flex:1">개설학년</p> -->
+<!-- 		</div> -->
+		
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<input type="text" name="lecaNm" id="lecaNm" value="${lectureApplyVO.lecaNm}" style="flex:1" readonly="readonly"/> --%>
+<%-- 			<input type="text" name="userNm" id="userNm" value="" class="counsel_margin_left"  placeholder="${userVO.userNm}" readonly style="flex:1" /> --%>
+<%-- 			<input type="number" name="lecaTrg" id="lecaTrg" value="${lectureApplyVO.lecaTrg}" class="counsel_margin_left" style="flex:1" readonly="readonly"/> --%>
+<!-- 		</div> -->
+<!-- 	</div> -->
+
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<div style="display:flex;"> -->
+<!-- 		<p style="flex:1">년도</p> -->
+<!-- 		<p style="flex:1">학기</p> -->
+<!-- 		<p style="flex:1">강의대상학과</p> -->
+<!-- 		</div> -->
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<input type="number" name="lecaYear" id="lecaYear" value="${lectureApplyVO.lecaYear}" style="flex:1" readonly="readonly"/> --%>
+<%-- 			<input type="number" name="lecaSem" id="lecaSem" value="${lectureApplyVO.lecaSem}" class="counsel_margin_left" style="flex:1" readonly="readonly"/> --%>
+<%-- 			<input id="depCD" value="${lectureApplyVO.depCd}" class="counsel_margin_left" style="flex:1" readonly="readonly"/> --%>
+<!-- 			<select name="depCd" id="depCd" class="counsel_margin_left" style="flex:1; display: none;"> -->
+<%-- 				<c:forEach var="departmentVO" items="${departmentVOList}"> --%>
+<%-- 					<option value="${departmentVO.depCd}">${departmentVO.depNm}</option> --%>
+<%-- 				</c:forEach> --%>
+<!-- 			</select> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<div style="display:flex;"> -->
+<!-- 		<p style="flex:1">학점</p> -->
+<!-- 		<p style="flex:1">강의시수</p> -->
+<!-- 		<p style="flex:1">정원</p> -->
+<!-- 		</div> -->
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<input type="number" name="lecaCrd" id="lecaCrd" style="flex:1" value="${lectureApplyVO.lecaCrd}" readonly="readonly"/> --%>
+<%-- 			<input type="number" name="lecaPer" id="lecaPer" class="counsel_margin_left" style="flex:1" value="${lectureApplyVO.lecaPer}" readonly="readonly"/> --%>
+<%-- 			<input type="number" name="lecaCap" id="lecaCap" class="counsel_margin_left" style="flex:1" value="${lectureApplyVO.lecaCap}" readonly="readonly"/> --%>
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<div style="display:flex;"> -->
+<!-- 		<p style="flex:1">평가구분</p> -->
+<!-- 		<p style="flex:1">전공유형</p> -->
+<!-- 		<p style="flex:1">강의실정보</p> -->
+<!-- 		</div> -->
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<c:if test="${lectureApplyVO.lecaEva == 0}"><input type="text" id="lecaEvA" style="flex:1" value="상대평가" readonly="readonly"/></c:if> --%>
+<%-- 			<c:if test="${lectureApplyVO.lecaEva == 1}"><input type="text" id="lecaEvA" style="flex:1" value="절대평가" readonly="readonly"/></c:if> --%>
+<!-- 			<select name="lecaEva" id="lecaEva" style="flex:1; display: none;" > -->
+<!-- 					<option value="0" selected="selected">상대평가</option> -->
+<!-- 					<option value="1">절대평가</option> -->
+<!-- 			</select> -->
+<%-- 			<c:if test="${lectureApplyVO.lecaType == 0}"><input type="text" id="lecaTypE" class="counsel_margin_left" style="flex:1" value="전공필수" readonly="readonly"/></c:if> --%>
+<%-- 			<c:if test="${lectureApplyVO.lecaType == 1}"><input type="text" id="lecaTypE" class="counsel_margin_left" style="flex:1" value="전공선택" readonly="readonly"/></c:if> --%>
+<%-- 			<c:if test="${lectureApplyVO.lecaType == 2}"><input type="text" id="lecaTypE" class="counsel_margin_left" style="flex:1" value="교양필수" readonly="readonly"/></c:if> --%>
+<%-- 			<c:if test="${lectureApplyVO.lecaType == 3}"><input type="text" id="lecaTypE" class="counsel_margin_left" style="flex:1" value="교양선택" readonly="readonly"/></c:if> --%>
+<!-- 			<select name="lecaType" id="lecaType" style="flex:1; display: none;" class="counsel_margin_left" > -->
+<!-- 					<option value="0" selected="selected">전공필수</option> -->
+<!-- 					<option value="1">전공선택</option> -->
+<!-- 					<option value="2">교양필수</option> -->
+<!-- 					<option value="3">교양선택</option> -->
+<!-- 			</select> -->
+<%-- 			<input type="text" id="roomCD" style="flex:1" value="${lectureApplyVO.roomCd}" readonly="readonly"/> --%>
+<!-- 			<select name="roomCd" id="roomCd" style="flex:1; display: none;" class="counsel_margin_left" > -->
+<%-- 					<c:forEach var="roomVO" items="${roomVOList}"> --%>
+<%-- 					<option value="${roomVO.roomCd}">${roomVO.roomNm}</option> --%>
+<%-- 					</c:forEach> --%>
+<!-- 			</select> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<div style="display:flex;"> -->
+<!-- 		<p style="flex:1">희망요일</p> -->
+<!-- 		</div> -->
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<input type="text" id="lecaScheCC" style="flex:1;" value="${lectureApplyVO.lecaSche}" readonly="readonly"/> --%>
+<!-- 			<input type="checkbox" name="lecaScheC" id="lecaScheC" value="월요일" style="display: none;" /><span class="inputSpan" style="display: none;">월</span> -->
+<!-- 			<input type="checkbox" name="lecaScheC" id="lecaScheC" value="화요일" style="display: none;"/><span  class="inputSpan" style="display: none;">화</span> -->
+<!-- 			<input type="checkbox" name="lecaScheC" id="lecaScheC" value="수요일" style="display: none;" /><span class="inputSpan" style="display: none;">수</span> -->
+<!-- 			<input type="checkbox" name="lecaScheC" id="lecaScheC" value="목요일" style="display: none;" /><span class="inputSpan" style="display: none;">목</span> -->
+<!-- 			<input type="checkbox" name="lecaScheC" id="lecaScheC" value="금요일" style="display: none;" /><span class="inputSpan" style="display: none;">금</span> -->
+<!-- 			<input type="hidden" id="lecaSche" name="lecaSche" value="" /> -->
+	
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<div style="display:flex;"> -->
+<!-- 			<p style="flex:1">강의시작시간</p> -->
+<!-- 			<p style="flex:1">강의종료시간</p> -->
+<!-- 		</div> -->
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<input type="text" id="lecaStdT" style="flex:1;" value="${lectureApplyVO.lecaStdt}" readonly="readonly"/> --%>
+<!-- 			<select name="lecaStdt" id="lecaStdt" style="flex:1;display: none;"> -->
+<!-- 				<option value="9:00">9:00</option> -->
+<!-- 				<option value="11:00">10:00</option> -->
+<!-- 				<option value="10:00">11:00</option> -->
+<!-- 				<option value="12:00">12:00</option> -->
+<!-- 				<option value="13:00">13:00</option> -->
+<!-- 				<option value="14:00">14:00</option> -->
+<!-- 				<option value="15:00">15:00</option> -->
+<!-- 				<option value="16:00">16:00</option> -->
+<!-- 				<option value="17:00">17:00</option> -->
+<!-- 				<option value="18:00">18:00</option> -->
+<!-- 			</select> -->
+<%-- 			<input type="text" id="lecaEddT" style="flex:1;" value="${lectureApplyVO.lecaEddt}" class="counsel_margin_left" readonly="readonly"/> --%>
+<!-- 			<select name="lecaEddt" id="lecaEddt" style="flex:1;display: none;" class="counsel_margin_left" > -->
+<!-- 				<option value="9:00">9:00</option> -->
+<!-- 				<option value="11:00">10:00</option> -->
+<!-- 				<option value="10:00">11:00</option> -->
+<!-- 				<option value="12:00">12:00</option> -->
+<!-- 				<option value="13:00">13:00</option> -->
+<!-- 				<option value="14:00">14:00</option> -->
+<!-- 				<option value="15:00">15:00</option> -->
+<!-- 				<option value="16:00">16:00</option> -->
+<!-- 				<option value="17:00">17:00</option> -->
+<!-- 				<option value="18:00">18:00</option> -->
+<!-- 			</select> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<p>받는사람</p> -->
+<!-- 		<span>  -->
+<%-- 			<input value="${lectureApplyVO.approvalVO.appTarget}" id="appTargeT" style="width:222.1px!important;"/> --%>
+<!-- 			<select required="required" name="approvalVO.appTarget" id="appTarget" style="width:222.1px!important;display: none;"> -->
+<%-- 				<c:forEach var="empVO" items="${employeeList}"> --%>
+<%-- 					<option value="${empVO.userCd}">${empVO.userNm}</option> --%>
+<%-- 				</c:forEach> --%>
+<!-- 			</select> -->
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<p>교재 및 참고서</p> -->
+<%-- 		<input type="text" name="lecaBook" id="lecaBook" value="${lectureApplyVO.lecaBook}" readonly="readonly"/> --%>
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<p>교과목 개요</p> -->
+<%-- 		<input type="text" name="lecaCon" id="lecaCon" value="${lectureApplyVO.lecaCon}" readonly="readonly"/> --%>
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title"> -->
+<!-- 		<p>비고</p> -->
+<%-- 		<input type="text" name="lecaNote" id="lecaNote" value="${lectureApplyVO.lecaNote}" readonly="readonly"/> --%>
+<!-- 	</div> -->
+<!-- 	<div class="counsel_form_title" style="margin-bottom:100px;"> -->
+<!-- 		<p>성적처리기준</p> -->
+<!-- 		<p style="font-size:12px; color:#333333; text-wrap:nowrap; display:block; margin:5px 0 0 5px!important;"> * 비율을 입력해주세요.<p> -->
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<input type="number" name="crtrMp" id="crtrMp" style="flex:1" value="${lectureApplyVO.crtrMp}" readonly="readonly"/> --%>
+<%-- 			<input type="number" name="crtrFp" id="crtrFp" class="counsel_margin_left" style="flex:1" value="${lectureApplyVO.crtrFp}" readonly="readonly"/> --%>
+<%-- 			<input type="number" name="crtrTp" id="crtrTp" class="counsel_margin_left" style="flex:1" value="${lectureApplyVO.crtrTp}" readonly="readonly"/> --%>
+<%-- 			<input type="number" name="crtrAp" id="crtrAp" class="counsel_margin_left" style="flex:1" value="${lectureApplyVO.crtrAp}" readonly="readonly"/> --%>
+<!-- 		</div> -->
+<!-- 	</div> -->
+<%-- 	<c:if test="${lectureApplyVO.approvalVO.appYn == 2}"> --%>
+<!-- 		<div class="counsel_form_title" style="margin-bottom:100px;"> -->
+<!-- 			<p>반려사유</p> -->
+<%-- 			<input type="text" id="appRet" value="${lectureApplyVO.approvalVO.appRet}" readonly="readonly"/> --%>
+<!-- 		</div> -->
+<%-- 	</c:if> --%>
+<!-- 	<div class="counsel_form_title" style="margin-bottom:0; margin-top:20px; position:absolute; right:30px; bottom:30px;"> -->
+<!-- 		<div style="display:flex;"> -->
+<%-- 			<c:if test="${lectureApplyVO.approvalVO.appYn == 0}"> --%>
+<!-- 			<button type="button" class="btn-reg bur" id="submitForm">수정</button> -->
+<!-- 			<button type="button" class="btn-reg bur" id="realSubmitForm" style="display: none;">수정하기</button> -->
+<%-- 			</c:if> --%>
+<!-- 			<button type="button" id="noSubmitForm" class="cancel btn-reg back" style="margin-left:10px;">목록</button> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<%-- 	<sec:csrfInput /> --%>
+<!-- </form> -->
+
+
+<!-- </div> -->

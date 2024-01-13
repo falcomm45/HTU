@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.CalendarMapper">
+	
+	<resultMap type="calendarVO" id="calMap">
+		<result property="calDate" column="DATES"/>
+		<result property="calStart" column="ST"/>
+		<result property="calEnd" column="ET"/>
+		<result property="calRoomCd" column="ROOMCD"/>
+	</resultMap>
+	
+	<select id="dateTransfer" parameterType="hashMap" resultMap="calMap">
+		SELECT T.DATES
+				, TO_CHAR(T.DATES,'YYYY-MM-DD')||'T'||#{startTime}||':00' ST
+         		, TO_CHAR(T.DATES,'YYYY-MM-DD')||'T'||#{endTime}||':00' ET
+         		, (SELECT #{roomCd} FROM DUAL) ROOMCD
+		FROM 
+		(
+		    SELECT TO_DATE(#{startDate},'YYYYMMDD') + LEVEL - 1 AS DATES
+		    FROM  DUAL
+		    CONNECT BY LEVEL &lt;= (TO_DATE(#{endDate},'YYYYMMDD') - TO_DATE(#{startDate},'YYYYMMDD') + 1)
+		) T
+		WHERE 1 = 1
+		<choose>
+			<when test="days != null and days.length == 1">
+				AND TO_CHAR(T.DATES, 'DAY') IN (#{days[0]})
+			</when>
+			<when test="days != null and days.length == 2">
+				AND TO_CHAR(T.DATES, 'DAY') IN (#{days[0]}, #{days[1]})
+			</when>
+			<when test="days != null and days.length == 3">
+				AND TO_CHAR(T.DATES, 'DAY') IN (#{days[0]}, #{days[1]}, #{days[2]})
+			</when>
+		</choose>
+	</select>
+	
+</mapper>

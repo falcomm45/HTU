@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.EmployeeMapper">
+
+
+	<resultMap type="employeeVO" id="empMap">
+		<result property="empCd" column="EMP_CD"/>
+		<result property="empDept" column="EMP_DEPT"/>
+		<result property="empPos" column="EMP_POS"/>
+		<result property="empJoin" column="EMP_JOIN"/>
+		<result property="empQuit" column="EMP_QUIT"/>
+	</resultMap>
+	
+	
+</mapper>

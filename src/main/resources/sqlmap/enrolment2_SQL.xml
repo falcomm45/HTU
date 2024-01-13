@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.EnrolmentMapper2">
+
+	
+	<resultMap type="wishLectureVO" id="wishLectureMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+	</resultMap>
+	
+	<resultMap type="lectureScheduleVO" id="lectureScheduleMap">
+		<result property="lecsCd" column="LECS_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecDay" column="LEC_DAY"/>
+		<result property="lecsStdt" column="LECS_STDT"/>
+		<result property="lecsEddt" column="LECS_EDDT"/>
+	</resultMap>
+	
+	<resultMap type="lectureApplyVO" id="lectureAppMap">
+		<result property="lecaStdt" column="LECA_STDT"/>
+		<result property="lecaEddt" column="LECA_EDDT"/>
+		<result property="lecaType" column="LECA_TYPE"/>
+		<result property="lecaCd" column="LECA_CD"/>
+		<result property="proCd" column="PRO_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="lecaYear" column="LECA_YEAR"/>
+		<result property="lecaSem" column="LECA_SEM"/>
+		<result property="lecaNm" column="LECA_NM"/>
+		<result property="lecaCon" column="LECA_CON"/>
+		<result property="lecaTrg" column="LECA_TRG"/>
+		<result property="lecaCrd" column="LECA_CRD"/>
+		<result property="lecaPer" column="LECA_PER"/>
+		<result property="lecaCap" column="LECA_CAP"/>
+		<result property="lecaSche" column="LECA_SCHE"/>
+		<result property="lecaBook" column="LECA_BOOK"/>
+		<result property="lecaNote" column="LECA_NOTE"/>
+		<result property="lecaEva" column="LECA_EVA"/>
+		<result property="lecaTemp" column="LECA_TEMP"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+		<association property="departmentVO" resultMap="departmentMap"/>
+		<association property="professorVO" resultMap="professorMap"/>
+	</resultMap>
+	
+	<resultMap type="professorVO" id="professorMap">
+		<result property="proCd" column="PRO_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="proJoin" column="PRO_JOIN"/>
+		<result property="proRet" column="PRO_RET"/>
+		<result property="proPos" column="PRO_POS"/>
+		<association property="userVO" resultMap="userMap"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="departmentVO" id="departmentMap">
+		<result property="depCd" column="DEP_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="depMrc" column="DEP_MRC"/>
+		<result property="depMoc" column="DEP_MOC"/>
+		<result property="depCrc" column="DEP_CRC"/>
+		<result property="depCoc" column="DEP_COC"/>
+		<result property="depCap" column="DEP_CAP"/>
+		<result property="depTel" column="DEP_TEL"/>
+		<result property="depFee" column="DEP_FEE"/>
+	</resultMap>
+	
+	<resultMap type="enrolmentVO" id="enrolmentVOMap">
+		<result property="enrCd" column="ENR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="enrReg" column="ENR_REG"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="studentVOList" resultMap="studentVOMap"></collection>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="studentVOMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		
+		<association property="userVO" resultMap="userMap"></association>
+	</resultMap>
+	
+		<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<resultMap type="lectureDataVO" id="lectureDataVOMap">
+		<result property="lecdCd" column="LECD_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="lecdDt" column="LECD_DT"/>
+		<result property="lecdTitle" column="LECD_TITLE"/>
+		<result property="lecdCon" column="LECD_CON"/>
+		<result property="rnum" column="RNUM"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<resultMap type="lectureNoticeVO" id="lectureNoticeVOMap">
+		<result property="lecnCd" column="LECN_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecnTitle" column="LECN_TITLE"/>
+		<result property="lecnCon" column="LECN_CON"/>
+		<result property="lecnReg" column="LECN_REG"/>
+		<result property="lecnUdt" column="LECN_UDT"/>
+		<result property="lecnCnt" column="LECN_CNT"/>
+		<result property="rnum" column="RNUM"/>
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	<resultMap type="taskVO" id="taskVOMap">
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="taskNm" column="TASK_NM"/>
+		<result property="taskCon" column="TASK_CON"/>
+		<result property="taskReg" column="TASK_REG"/>
+		<result property="taskEddt" column="TASK_EDDT"/>
+		<result property="rnum" column="RNUM"/>
+		
+		<association property="lectureVO" resultMap="lectureMap"></association>
+		<association property="taskSubmitVO" resultMap="taskSubmitVOMap"></association>
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>	
+	
+	<resultMap type="lectureGradeVO" id="lectureGradeMap">
+		<result property="crtrCd" column="CRTR_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="lecgMs" column="LECG_MS"/>
+		<result property="lecgFs" column="LECG_FS"/>
+		<result property="lecgTs" column="LECG_TS"/>
+		<result property="lecgAs" column="LECG_AS"/>
+		<result property="lecgSum" column="LECG_SUM"/>
+		<result property="lecgGrade" column="LECG_GRADE"/>
+	</resultMap>
+	
+		
+	<resultMap type="lectureVO" id="lectureMap">
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecHcnt" column="LEC_HCNT"/>
+		<result property="lecStat" column="LEC_STAT"/>
+		<association property="lectureApplyVO" resultMap="lectureAppMap"/>
+		<association property="lectureScheduleVO" resultMap="lectureScheduleMap"/>
+		<collection property="wishLectureList" resultMap="wishLectureMap"/>
+<!-- 		<collection property="weekplanVOList" resultMap="weekplanVOMap"></collection> -->
+	</resultMap>
+	
+	
+	<resultMap type="weekplanVO" id="weekplanVOMap">
+		<result property="wpNo" column="WP_NO"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="wpCon" column="WP_CON"/>
+		<result property="rnum" column="RNUM"/>
+		<association property="lectureVO" resultMap="lectureMap"></association>
+	</resultMap>
+	
+	<resultMap type="taskSubmitVO" id="taskSubmitVOMap">
+		<result property="tsubCd" column="TSUB_CD"/>
+		<result property="taskCd" column="TASK_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="tsubDt" column="TSUB_DT"/>
+		<result property="tsubCon" column="TSUB_CON"/>
+		<result property="tsubScore" column="TSUB_SCORE"/>
+		
+		<collection property="filesDetailVOList" resultMap="filesDetailMap"></collection>
+	</resultMap>
+	
+	
+	
+	<select id="getLectureSyllabus" parameterType="hashMap" resultMap="lectureMap">
+		<![CDATA[
+		SELECT 
+		    E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG,
+		    LC.LEC_HCNT, LC.LEC_STAT,
+		    
+		    LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD,
+		    LA.LECA_YEAR, LA.LECA_SEM, LA.LECA_NM,
+		    LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP,
+		    LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP,
+		    LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE, LA.CRTR_MP, LA.CRTR_FP, LA.CRTR_TP, LA.CRTR_AP,
+		    
+		    P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+		    
+		    U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO,
+		    
+		    D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC, 
+		    D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL
+		FROM
+		    LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E
+		WHERE 
+		    E.LEC_CD = LC.LEC_CD
+		AND
+		    LC.LEC_CD = LA.LECA_CD
+		AND
+		    LA.PRO_CD = P.PRO_CD
+		AND 
+		    LA.DEP_CD = D.DEP_CD
+		AND
+		    P.PRO_CD = U.USER_CD
+		AND   
+		    LA.ROOM_CD = R.ROOM_CD
+		AND     
+		    C.COMD_CD = R.BLD_CD
+		AND 
+		    E.STU_CD = #{stuCd}
+		AND
+		    LC.LEC_CD = #{lecCd}
+	    ]]>
+	</select>
+		<select id="enrolmentLectureWeekplan" parameterType="hashMap" resultMap="weekplanVOMap">
+		<![CDATA[
+			SELECT 
+		
+		    W.WP_NO, W.WP_CON,
+		
+		    E.ENR_CD, E.STU_CD, E.LEC_CD, E.ENR_REG,
+		    LC.LEC_HCNT, LC.LEC_STAT,
+		    
+		    LA.LECA_CD, LA.APP_CD, LA.DEP_CD, C.COMD_NM || ' ' || SUBSTR(LA.ROOM_CD, 7) || '호' AS ROOM_CD,
+		    LA.LECA_YEAR, LA.LECA_SEM, 
+		    TRIM(TRAILING FROM
+		        CASE 
+		            WHEN LENGTH(LA.LECA_NM) <= 7 THEN LA.LECA_NM 
+		            ELSE SUBSTR(LA.LECA_NM, 1, 7) || '···' 
+		        END
+		    ) LECA_NM,
+		    LA.LECA_CON, LA.LECA_TRG, LA.LECA_CRD, LA.LECA_PER, LA.LECA_CAP,
+		    LA.LECA_SCHE, LA.LECA_BOOK, LA.LECA_NOTE, LA.LECA_EVA, LA.LECA_TEMP,
+		    LA.LECA_STDT, LA.LECA_EDDT, LA.LECA_TYPE,
+		    
+		    P.PRO_CD, P.PRO_JOIN, P.PRO_RET, P.PRO_POS,
+		    
+		    U.USER_CD, U.FILE_CD, U.USER_NM, U.USER_NME, U.USER_TEL, U.USER_MAIL, U.USER_DEPO,
+		    
+		    D.COL_CD, D.DEP_NM, D.DEP_MRC, D.DEP_MOC, 
+		    D.DEP_CRC, D.DEP_COC, D.DEP_CAP, D.DEP_TEL
+			FROM
+			    LECTURE LC, LECTURE_APPLY LA, PROFESSOR P, USERS U, DEPARTMENT D, COMMON_DETAIL C, ROOM R, ENROLMENT E, WEEKPLAN W
+			WHERE 
+			    E.LEC_CD = LC.LEC_CD
+			AND
+			    LC.LEC_CD = LA.LECA_CD
+			AND
+			    LA.PRO_CD = P.PRO_CD
+			AND 
+			    LA.DEP_CD = D.DEP_CD
+			AND
+			    P.PRO_CD = U.USER_CD
+			AND   
+			    LA.ROOM_CD = R.ROOM_CD
+			AND     
+			    C.COMD_CD = R.BLD_CD
+			AND
+			    LC.LEC_CD = W.LEC_CD
+			AND 
+			    E.STU_CD = #{stuCd}
+			AND
+			    LC.LEC_CD = #{lecCd}
+		
+		]]>
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

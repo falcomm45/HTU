@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+  	<!-- 여기에 로거 추가 -->
+  	
+  	
+  	  <!-- Application Loggers -->
+	<logger name="kr.or.ddit">
+		<level value="debug" />
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+  	
+  	 <!-- log4JDBC 관련 로그 설정-->
+  	 
+     <logger name="jdbc.sqlonly" level="INFO"/>
+     <logger name="jdbc.resultsettable" level="INFO"/>
+     <logger name="jdbc.audit" level="OFF"/>
+     <logger name="jdbc.resultset" level="OFF"/>
+     <logger name="jdbc.connection" level="OFF"/>
+  	
+
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+
+</Configuration>
+
+
+
+
+

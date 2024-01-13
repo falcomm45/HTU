@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.CommentMapper">
+	
+	<resultMap type="commentVO" id="commentMap">
+		<result property="cmtCd" column="CMT_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="bdCd" column="BD_CD"/>
+		<result property="cmtPcd" column="CMT_PCD"/>
+		<result property="cmtCon" column="CMT_CON"/>
+		<result property="cmtReg" column="CMT_REG"/>
+		<result property="cmtUdt" column="CMT_UDT"/>
+		<result property="cmtAnony" column="CMT_ANONY"/>
+		<result property="cmtYn" column="CMT_YN"/>
+		<association property="boardVO" resultMap="boardMap"/>
+	</resultMap>
+	
+	<resultMap type="boardVO" id="boardMap">
+		<result property="bdCd" column="BD_CD" />
+		<result property="userCd" column="USER_CD" />
+		<result property="comdCd" column="COMD_CD" />
+		<result property="bdTitle" column="BD_TITLE" />
+		<result property="bdCon" column="BD_CON" />
+		<result property="bdReg" column="BD_REG" />
+		<result property="bdUdt" column="BD_UDT" />
+		<result property="bdCnt" column="BD_CNT" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="commentVO">
+		<selectKey resultType="String" keyProperty="cmtCd" order="BEFORE">
+			SELECT COMMENT_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO COMMENTS (CMT_CD, USER_CD, BD_CD, CMT_PCD, CMT_CON, CMT_ANONY)
+		VALUES (#{cmtCd}, #{userCd}, #{bdCd}, #{cmtPcd}, #{cmtCon}, #{cmtAnony})
+	</insert>
+	
+	<select id="serchAnomyComment" parameterType="hashMap" resultType="int">
+		SELECT NVL(MAX(CMT_ANONY), 0) FROM COMMENTS 
+		WHERE BD_CD = #{bdCd}
+		AND USER_CD = #{userCd}
+	</select>
+	
+	<select id="getAnonyNumber" parameterType="String" resultType="int">
+		SELECT NVL(MAX(CMT_ANONY), 0) + 1 FROM COMMENTS
+		WHERE BD_CD = #{bdCd}
+	</select>
+	
+	<update id="delete" parameterType="String">
+		UPDATE COMMENTS
+		SET CMT_YN = 1
+		WHERE CMT_CD = #{cmtCd}	
+	</update>
+	
+	<select id="getCommentByCmtCd" parameterType="String" resultMap="commentMap">
+		SELECT  CMT_CD, C.USER_CD, C.BD_CD, CMT_PCD, CMT_CON, CMT_REG, CMT_UDT, CMT_ANONY, CMT_YN,
+		        B.BD_CD, B.USER_CD, COMD_CD, BD_TITLE, BD_CON, BD_REG, BD_UDT, BD_CNT, FILE_CD
+		FROM    COMMENTS C, BOARD B
+		WHERE   C.BD_CD = B.BD_CD
+		AND     C.CMT_CD = #{cmtCd}	
+	</select>
+	
+	
+	
+</mapper>

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC 
+"-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<!-- tiles 설정 -->
+<tiles-definitions>
+	
+	<!-- <definition name="tiles2-layout" template="/WEB-INF/views/tiles2/index.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles2/header.jsp" />
+		<put-attribute name="aside1" value="" />
+		<put-attribute name="aside2" value="/WEB-INF/views/tiles2/aside2.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles2/footer.jsp" />
+	</definition>
+	
+	<definition name="mail/*" extends="tiles2-layout">
+		<put-attribute name="aside1" value="/WEB-INF/views/tiles2/aside_mail.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/mail/{1}.jsp" />
+	</definition>
+	
+	<definition name="sub/*" extends="tiles2-layout">
+		<put-attribute name="aside1" value="/WEB-INF/views/tiles2/aside_board.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/views/sub/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/counsel/*" extends="tiles2-layout">
+		<put-attribute name="aside1" value="/WEB-INF/views/tiles2/aside_counsel.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/views/student/counsel/{1}.jsp" />
+	</definition>
+	
+	<definition name="reservation/*" extends="tiles2-layout">
+		<put-attribute name="aside1" value="/WEB-INF/views/tiles2/aside_reservation.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/views/reservation/{1}.jsp" />
+	</definition>
+			
+	<definition name="pro/*" extends="tiles2-layout">
+		<put-attribute name="body" value="/WEB-INF/views/pro/{1}.jsp" />
+	</definition>
+
+	<definition name="*/*" extends="tiles2-layout">
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+	</definition>
+	 -->
+	 <!-- tiles-layout2 -->
+	<definition name="tiles-layout2" template="/WEB-INF/views/tiles2/index2.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles2/header2.jsp" />
+		<put-attribute name="aside2" value="/WEB-INF/views/tiles2/aside2.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles2/footer.jsp" />
+	</definition>
+	
+	<definition name="reservation/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_reservation.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/reservation/{1}.jsp" />
+	</definition>
+
+	<definition name="academicCalendar/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_calendar.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/academicCalendar/{1}.jsp" />
+	</definition>
+
+	<definition name="myCalendar/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_calendar.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/myCalendar/{1}.jsp" />
+	</definition>
+	
+	<definition name="board/*/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_board.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/board/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="mail/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_mail.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/mail/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/counsel/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_counsel.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/counsel/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/academicAdmin/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_academicadmin.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/academicAdmin/{1}.jsp" />
+	</definition>
+
+	<definition name="student/tutionAndScholarship/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_academicadmin.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/tutionAndScholarship/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/grade/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_grade.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/academicAdmin/{1}.jsp" />
+	</definition>
+
+	<definition name="student/crew/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_crew.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/crew/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/dormitory/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_dormitory.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/dormitory/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/certificate/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_certificate.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/certificate/{1}.jsp" />
+	</definition>
+	
+	<definition name="employee/dormitory/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_approval.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/dormitory/{1}.jsp" />
+	</definition>
+	
+<!-- 	<definition name="student/enrolment/*" extends="tiles-layout2"> -->
+<!-- 		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_enrolment.jsp" /> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/student/enrolment/{1}.jsp" /> -->
+<!-- 	</definition> -->
+	
+<!-- 	<definition name="student/dormitory/*" extends="tiles-layout2"> -->
+<!-- 		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_dormitory.jsp" /> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/student/dormitory/{1}.jsp" /> -->
+<!-- 	</definition> -->
+	
+	<definition name="common/mypage/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_mypage.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/common/mypage/{1}.jsp" />
+	</definition>
+	
+	<definition name="common/portlet/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_portlet.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/common/portlet/{1}.jsp" />
+	</definition>
+	
+	<definition name="employee/stuadmin/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_stuadmin.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/stuadmin/{1}.jsp" />
+	</definition>
+	
+	<definition name="employee/stuadmin/recordApprovalList" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_approval.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/stuadmin/recordApprovalList.jsp" />
+	</definition>
+	
+	<definition name="employee/proadmin/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_proadmin.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/proadmin/{1}.jsp" />
+	</definition>
+	
+	<definition name="employee/crew/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_approval.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/crew/{1}.jsp" />
+	</definition>
+	
+	<definition name="employee/lectureapply/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_approval.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/lectureapply/{1}.jsp" />
+	</definition>
+	
+	<definition name="employee/postreport/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_approval.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/postreport/{1}.jsp" />
+	</definition>
+	
+	<definition name="employee/tutionAndScholarship/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_tutionAndScholarship.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/employee/tutionAndScholarship/{1}.jsp" />
+	</definition>
+	
+	<definition name="professor/lecture/list/lectureApplyList" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_proLectureApply.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/lecture/list/lectureApplyList.jsp" />
+	</definition>
+
+	
+	<definition name="professor/lecture/detail/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_proLectureApplyList.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/lecture/detail/{1}.jsp" />
+	</definition>
+	
+	<definition name="professor/scholarshipRecommend/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_scholarship.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/scholarshipRecommend/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/lecture/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_lecturename.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/lecture/{1}.jsp" />
+	</definition>
+	
+	<definition name="student/lecture/detail/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_lecturename.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/student/lecture/detail/{1}.jsp" />
+	</definition>
+	
+	<definition name="professor/lecture/list/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_proLectureApply.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/lecture/list/{1}.jsp" />
+	</definition>
+	
+	<definition name="professor/lecture/detail/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_proLectureApplyList.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/lecture/detail/{1}.jsp" />
+	</definition>
+	
+	<definition name="professor/counsel/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_counselpro.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/counsel/{1}.jsp" />
+	</definition>
+	
+	<definition name="professor/lectureapply/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_proLectureApply.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/lectureapply/{1}.jsp" />
+	</definition>
+	
+	
+	
+	<!-- <definition name="professor/counsel/*" extends="tiles-layout2">
+		<put-attribute name="side" value="/WEB-INF/views/tiles2/side_counsel.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/professor/counsel/{1}.jsp" />
+	</definition> -->
+	
+	<!-- student layout -->
+	<definition name="tiles-layout" template="/WEB-INF/views/tiles/index.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="aside2" value="/WEB-INF/views/tiles2/aside2.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+	</definition>
+	<!-- name의 */*은 body의 value에서 1과 2에 해당
+		controller에서 forwarding 시 return "1/2";
+	 -->
+	<definition name="stu_home" extends="tiles-layout">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/stu_home.jsp" />
+	</definition>
+	
+	<definition name="pro_home" extends="tiles-layout">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/pro_home.jsp" />
+	</definition>
+	
+	<definition name="emp_home" extends="tiles-layout">
+		<put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/emp_home.jsp" />
+	</definition>
+	
+<!-- 	<definition name="board/*/*" extends="tiles-layout"> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/board/{1}/{2}.jsp" /> -->
+<!-- 	</definition> -->
+	
+<!-- 	<definition name="mail/*" extends="tiles-layout"> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/mail/{1}.jsp" /> -->
+<!-- 	</definition> -->
+	
+	
+	<definition name="student/*/*" extends="tiles-layout">
+		<put-attribute name="body" value="/WEB-INF/views/student/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="professor/*/*" extends="tiles-layout">
+		<put-attribute name="body" value="/WEB-INF/views/professor/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="employee/*/*" extends="tiles-layout">
+		<put-attribute name="body" value="/WEB-INF/views/employee/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="*/*/*" extends="tiles-layout">
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+	</definition>
+	
+	
+	
+	
+<!-- 	<definition name="student/*/*" extends="tiles-layout"> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/student/{1}/{2}.jsp" /> -->
+<!-- 	</definition> -->
+	
+<!-- 	<definition name="mail/*" extends="tiles-layout"> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/mail/{1}.jsp" /> -->
+<!-- 	</definition> -->
+	
+<!-- 	<definition name="reservation/*" extends="tiles-layout"> -->
+<!-- 		<put-attribute name="body" value="/WEB-INF/views/reservation/{1}.jsp" /> -->
+<!-- 	</definition> -->
+	
+	
+
+</tiles-definitions>

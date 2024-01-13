@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.LectureAttendanceMapper">
+	
+	<resultMap type="lectureVO" id="lectureMap">
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecHcnt" column="LEC_HCNT"/>
+		<result property="lecStat" column="LEC_STAT"/>
+		<association property="lectureApplyVO" resultMap="lectureAppMap"/>
+		<association property="lectureScheduleVO" resultMap="lectureScheduleMap"/>
+		<collection property="studentList" resultMap="studentMap"/>
+	</resultMap>
+	
+	<resultMap type="studentVO" id="studentMap">
+		<result property="stuCd" column="STU_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="stuYear" column="STU_YEAR"/>
+		<result property="stuSem" column="STU_SEM"/>
+		<result property="stuMrc" column="STU_MRC"/>
+		<result property="stuMoc" column="STU_MOC"/>
+		<result property="stuCrc" column="STU_CRC"/>
+		<result property="stuCoc" column="STU_COC"/>
+		<result property="stuAddt" column="STU_ADDT"/>
+		<result property="stuGrdt" column="STU_GRDT"/>
+		<association property="userVO" resultMap="userMap"/>
+		<association property="departmentVO" resultMap="departmentMap"/>
+		<association property="filesDetailVO" resultMap="filesDetailMap"/>
+		<collection property="attendanceList" resultMap="attendanceMap"/>
+	</resultMap>
+	
+	<resultMap type="attendanceVO" id="attendanceMap">
+		<result property="attDt" column="ATT_DT"/>
+		<result property="lecsCd" column="LECS_CD"/>
+		<result property="stuCd" column="STU_CD"/>
+		<result property="attYn" column="ATT_YN"/>
+	</resultMap>
+	
+	<resultMap type="filesDetailVO" id="filesDetailMap">
+		<result property="fileSn" column="FILE_SN"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="fileOrnm" column="FILE_ORNM"/>
+		<result property="fileSvnm" column="FILE_SVNM"/>
+		<result property="fileExtsn" column="FILE_EXTSN"/>
+		<result property="fileCon" column="FILE_CON"/>
+		<result property="fileSize" column="FILE_SIZE"/>
+	</resultMap>
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+	</resultMap>
+	
+	<resultMap type="departmentVO" id="departmentMap">
+		<result property="depCd" column="DEP_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="depNm" column="DEP_NM"/>
+		<result property="depMrc" column="DEP_MRC"/>
+		<result property="depMoc" column="DEP_MOC"/>
+		<result property="depCrc" column="DEP_CRC"/>
+		<result property="depCoc" column="DEP_COC"/>
+		<result property="depCap" column="DEP_CAP"/>
+		<result property="depTel" column="DEP_TEL"/>
+		<result property="depFee" column="DEP_FEE"/>
+	</resultMap>
+	
+	<resultMap type="lectureScheduleVO" id="lectureScheduleMap">
+		<result property="lecsCd" column="LECS_CD"/>
+		<result property="lecCd" column="LEC_CD"/>
+		<result property="lecDay" column="LEC_DAY"/>
+		<result property="lecsStdt" column="LECS_STDT"/>
+		<result property="lecsEddt" column="LECS_EDDT"/>
+	</resultMap>
+	
+	<resultMap type="lectureApplyVO" id="lectureAppMap">
+		<result property="lecaStdt" column="LECA_STDT"/>
+		<result property="lecaEddt" column="LECA_EDDT"/>
+		<result property="lecaType" column="LECA_TYPE"/>
+		<result property="lecaCd" column="LECA_CD"/>
+		<result property="proCd" column="PRO_CD"/>
+		<result property="appCd" column="APP_CD"/>
+		<result property="depCd" column="DEP_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="lecaYear" column="LECA_YEAR"/>
+		<result property="lecaSem" column="LECA_SEM"/>
+		<result property="lecaNm" column="LECA_NM"/>
+		<result property="lecaCon" column="LECA_CON"/>
+		<result property="lecaTrg" column="LECA_TRG"/>
+		<result property="lecaCrd" column="LECA_CRD"/>
+		<result property="lecaPer" column="LECA_PER"/>
+		<result property="lecaCap" column="LECA_CAP"/>
+		<result property="lecaSche" column="LECA_SCHE"/>
+		<result property="lecaBook" column="LECA_BOOK"/>
+		<result property="lecaNote" column="LECA_NOTE"/>
+		<result property="lecaEva" column="LECA_EVA"/>
+		<result property="lecaTemp" column="LECA_TEMP"/>
+		<result property="crtrMp" column="CRTR_MP"/>
+		<result property="crtrFp" column="CRTR_FP"/>
+		<result property="crtrTp" column="CRTR_TP"/>
+		<result property="crtrAp" column="CRTR_AP"/>
+	</resultMap>
+	
+	
+	<select id="detail" parameterType="String" resultMap="lectureMap">
+		SELECT  L.LEC_CD, LEC_HCNT, LEC_STAT,
+		        LA.LECA_CD, PRO_CD, APP_CD, LA.DEP_CD, ROOM_CD, LECA_YEAR, LECA_SEM, LECA_NM, LECA_CON, LECA_TRG, LECA_CRD, 
+		        LECA_PER, LECA_CAP, LECA_SCHE, LECA_BOOK, LECA_NOTE, LECA_EVA, LECA_TEMP, LECA_STDT, LECA_EDDT, LECA_TYPE,
+		        LS.LECS_CD, LS.LEC_CD, LEC_DAY, LECS_STDT, LECS_EDDT, T.*, FD.*,
+		        ATT_DT, ATT_YN
+		FROM    LECTURE L
+		INNER JOIN LECTURE_APPLY LA ON L.LEC_CD = LA.LECA_CD
+		INNER JOIN LECTURE_SCHEDULE LS ON L.LEC_CD = LS.LEC_CD
+		LEFT OUTER JOIN (
+		    SELECT  ENR_CD, E.STU_CD, ENR_REG, LEC_CD,
+		            S.COMD_CD, STU_YEAR, STU_SEM, STU_MRC, STU_MOC, STU_CRC, STU_COC, STU_ADDT, STU_GRDT,
+		            USER_CD, U.FILE_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, USER_REG1, USER_REG2, 
+		            USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC,
+		            COL_CD, DEP_NM, DEP_MRC, DEP_MOC, DEP_CRC, DEP_COC, DEP_CAP, DEP_TEL, DEP_FEE, COL_NM
+		    FROM    ENROLMENT E, STUDENT S, USERS U, DEPARTMENT D
+		    WHERE   E.STU_CD = S.STU_CD
+		    AND     S.STU_CD = U.USER_CD
+		    AND     S.DEP_CD = D.DEP_CD
+		) T  ON     L.LEC_CD = T.LEC_CD
+		LEFT OUTER JOIN FILES_DETAIL FD ON T.USER_CD = FD.FILE_CD
+		LEFT OUTER JOIN ATTENDANCE A ON LS.LECS_CD = A.LECS_CD AND A.STU_CD = T.USER_CD
+		WHERE   L.LEC_CD = #{lecCd}
+		ORDER BY T.STU_CD, ATT_DT
+	</select>
+	
+	
+	<insert id="insert" parameterType="attendanceVO">
+		INSERT INTO ATTENDANCE (ATT_DT, LECS_CD, STU_CD, ATT_YN)
+		VALUES (#{attDt}, #{lecsCd}, #{stuCd}, #{attYn})
+	</insert>
+	
+	<update id="update" parameterType="attendanceVO">
+		UPDATE 	ATTENDANCE
+		SET 	ATT_YN = #{attYn}
+		WHERE 	ATT_DT = #{attDt}
+		AND		LECS_CD = #{lecsCd}
+		AND		STU_CD = #{stuCd}
+	</update>
+	
+	<select id="count" parameterType="String" resultType="int">
+		SELECT  COUNT(*)
+		FROM    ATTENDANCE A, LECTURE_SCHEDULE LS
+		WHERE   A.LECS_CD = LS.LECS_CD
+		AND     LS.LEC_CD = #{lecCd}
+	</select>
+	
+	<select id="getAttendanceListByLecCd" parameterType="String" resultMap="attendanceMap">
+		SELECT  ATT_DT, A.LECS_CD, STU_CD, ATT_YN, 
+		        LEC_CD, LEC_DAY, LECS_STDT, LECS_EDDT
+		FROM    ATTENDANCE A, LECTURE_SCHEDULE LS
+		WHERE   A.LECS_CD = LS.LECS_CD
+		AND     LEC_CD = #{lecCd}
+	</select>
+	
+</mapper>

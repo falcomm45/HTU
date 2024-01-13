@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.mapper.ReservationMapper">
+
+
+	<resultMap type="reservationVO" id="resMap">
+		<result property="resCd" column="RES_CD"/>
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="userCd" column="USER_CD"/>
+		<result property="resStdt" column="RES_STDT"/>
+		<result property="resEddt" column="RES_EDDT"/>
+		<result property="resRsn" column="RES_RSN"/>
+		<association property="userVO" resultMap="userMap"/>
+		<association property="roomVO" resultMap="roomMap"/>
+		<association property="commonDetailVO" resultMap="commonDetailMap"/>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="commonDetailMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<resultMap type="roomVO" id="roomMap">
+		<result property="roomCd" column="ROOM_CD"/>
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="roomPur" column="ROOM_PUR"/>
+		<result property="roomCap" column="ROOM_CAP"/>
+		<result property="roomTel" column="ROOM_TEL"/>
+		<association property="buildingVO" resultMap="buildingMap"></association>
+	</resultMap>
+	
+	<resultMap type="buildingVO" id="buildingMap">
+		<result property="bldCd" column="BLD_CD"/>
+		<result property="colCd" column="COL_CD"/>
+		<result property="bldZip" column="BLD_ZIP"/>
+		<result property="bldAddr1" column="BLD_ADDR1"/>
+		<result property="bldAddr2" column="BLD_ADDR2"/>
+	</resultMap>
+	
+	
+	<resultMap type="userVO" id="userMap">
+		<result property="userCd" column="USER_CD"/>
+		<result property="userNm" column="USER_NM"/>
+		<result property="userNme" column="USER_NME"/>
+		<result property="userTel" column="USER_TEL"/>
+		<result property="userZip" column="USER_ZIP"/>
+		<result property="userAddr1" column="USER_ADDR1"/>
+		<result property="userAddr2" column="USER_ADDR2"/>
+		<result property="userReg1" column="USER_REG1"/>
+		<result property="userReg2" column="USER_REG2"/>
+		<result property="userMail" column="USER_MAIL"/>
+		<result property="userPass" column="USER_PASS"/>
+		<result property="userBank" column="USER_BANK"/>
+		<result property="userDepo" column="USER_DEPO"/>
+		<result property="userAcc" column="USER_ACC"/>
+		<result property="fileCd" column="FILE_CD"/>
+		<result property="comdCd" column="COMD_CD"/>
+		<association property="commonDetailVO" resultMap="cdMap"/>
+	</resultMap>
+	
+	<resultMap type="commonDetailVO" id="cdMap">
+		<result property="comdCd" column="COMD_CD"/>
+		<result property="comCd" column="COM_CD"/>
+		<result property="comdNm" column="COMD_NM"/>
+		<result property="comdDesc" column="COMD_DESC"/>
+	</resultMap>
+	
+	<select id="getListByUserCd" parameterType="String" resultMap="resMap">
+		SELECT  RES_CD, RS.ROOM_CD, USER_CD, RES_STDT, RES_EDDT, RES_RSN,
+		        R.ROOM_CD, BLD_CD, ROOM_PUR, ROOM_CAP, ROOM_TEL,
+		        COMD_CD, COM_CD, COMD_NM, COMD_DESC
+		FROM    RESERVATION RS, ROOM R, COMMON_DETAIL CD
+		WHERE   RS.USER_CD = #{userCd}
+		AND     R.BLD_CD = CD.COMD_CD
+		AND     RS.ROOM_CD = R.ROOM_CD
+		ORDER BY RS.RES_STDT DESC
+	</select>
+	
+	<select id="getReservationList" resultMap="resMap">
+		SELECT * FROM RESERVATION
+	</select>
+	
+	<select id="getResListByRoomCd" parameterType="String" resultMap="resMap">
+		SELECT  RES_CD, RS.ROOM_CD, RS.USER_CD, RES_STDT, RES_EDDT, RES_RSN,
+		        U.USER_CD, FILE_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, 
+		        USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD,
+		        R.ROOM_CD, R.BLD_CD, ROOM_PUR, ROOM_CAP, ROOM_TEL,
+		        CD.COMD_CD, COM_CD, COMD_NM, COMD_DESC
+		FROM    RESERVATION RS, USERS U, ROOM R, COMMON_DETAIL CD
+		WHERE   RS.ROOM_CD = #{roomCd}
+		AND     RS.USER_CD = U.USER_CD
+		AND     RS.ROOM_CD = R.ROOM_CD
+		AND     R.BLD_CD = CD.COMD_CD
+	</select>
+	
+	<insert id="insert" parameterType="reservationVO">
+		<selectKey resultType="String" keyProperty="resCd" order="BEFORE">
+			SELECT RESERVATION_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO RESERVATION (RES_CD, ROOM_CD, USER_CD, RES_STDT, RES_EDDT, RES_RSN)
+		VALUES (#{resCd}, #{roomCd}, #{userCd}, #{resStdt}, #{resEddt}, #{resRsn})
+	</insert>
+	
+	<select id="detail" parameterType="String" resultMap="resMap">
+		SELECT  RES_CD, RS.ROOM_CD, RS.USER_CD, RES_STDT, RES_EDDT, RES_RSN,
+		        U.USER_CD, FILE_CD, USER_NM, USER_NME, USER_TEL, USER_ZIP, USER_ADDR1, USER_ADDR2, 
+		        USER_REG1, USER_REG2, USER_MAIL, USER_PASS, USER_BANK, USER_DEPO, USER_ACC, U.COMD_CD,
+		        R.ROOM_CD, R.BLD_CD, ROOM_PUR, ROOM_CAP, ROOM_TEL,
+		        CD.COMD_CD, COM_CD, COMD_NM, COMD_DESC,
+		        B.BLD_CD, COL_CD, BLD_ZIP, BLD_ADDR1, BLD_ADDR2
+		FROM    RESERVATION RS, USERS U, ROOM R, COMMON_DETAIL CD, BUILDING B
+		WHERE   RS.USER_CD = U.USER_CD
+		AND     RS.ROOM_CD = R.ROOM_CD
+		AND     R.BLD_CD = CD.COMD_CD
+		AND     B.BLD_CD = R.BLD_CD
+		AND     RS.RES_CD = #{resCd}
+	</select>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM RESERVATION
+		WHERE RES_CD = #{resCd}
+	</delete>
+	
+	
+</mapper>
