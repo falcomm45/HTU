@@ -39,10 +39,10 @@
 	</bean>
 	
 	<bean id="apiKey" class="java.lang.String">
-		<constructor-arg value="NCS56A8QFAIFPNKV"/>
+		<constructor-arg value=""/>
 	</bean>
 	<bean id="apiSecretKey" class="java.lang.String">
-		<constructor-arg value="SV2HTUPQS4HU0OKLZWUAQNXAQXC9JGSR"/>
+		<constructor-arg value=""/>
 	</bean>
 
 	<bean id="dataSource"
